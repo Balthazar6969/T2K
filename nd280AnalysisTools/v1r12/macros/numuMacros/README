@@ -1,0 +1,182 @@
+Authors: A. Cervera, L. Monfregola and P. Stamoulis
+
+---------------------------------------------------------
+---------------------------------------------------------
+Drawing, systematic and analysis Tools
+---------------------------------------------------------
+---------------------------------------------------------
+
+This code resides in nd280AnalysisTools. Most of the code can be run standalone (only needs root), except the part interfacing with the oaAnalysis tree files 
+for which we need to be inside nd280AnalysisTools. The code is working fine for the NumuFlatTree. The oaAnalysis interface is under development. However 
+the DrawingTools part can be used separately and iterfaced easily with the existing analyses using oaAnalysis trees (ask Federico Sanchez) 
+
+The code is still under development and should be improved using people's feedback 
+
+
+0. Some definitions
+------------------------------------------------
+
+The event loop has three nexted loops
+
+- Event: Standard event loop, where each event is a bunch. 
+- Configuration: This is a running mode normaly used for systematics. We can have several configurations with different systematics or corrections switched on/off
+- Analysis: For systematics studies or cuts optimisation we can run several analyses for the same event and save the resuts
+
+Analysis output
+
+- micro-tree: This is the output of the analysis. Instead of having histograms we have a micro-tree which allows to change the binning, 
+  do multiple analysis cuts at plotting level, computing systematics in a trivial way, etc. There is a micro-tree for each configuration
+
+
+1. The code
+------------
+
+This code englobes the following compilable code:
+
+TrackCategory.h                Class used for color code drawing
+DrawingTools.h/C               Drawing and systematics tools
+
+TreeToolsBase.h                Base class for access functions
+oaAnalysisTreeDefinition.h/C   Definition of oaAnalysis variables. 
+oaAnalysisTreeTools.h/C        Access functions for oaAnalysis tree variables
+NumuFlatTreeDefinition.h/C     Definition of NumuFlatTree variables. Build with MakeClass 
+NumuFlatTreeTools.h/C          Access functions for NumuFlatTree variables
+
+SystematicsAnalysis.h/C        Definition of Configurations used for systematics studies. Variation of recon variables
+AnalysisBase.h/C               Event, configuration and analyses loops. Definition of standard cuts 
+MyAnalysis.h/C                 The actual list of cuts and definition of micro-tree variables
+
+And the following macros:
+
+comp.C                         Compiles the code
+example.C                      Compiles the code, run it and make some plots. 
+
+
+
+In principle the user should only modify MyAnalysys.h/C to change the cuts or to add more variables to the micro-tree. 
+To study SystematicErrors is possible th
+
+All code nd280 software independent except the classes related to the oaAnalysis tree. 
+
+
+2. How to use it
+----------------------------
+
+This is basically what example.C does: 
+
+step 1: compile the code
+
+  > root -l comp.C
+
+step 2: create an instance of MyAnalysis giving the data file as input 
+
+  root [0] MyAnalysis data1(data1_file) 
+  root [1] MyAnalysis mc1(mc1_file)
+
+step 3: loop over events
+
+  root [2] data1.Loop()
+  root [3] mc1.Loop()
+
+step 4: save the resulting micro-trees ( for safety, it can be recovered later if root crashes)
+
+  root [4] data1.WriteTrees("data1.root")
+  root [5] mc1.WriteTrees("mc1.root")
+
+step 5: make plots. For example the muon candidate momentum with variable binning
+  
+  root [6] double pbins[6]={ ... };
+  root [7] mc1.Draw(data1,mc1,"mu_mom",5,pbins,"particle","accum_level>6","e1",norm2)
+
+where "mu_mom" is one of the micro-tree variables (the muon candidate momentum),  
+"particle" is the category of color codes, particle types in this case, 
+"accmum_level" is a micro-tree variable that tells you which analysis cuts were passed. accum_level>6 is all events passing all cuts.
+norm2 is the data/MC normalization fator. 
+  
+3. DrawingTools drawing functionality
+-------------------------------------
+
+ // Plot a single variable with the chosen binning
+ Draw(const std::string& var, int nbins, double xmin, double xmax, const std::string& comp, const std::string& cut="", const std::string& opt="", double norm=1);
+
+ // 2D Plot with the chosen binning
+ Draw(const std::string& var, int nx, double xmin, double xmax, int ny, double ymin, double ymax, const std::string& comp, const std::string& cut="", const std::string& opt="", double norm=1);
+
+ // Ratio between two cuts (cut1/cut2)
+ DrawRatio(const std::string& var, int nx, double xmin, double xmax, const std::string& cut1, const std::string& cut2,  const std::string& leg_name="", const std::string& opt="");
+
+ // Binomial ratio between two cuts (cut1/(cut1+cut2))
+ DrawEff(  const std::string& var, int nx, double xmin, double xmax, const std::string& cut1, const std::string& cut2, const std::string& leg_name="", const std::string& opt="");
+
+ // Draw signal/(error on signal) where (cut1/(cut1+cut2)) defines the purity. The normalisation factor is needed to get the statistical error of the real data (MC statistics is usually
+ // larger. rel_sys is the relative error on the background knowledge
+ DrawSignificance(const std::string& var, int nbins, double xmin, double xmax, const std::string& cut1, const std::string& cut2, 
+			double norm=1, double rel_syst=0,const std::string& leg_name="", const std::string& opt="");
+
+ // Draw a data-MC comparison (or two different data or MC samples)
+ void Draw(DrawingTools& data, DrawingTools& mc, const std::string& var, int nx, double xmin, double xmax, 
+	   const std::string& comp, const std::string& cut="",  const std::string& opt="", double norm=1);
+
+ // Draw a data/MC ratio (or two different data or MC samples)
+ void DrawRatio(DrawingTools& data, DrawingTools& mc, const std::string& var, int nx, double xmin, double xmax, 
+	 	const std::string& cut="",  double norm=1,const std::string& leg_name="", const std::string& opt="");
+
+comp = is the type of color codes to be plotted 
+   "all" --> no color codes, only total
+   "particle" --> particle type
+   "reaction" --> reaction type (including CC components)
+   "reaction2" -->reaction type (CC inclusive only)
+   "sense" 
+   "vertex" --> detector in which the true vertex is contained
+
+cut = the events in the micro-tree have already passed a set of cuts. We can however further select the plotted events (in FGD1, with x>0, etc)
+
+opt = is the standard ROOT plotting options with few additions. 
+    - "ST"  plots statistical error only			
+    - "SYS" plots systematic error only. Computed as the RMS for the N analyses
+    - "DIS" plots systematic error only. Computed as the dispersion for the N analyses		
+    - "N" does not plot the legend
+
+leg_name = is the legend entry to be included in the plot. If option "same" is used a new legend entry will be added to the existing legend
+
+
+norm = is the normalisation factor between data and MC  (one could also use to different data or samples MC samples)
+
+
+3. DrawingTools systematics errors functionality
+-------------------------------------
+
+The user can run N analyses varying a cut or some of the reconstructed quantities and see the impact on the final number of selected events 
+and they kinematic and topological properties. This can be used to compute systematic errors. For example if we want to study the impact of the momentum scale 
+systematic in all our distributions we run N analysis scaling the momentum by a gaussian random variable (with mean 1 and sigma the error on the momentum scale).  
+To do this we should specify the number of analyses to be run, the reference analysis (the one with scale=1)
+
+  AddConfiguration("mom_scale_syst");
+  SetNAnalyses("mom_scale_syst",50);
+  SetRefAnalysisIndex(0)
+
+where "mom_scale_syst" is the name of the configuration, with 50 analyses and 0 the reference analyses. 
+The momentum scale for each of the 50 analyses should be the same for all events, what means that we cannot throw a random number for each 
+event. It has to be done at the initialisation level (as in SystematicsAnalysis.C). These momentum scale parameters can be save to be use 
+later using the DrawingTools parameters functionality
+
+  // manage analysis dependent parameter      
+  void AddParameter(const std::string& name);
+  void SetParameter(const std::string& name, int ana_index, double par);
+  double GetParameter(const std::string& name, int ana_index);
+
+  // manage analysis dependent parameter vector      
+  void AddParameterVector(const std::string& name, int nbins);
+  void SetParameter(const std::string& name, int ana_index, int vect_index, double par);
+  double GetParameter(const std::string& name, int ana_index, int vect_index);
+
+
+
+ // Draw the number of events passing the specified cut for the N analyses. The rms (or dispersion) of this distribution 
+ // will be the systematic error in some cases	
+ DrawEntries(const std::string& cut="", const std::string& opt="", const std::string& leg_name="");
+
+ // Draw the data1/data2 (in general real-data/MC ratio) for the N analyses. The rms (or dispersion) of this distribution 
+ // will be the systematic error of the data1/data2 ratio in some cases. The normalisation factor should be specified	
+ DrawEntriesRatio(DrawingTools& data1, DrawingTools& data2,
+		  const std::string& cut="", const std::string& opt="", double norm=1, const std::string& leg_name="");

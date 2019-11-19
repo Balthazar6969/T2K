@@ -1,0 +1,151 @@
+/*!
+\page versioning Handling different oaAnalysis file formats: versioning, different productions, ...
+
+The oaAnalysis file format can change between productions. This page explains
+how these changes are handled in highland2.
+  
+The page is split into the following sections:
+ - \ref versioning_compile
+ - \ref versioning_usage
+ - \ref versioning_check
+   
+\section versioning_compile Re-compiling the software
+
+When you want to use a new oaAnalysis file format (say, changing from a
+Production 5 file to a Production 6 file), you MUST re-compile the software.
+To do this, run the commands below. <b>Take special care when copying the 
+first "cmt broadcast" line </b> (the long one) - this has been designed 
+so that you don't have to re-compile the time-consuming packages
+such as ROOT. Make sure you copy the whole line exactly as it is 
+(including quotes \c ", backslashes \c \\ and backticks \c `)
+
+\code
+vim $OAANALYSISREADERROOT/cmt/requirements
+# Edit the file by changing the PRODUCTIONDIR variable
+cd $ND280HIGHLAND2ROOT/cmt
+cmt broadcast "if [[ \`pwd\` == $GSLROOT/cmt || \`pwd\` == $MYSQLROOT/cmt || \`pwd\` == $EXTERNROOT/cmt || \`pwd\` == $ROOTROOT/cmt ]]; then echo Skipping; else make clean; fi"
+cmt broadcast cmt make
+cd <yourAnalysisPackage>/cmt
+make clean
+cmt make
+\endcode
+
+\section versioning_usage Developing against different file formats
+  
+Each different oaAnalysis file format brings with it new features.
+In highland2, we use C++ pre-processor definitions to selectively compile
+code that is compatible with and/or appropriate for each format.
+
+<b>User analyses will generally not have to change to deal with new formats!</b>
+(That's the point of highland2 - we deal with the nasty things, so you don't have to.)
+You only need to read the rest of this section of you plan to use features that
+are only available in a certain oaAnalysis formats.
+
+The file Versioning.hxx in highlandEventModel contains definitions for whether
+the file that was used to compile oaAnalysisReader supports various
+features. 
+
+For example, for production 5F the software introduced an full B-field refit of TPC tracks,
+and we have the VERSION_HAS_BFIELD_REFIT_FULL definition to indicate this (you
+don't need to worry about how they are defined, just that VERSION_HAS_BFIELD_REFIT_FULL
+is 1 if the oaAnalysis file contains the relevant information, and 0 if it doesn't):
+
+\code
+// nd280 version for production 5F goes from v10r11p19 to v10r11p23
+#define VERSION_PROD5F (defined ANATOOLS_FILE_VERSION && !BEFORE_ANATOOLS_FILE(10,11,19) && BEFORE_ANATOOLS_FILE(10,11,27))
+
+...
+
+// The B-field distortion refit info changed interface between P5 and P6.
+// In P5F, we had Charge, Momentum, Position and Direction saved
+#define VERSION_HAS_BFIELD_REFIT_FULL VERSION_PROD5F
+\endcode
+
+To avoid extra variables in the DataClasses that are not needed for analysis using productions other than 5F one can use instructions as this:
+
+
+\code
+// Representation of a TPC segment of a global track.
+class AnaTPCParticle:public AnaTPCParticleB, public AnaSubTrack{
+public :
+
+  AnaTPCParticle();
+  virtual ~AnaTPCParticle();
+
+  ...
+
+public:
+
+#if VERSION_HAS_BFIELD_REFIT_FULL
+  // Reconstructed charge with the empirical distortion corrections
+  Float_t RefitCharge;
+
+  // Reconstructed direction with the empirical distortion corrections
+  Float_t RefitDirection[3];
+
+  // Reconstructed position with the empirical distortion corrections
+  Float_t RefitPosition[4];
+#endif
+
+  ...
+
+};
+
+\endcode
+
+
+Various other pieces of code deal with filling the variable if appropriate.
+
+If you want to use any of this extra variables in your analysis, you SHOULD
+wrap those bits of code in VERSION_HAS_BFIELD_REFIT_FULL checks. You SHOULD try to keep
+your code backwards-compatible, so that it can be run on both Production 5 and 
+Production 6 files.
+
+The code that fills those variables inside the converter:
+
+\code
+//*****************************************************************************
+void oaAnalysisTreeConverter::FillTpcTrackInfo(ND::TGlobalReconModule::TTPCObject& tpcTrack, AnaTPCParticle* seg){
+//*****************************************************************************
+
+  ...
+
+#if VERSION_HAS_BFIELD_REFIT_FULL
+  seg->RefitCharge         = tpcTrack.RefitCharge;
+  anaUtils::VectorToArray(tpcTrack.RefitDirection, seg->RefitDirection);
+  anaUtils::VectorToArray(tpcTrack.RefitPosition, seg->RefitPosition);
+#endif
+
+  ...
+
+}
+
+\endcode
+
+The full list of features and associated definitions are documented in Versioning.hxx
+in highlandEventModel.
+
+\section versioning_check Version check at run time
+
+When running your highland2 analysis or creating a Flat Tree there is a run-time version check. The system checks whether oaAnalysisReader (previously nd280AnalysisTools) 
+was compiled with an oaAnalysis file compatible with the one you are running over. If this is not the case the job will stop and 
+following message will appear on the screen: 
+
+\code
+oaAnalysisReader compiled with PROD6A (software version: v11r29 - v12)  file. 
+Checking for compatibility version with current file  (software version: v10r11p7)
+.*************************************************
+.*************************************************
+WARNING: Running over a non PROD6A  file !!!!!
+oaAnalysis data classes definition could be incompatible !!!!
+You should set the proper production version in oaAnalysisReader requirements file and recompile highland2 from scratch !!!
+You could also disable version check with command line option -v
+.*************************************************
+.*************************************************
+\endcode
+
+
+This is to avoid problems due to the file format, but also to make sure the proper 
+pre-procesor definitions used for versioning are used. 
+
+*/

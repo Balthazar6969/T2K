@@ -1,0 +1,1 @@
+ToyBoxB_cxx_dependencies =  ../src/ToyBoxB.cxx   ../src/BasicTypes.hxx   ../src/ToyBoxB.hxx  $(bin)psycheCore_deps/ToyBoxB_cxx.stamp

@@ -1,0 +1,40 @@
+/*! \page highland2/baseP0DAnalysisHistory History for the highland2/baseP0DAnalysis Package 
+
+\section baseP0DAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 11:36:31 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+major reorganization with new packages and  changes in event model class names
+- udapt to changes in base packages
+
+
+\section baseP0DAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 11:33:00 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+p0dExampleAnalysis: 
+- Add method to return the ToyBoxP0D
+- Add methods to get the vertex and the true vertex from the ToyBoxP0D
+p0dExampleSelection
+- ToyBoxP0D inherits now from ToyBoxND280, which contains the TrueVertex
+
+
+
+\section baseP0DAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Fri Aug 12 16:29:58 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!!
+
+make enums public such that they can be used by any analysis. This should salve bug 1333
+
+*/

@@ -1,0 +1,135 @@
+Enable/disable the beam quality cut when doing the "event_quality" cut.
+This is useful when you are using oaAnalysis files that you processed yourself, and so
+don't contain the beam data quality information. 
+BY DEFAULT THIS SHOULD BE SET TO 1
+ < psycheSelections.EnableBeamQualityCut = 1 >
+ 
+Enable/disable the ND280 data quality cut when doing the "event_quality" cut.
+This is useful when you are using oaAnalysis files that you processed yourself, and so
+don't contain the data data quality information. 
+BY DEFAULT THIS SHOULD BE SET TO 1
+ < psycheSelections.EnableDataQualityCut = 1 >
+
+Systematics tunning tests
+ < psycheSelections.Systematics.ApplyFineTuning = 1 >
+
+=========================================================================
+Options to turn on Production 5 2013 BANFF fit
+=========================================================================
+
+ < psycheSelections.numuCCMultiPi.Prod5Cuts = 0 > # Set to 1 to apply the production 5 analysis Michel electron tag and TPC PID cuts and old Ecal pi0 definition
+ 
+ < psycheSelections.numuCC4piMultiPi.Prod5Cuts = 0 > # Set to 1 to apply the production 5 analysis Michel electron tag and TPC PID cuts and old Ecal pi0 definition
+ 
+ # Set the MostUpstreamLayerHit threshold cut for the pi0 veto
+ # Note that if you want to use another value, you should re-do the ecal reconstruction efficiency for shower-like events
+ # using that new value for the ecal objects
+
+ < psycheSelections.numuCCMultiPi.MostUpstreamLayerHitCut = 5 > 
+ < psycheSelections.numuCC4piMultiPi.MostUpstreamLayerHitCut = 5 > 
+
+=========================================================================
+numuCC MultiPi and 4pi Analysis cuts
+=========================================================================
+
+ < psycheSelections.numuCCMultiPi.UseTPCPions       = 1 >
+ < psycheSelections.numuCCMultiPi.UseME             = 1 >
+ < psycheSelections.numuCCMultiPi.UseFGDPions       = 1 >
+ < psycheSelections.numuCCMultiPi.UseECalPiZeroInfo = 1 >
+ < psycheSelections.numuCCMultiPi.OldSecondaryPID   = 0 >
+  
+
+ < psycheSelections.numuCC4piMultiPi.UseTPCPions       = 1 >
+ < psycheSelections.numuCC4piMultiPi.UseME             = 1 >
+ < psycheSelections.numuCC4piMultiPi.UseFGDPions       = 1 >
+ < psycheSelections.numuCC4piMultiPi.UseECalPiZeroInfo = 1 >
+ < psycheSelections.numuCC4piMultiPi.OldSecondaryPID   = 0 >
+ 
+=========================================================================
+anti-numuCC Analysis
+=========================================================================
+
+ < psycheSelections.antinumuCCMultiPi.UseTPCPions = 1 >
+ < psycheSelections.antinumuCCMultiPi.UseME = 1 >
+ < psycheSelections.antinumuCCMultiPi.UseFGDPions = 1 >
+ < psycheSelections.antinumuCCMultiPi.OldSecondaryPID = 0 >
+ < psycheSelections.antinumuCCMultiPi.UseECalPiZeroInfo = 1 >
+ 
+ < psycheSelections.antinumuCCMultiPi.Prod5Cuts = 0 > # Set to 1 to apply the production 5 analysis Michel electron tag and TPC PID cuts and old Ecal pi0 definition
+ < psycheSelections.antinumuCCMultiPi.MostUpstreamLayerHitCut = 5 >  
+
+
+=========================================================================
+NuE CC Analysis cuts
+=========================================================================
+--- Kinematics and quality parameters ------------
+ < psycheSelections.nueCCAnalysis.Cuts.HiMom.MinMom = 200.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.EcalThreshold = 300.0 >
+
+--- TPC Pulls PID ------------
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullElecMin = -2.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullElecMax = 2.5 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullMuonMin = -2.5 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullMuonMax = 3.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullPionMin = -2.5 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullPionMax = 3.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullElecTightMin = -1.5 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.PullElecTightMax = 2.5 >
+
+--- Second TPC PID ------------
+ < psycheSelections.nueCCAnalysis.Cuts.PID2.PullMuonMin = -2.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID2.PullMuonMax = 1.5 >
+
+--- Ecal PID ------------
+ < psycheSelections.nueCCAnalysis.Cuts.PID.EcalMipEmMin = 0.0 >	
+ < psycheSelections.nueCCAnalysis.Cuts.PID.EThreshold = 1000.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.EcalEMin = 1000 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.EoverP = 0.70 >
+
+ < psycheSelections.nueCCAnalysis.Cuts.PID.EOverPThreshold = 0.50 >
+ < psycheSelections.nueCCAnalysis.Cuts.PID.EOverPMinMomentum = 600.0 >
+
+--- Gamma rejection parameters ------------
+ < psycheSelections.nueCCAnalysis.Cuts.PairFinder.InvMassMin = 110.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PairFinder.DeltaPosMax = 100.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PairFinder.PullElecMin = -3.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.PairFinder.PullElecMax = 3.0 >
+
+--- Veto parameters ------------
+ < psycheSelections.nueCCAnalysis.Cuts.TPCVeto.DeltaZMin.FGD1 = -30.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.TPCVeto.DeltaZMin.FGD2 = -50.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.GammaIso.VertexActivity = 50.0 >
+ < psycheSelections.nueCCAnalysis.Cuts.ECalVeto.DeltaZMin = -100.0 >
+
+--- FGD-ECal ToF
+ < psycheSelections.nueCCAnalysis.Cuts.ToF.FGDEcal = 0.0 >
+
+--- NuEBar cuts
+--- PID for the nuebar analysis only ------------
+ < psycheSelections.antiNueCCAnalysis.Analysis.ProtonMomentumRegion.Low = 600.0 >
+ < psycheSelections.antiNueCCAnalysis.Analysis.ProtonMomentumRegion.High = 1650.0 >   
+ < psycheSelections.antiNueCCAnalysis.Cuts.PID.EoverP = 0.65 >
+ < psycheSelections.antiNueCCAnalysis.Cuts.PID.EmHip = 0.0 >
+ < psycheSelections.antiNueCCAnalysis.Cuts.PID2.PullElecMin = -2.5 >
+ < psycheSelections.antiNueCCAnalysis.Cuts.PID2.PullElecMax = 2.5 >
+
+--- Cut harder on the fhc nuebar analysis only ------------
+ < psycheSelections.antiNueCCAnalysis.Cuts.PID.FHC.EoverP = 0.75 >
+ < psycheSelections.antiNueCCAnalysis.Cuts.PID.FHC.EmHip = -5.0 >
+
+--- FGD2 proton pull PID for tracks starting in FGD1 ---
+ < psycheSelections.antiNueCCAnalysis.Cuts.FGD2.ProtonPull = 2.0 >
+
+--- ToF parameters ------------
+ < psycheSelections.antiNueCCAnalysis.Cuts.ToF.FGD1FGD2 = -4.5 >
+ < psycheSelections.antiNueCCAnalysis.Cuts.ToF.RelaxedFGD1FGD2 = -7.0 >
+ < psycheSelections.antiNueCCAnalysis.Cuts.ToF.FGDEcal = 0.0 >  
+
+--- Gamma Analysis --------
+--- Min invariant mass --------			  
+ < psycheSelections.gammaAnalysis.Cuts.PairFinder.InvMassMin = 55.0 >
+ 
+--- Electron pull cuts --------	
+ < psycheSelections.gammaAnalysis.Cuts.PID.PullElecMin = -2.0 >
+ < psycheSelections.gammaAnalysis.Cuts.PID.PullElecMax = 2.5 >
+ < psycheSelections.gammaAnalysis.UseVetoes = 1 >

@@ -1,0 +1,26 @@
+package nd280Psyche
+version v3r25
+
+manager Mark Scott <mscott@triumf.ca>
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt doc
+
+# Master package to specify psyche package versions
+
+use psychePolicy      v3r1    psyche
+use psycheCore        v3r21   psyche
+use psycheEventModel  v3r21   psyche
+use psycheUtils       v3r21   psyche 
+use psycheND280Utils  v3r23   psyche
+use psycheIO          v3r17   psyche
+use psycheSelections  v3r25   psyche
+use psycheSystematics v3r23   psyche
+use psycheSteering    v3r17   psyche
+
+# Build methods to include.
+#document version version *.cxx ../dict/*.cxx
+#document register register
+document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox *py
+

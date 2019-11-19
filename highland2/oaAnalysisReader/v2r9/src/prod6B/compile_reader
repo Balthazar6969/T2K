@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Make sure the environment is properly configured.
+source setup.sh
+
+PRODUCTIONDIR=prod6B
+LIBS=`root-config --libs`
+CC=`root-config --cxx` 
+CFLAGS=`root-config --cflags`
+
+# Get the system identifier.
+cd $OAANALYSISREADERROOT/src/$PRODUCTIONDIR
+
+rm -f oaAnalysisReaderProjectDict.*
+cp -f oaAnalysisReaderProjectHeaders.h0 oaAnalysisReaderProjectHeaders.h
+
+echo "GENERATING DICTIONARY"
+rootcint -f oaAnalysisReaderProjectDict.cxx -c -I$ROOTSYS/include/root  -I"$ROOTSYS/include/root"  oaAnalysisReaderProjectHeaders.h oaAnalysisReaderLinkDef.h 
+
+
+echo "COMPILING"
+#-c -O2 -pipe -m64 -Wshadow -Wall -W -Woverloaded-virtual -fPIC -DR__HAVE_CONFIG -pthread 
+#clang++ -c -O2 -m64 -pipe -W -Woverloaded-virtual -fsigned-char -fno-common -DR__HAVE_CONFIG -stdlib=libc++ -pthread -I$ROOTSYSinclude/root  -I"$ROOTSYSinclude/root"  oaAnalysisReaderProjectSource.cxx
+
+#$CC -c -O2 -pipe -Wshadow -Wall -W -Woverloaded-virtual -fPIC -DR__HAVE_CONFIG  $CFLAGS  -I$OAANALYSISREADERROOT/src/$PRODUCTIONDIR oaAnalysisReaderProjectSource.cxx -o $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReaderProjectSource.o
+$CC -c -O2 -fPIC $CFLAGS  -I$OAANALYSISREADERROOT/src/$PRODUCTIONDIR oaAnalysisReaderProjectSource.cxx -o $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReaderProjectSource.o
+
+echo "LINKING"
+#clang++ $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReaderProjectSource.o  -dynamiclib -single_module -Wl,-dead_strip_dylibs -O2 -m64 -mmacosx-version-min=10.11 -stdlib=libc++ $ROOTSYSlib/root/libCint.so $ROOTSYSlib/root/libCore.so $ROOTSYSlib/root/libRint.so $ROOTSYSlib/root/libMathCore.so $ROOTSYSlib/root/libThread.so $ROOTSYSlib/root/libRIO.so $ROOTSYSlib/root/libCint.so $ROOTSYSlib/root/libMatrix.so $ROOTSYSlib/root/libPhysics.so $ROOTSYSlib/root/libNet.so $ROOTSYSlib/root/libTree.so $ROOTSYSlib/root/libGeom.so -o $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReader.so
+
+LIBNAME=liboaAnalysisReader.so
+if [ $CMTCONFIG == Darwin ]; then
+    LIBNAME=liboaAnalysisReader.dylib
+fi
+
+$CC $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReaderProjectSource.o  -dynamiclib -shared $LIBS  -o $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/$LIBNAME
+cp ND__*.h $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/
+
+echo "ADDING VERSION"
+cat oaAnalysisReaderProjectHeaders.h0 Version.h > oaAnalysisReaderProjectHeaders.h

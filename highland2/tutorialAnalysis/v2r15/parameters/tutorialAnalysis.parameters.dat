@@ -1,0 +1,14 @@
+--- Cut levels --------
+ < tutorialAnalysis.MinAccumLevelToSave = 3 >   // minimum accum level to save the event
+
+--- Selections --------
+ < tutorialAnalysis.Selections.RunSelectionWithoutBranches    = 0 >	
+ < tutorialAnalysis.Selections.RunSelectionWithBranches       = 1 >	
+
+--- Systematics --------
+ < tutorialAnalysis.Systematics.EnableTutorialSystematics     = 1 >
+
+--- Other --------
+
+# should be switched on for RunUseTutorialAnalysis, which uses the nueCCSelections, and this needs local tracker ecal recon info
+ < highlandIO.FlatTree.UseReconDirTrackerECal = 1 >

@@ -1,0 +1,96 @@
+
+ --- Corrections ------------
+
+Disable all corrections regardless of the ones enabled below
+
+ < baseTrackerAnalysis.Corrections.DisableAllCorrections  = 0 >
+
+Enable/Disable individual corrections
+
+ < baseTrackerAnalysis.Corrections.EnableTPCdEdxData              = 1 >
+ < baseTrackerAnalysis.Corrections.EnableTPCdEdxMC                = 1 >
+ < baseTrackerAnalysis.Corrections.EnableTPCExpecteddEdx          = 1 >
+ < baseTrackerAnalysis.Corrections.EnableTPCPIDPullMC             = 1 >
+ < baseTrackerAnalysis.Corrections.EnablePileUp                   = 1 >
+ < baseTrackerAnalysis.Corrections.EnableMomResolMC               = 1 >
+ < baseTrackerAnalysis.Corrections.EnableFlipKinematicsCorrection = 1 >
+ < baseTrackerAnalysis.Corrections.EnableToFCorrection            = 1 >
+ < baseTrackerAnalysis.Corrections.EnableMomRangeCorrection       = 1 >
+
+--- Event Variations ------------
+
+The single systematics configuration (when EnableSingle...SystConfigurations = 1)
+or the all systematics configuration (when EnableAllSystematics = 1)
+need to be enabled in baseAnalysis parameter file
+
+TPC-FGD related, observable variation systematics
+ < baseTrackerAnalysis.Variations.EnableBFieldDist                 = 1 >
+ < baseTrackerAnalysis.Variations.EnableMomScale                   = 0 >
+ < baseTrackerAnalysis.Variations.EnableMomRes                     = 0 >
+ < baseTrackerAnalysis.Variations.EnableMomBiasFromVertexMigration = 0 >
+ 
+ < baseTrackerAnalysis.Variations.EnableTPCPID                     = 1 >
+ < baseTrackerAnalysis.Variations.EnableFGDPID                     = 1 >
+
+
+Other detectors related
+ECAL
+ < baseTrackerAnalysis.Variations.EnableECalEMResol       = 1 >
+ < baseTrackerAnalysis.Variations.EnableECalEMScale       = 1 >
+
+
+High-angle
+ < baseTrackerAnalysis.Variations.EnableMomRangeRes       = 1 >
+
+ToF
+ < baseTrackerAnalysis.Variations.EnableToFResol          = 1 >
+
+P0D
+ < baseTrackerAnalysis.Variations.EnableP0DELossScale          = 0 >
+ < baseTrackerAnalysis.Variations.EnableP0DELossResol          = 0 >
+
+--- Event Weights ------------
+
+TPC-FGD related, efficiency-like systematics (i.e. weight systematics)
+ < baseTrackerAnalysis.Weights.EnableTPCClusterEff        = 0 >
+ < baseTrackerAnalysis.Weights.EnableTPCTrackEff          = 0 >
+ < baseTrackerAnalysis.Weights.EnableChargeConf           = 0 > i.e. TPC Charge ID efficiency
+ < baseTrackerAnalysis.Weights.EnableTPCFGDMatchEff       = 1 >
+ < baseTrackerAnalysis.Weights.EnableFGDTrackEff          = 1 > (not in TN212)
+ < baseTrackerAnalysis.Weights.EnableFGDHybridTrackEff    = 1 >
+ < baseTrackerAnalysis.Weights.EnableMichelEleEff         = 1 >
+
+Other detectors related
+ECAL
+ < baseTrackerAnalysis.Weights.EnableTPCECalMatchEff      = 1 >
+ < baseTrackerAnalysis.Weights.EnableECalTrackEff         = 1 >
+ < baseTrackerAnalysis.Weights.EnableECalPID              = 1 >
+
+High-angle
+ < baseTrackerAnalysis.Weights.EnableFGDECalMatchEff      = 1 >
+ < baseTrackerAnalysis.Weights.EnableFGDECalSMRDMatchEff  = 1 >
+
+P0D
+< baseTrackerAnalysis.Weights.EnableTPCP0DMatchEff        = 1 >
+< baseTrackerAnalysis.Weights.EnableP0DVeto        = 1 >
+
+
+Background related, normalization systematics
+ < baseTrackerAnalysis.Weights.EnableOOFV              = 1 >
+ < baseTrackerAnalysis.Weights.EnableSandMu            = 1 >
+ < baseTrackerAnalysis.Weights.EnablePileUp            = 1 >
+
+MC modeling related, normalization systematics
+ Pion SI is in baseAnalysis
+ < baseTrackerAnalysis.Weights.EnableFGDMass           = 0 >
+
+NuE analysis specific
+ < baseTrackerAnalysis.Weights.EnableECalEmHipPID      = 1 >  
+ < baseTrackerAnalysis.Weights.EnableFGD2Shower        = 1 >
+ < baseTrackerAnalysis.Weights.EnableNuETPCPileUp      = 1 >
+ < baseTrackerAnalysis.Weights.EnableNuEP0DPileUp      = 1 >
+ < baseTrackerAnalysis.Weights.EnableNuEECalPileUp     = 1 >
+ < baseTrackerAnalysis.Weights.EnableNuEOOFV           = 1 >	
+
+Compute the analysis sample, efficiency inside the eff-like systematics
+ < baseTrackerAnalysis.Systematics.ComputeEfficiency       = 0 >

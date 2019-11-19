@@ -1,0 +1,99 @@
+Enable TrackerEcal module since it is now needed by some selections
+
+< highlandIO.FlatTree.UseReconDirTrackerECal = 1 >
+
+--- Systematics for HEAD------------
+
+Enable/disable configurations with a single systematic (when EnableSingleSystConfigurations = 0)
+and enable systematics in the "all_syst" configuration (when EnableSingleSystConfigurations = 1)
+
+ < baseTrackerAnalysis.Variations.EnableBFieldDist        = 1 >
+ < baseTrackerAnalysis.Variations.EnableMomRes            = 1 >
+ < baseTrackerAnalysis.Variations.EnableMomRangeRes       = 1 >
+ < baseTrackerAnalysis.Variations.EnableMomScale          = 1 >
+ < baseTrackerAnalysis.Variations.EnableTPCPID            = 1 >	
+ < baseTrackerAnalysis.Variations.EnableFGDPID            = 1 >	
+
+ < baseTrackerAnalysis.Weights.EnableChargeConf        = 1 >
+ < baseTrackerAnalysis.Weights.EnableTPCTrackEff       = 1 >	
+ < baseTrackerAnalysis.Weights.EnableFGDTrackEff       = 1 >	
+ < baseTrackerAnalysis.Weights.EnableFGDHybridTrackEff = 1 >		
+ < baseTrackerAnalysis.Weights.EnableTPCFGDMatchEff    = 1 >	
+ < baseTrackerAnalysis.Weights.EnableTPCClusterEff     = 1 >	
+ < baseTrackerAnalysis.Weights.EnableMichelEleEff      = 1 >	
+ < baseTrackerAnalysis.Weights.EnableOOFV              = 1 >	
+ < baseTrackerAnalysis.Weights.EnablePileUp            = 1 >	
+ < baseTrackerAnalysis.Weights.EnableFGDMass           = 1 >	
+ < baseTrackerAnalysis.Weights.EnableSandMu            = 0 >	
+
+
+ < baseAnalysis.Weights.EnableSIPion            = 1 >	
+ < baseAnalysis.Weights.EnableSIProton          = 1 >	
+
+ < baseAnalysis.Weights.EnableFluxNeutrino      = 1 >	
+ < baseAnalysis.Weights.EnableFluxAntiNeutrino  = 0 >	
+
+
+--- Systematics for v1r13 ------------
+
+Enable/disable configurations with a single systematic (when EnableSingleSystConfigurations = 0)
+and enable systematics in the "all_syst" configuration (when EnableSingleSystConfigurations = 1)
+
+
+ < baseTrackerAnalysis.Systematics.EnableBFieldDist        = 1 >
+ < baseTrackerAnalysis.Systematics.EnableMomRes            = 1 >
+ < baseTrackerAnalysis.Systematics.EnableMomRangeRes       = 1 >
+ < baseTrackerAnalysis.Systematics.EnableMomScale          = 1 >
+ < baseTrackerAnalysis.Systematics.EnableTPCPID            = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableFGDPID            = 1 >	
+
+ < baseTrackerAnalysis.Systematics.EnableChargeConf        = 1 >
+ < baseTrackerAnalysis.Systematics.EnableTPCTrackEff       = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableFGDTrackEff       = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableFGDHybridTrackEff = 1 >		
+ < baseTrackerAnalysis.Systematics.EnableTPCFGDMatchEff    = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableTPCClusterEff     = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableMichelEleEff      = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableOOFV              = 1 >	
+ < baseTrackerAnalysis.Systematics.EnablePileUp            = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableFGDMass           = 1 >	
+ < baseTrackerAnalysis.Systematics.EnableSandMu            = 0 >	
+
+ < baseAnalysis.Systematics.EnableSIPion            = 1 >	
+ < baseAnalysis.Systematics.EnableSIProton          = 1 >	
+
+ < baseAnalysis.Systematics.EnableFluxNeutrino      = 0 >	
+ < baseAnalysis.Systematics.EnableFluxAntiNeutrino  = 0 >	
+
+---------------------------------
+
+
+Number of toy experiments
+ < baseAnalysis.Systematics.NumberOfToys = 100 >
+
+The Random Seed. When throwing toys we want the same random numbers for all jobs. Thus, the random seed should be the same in all cases (and different from 0 !!!!)
+
+     0 --> A pure random seed is generated based on time
+ not 0 --> A fix random seed is used 
+
+ < baseAnalysis.Systematics.RandomSeed = 1 >
+
+
+Whether to apply a zero variation or the random variation. Zero variation is normally used to apply systematic corrections but not systematic errors. 
+The number of toys should be one in that case
+
+ < baseAnalysis.Systematics.ZeroVariation = 0 >
+
+--- Configurations ------------
+
+Create configurations with a single systematic ( a configuration for each systematic selected above). For HEAD
+
+ < baseAnalysis.Configurations.EnableSingleVariationSystConfigurations = 1 >
+ < baseAnalysis.Configurations.EnableSingleWeightSystConfigurations    = 0 >
+
+Create configurations with a single systematic ( a configuration for each systematic selected above). For v1r3
+ < baseAnalysis.Configurations.EnableSingleSystConfigurations    = 1 >
+
+Enable/disable the configuration with all systematics (or the ones selected above)
+
+ < baseAnalysis.Configurations.EnableAllSystematics = 1 >	

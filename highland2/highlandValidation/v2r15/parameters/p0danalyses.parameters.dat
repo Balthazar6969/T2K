@@ -1,0 +1,77 @@
+Enable/disable the use of different oaAnalysis folders
+Only one should be enabled at a time
+ < highlandIO.FlatTree.UseReconDirP0D = 1 >
+ < highlandIO.P0DDataClasses.UseReconDirP0DNew = 0 >
+ < highlandIO.FlatTree.UseReconDirTrackerECal = 0 >
+ 
+Number of toy experiments
+ < baseAnalysis.Systematics.NumberOfToys = 100 >
+
+The Random Seed. When throwing toys we want the same random numbers for all jobs. Thus, the random seed should be the same in all cases (and different from 0 !!!!)
+
+     0 --> A pure random seed is generated based on time
+ not 0 --> A fix random seed is used 
+
+ < baseAnalysis.Systematics.RandomSeed = 8 >
+
+
+Whether to apply a zero variation or the random variation. Zero variation is normally used to apply systematic corrections but not systematic errors. 
+The number of toys should be one in that case
+
+ < baseAnalysis.Systematics.ZeroVariation = 0 >
+
+--- Cut levels --------
+
+ < p0dNumuCCAnalysis.MinAccumLevelToSave = 3 >   // minimum accum level to save the event
+ < p0dNumuCCQEAnalysis.MinAccumLevelToSave = 3 > 
+
+
+ --- Corrections ------------
+ < baseTrackerAnalysis.Corrections.EnableTPCdEdxData       = 1 >
+ < baseTrackerAnalysis.Corrections.EnableTPCdEdxMC         = 1 >
+ < baseTrackerAnalysis.Corrections.EnableTPCExpecteddEdx   = 1 >
+ < baseTrackerAnalysis.Corrections.EnablePileUp            = 0 >
+ < baseTrackerAnalysis.Corrections.EnableMomResolMC        = 0 >
+
+!TODO: check that this actually forces muon hypothesis in momentum reconstruction disable for now
+ < numuCCAnalysis.Corrections.EnableUseMuonAltMom    = 0 >
+
+ < p0dNumuCCQEAnalysis.Corrections.EnableP0DPileUp = 1 >
+
+--- TruthTree Options ------------
+
+ < p0dNumuCCAnalysis.TruthTree.SaveNumuCCOnPb  = 0 >
+ < p0dNumuCCQEAnalysis.TruthTree.SaveAllNumuCC = 0 >
+
+--- Modified Tracker Systematics ------------
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerMomentumResol    = 1 >	
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerMomentumScale    = 1 >	
+
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerChargeConf       = 1 >
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerBFieldDistortion       = 1 >
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerTPCClusterEff       = 1 >
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerTPCTrackEff       = 1 >
+ < p0dNumuCCAnalysis.Systematics.EnableTrackerTPCPID       = 0 >
+
+--- P0D-specific systematics --------
+ < p0dNumuCCAnalysis.Systematics.EnableP0DMomentumScale = 1 >
+ < p0dNumuCCAnalysis.Systematics.EnableP0DMomentumResol = 1 >
+
+ < p0dNumuCCAnalysis.Systematics.EnableP0DMass = 0 >
+
+--- Configurations ------------
+
+Create configurations with a single systematic ( a configuration for each systematic selected above). For HEAD
+
+ < baseAnalysis.Configurations.EnableSingleVariationSystConfigurations = 0 >
+ < baseAnalysis.Configurations.EnableSingleWeightSystConfigurations    = 0 >
+
+Enable/disable the configuration with all systematics (or the ones selected above)
+
+ < baseAnalysis.Configurations.EnableAllSystematics = 1 >
+
+Compute the analysis sample, efficiency inside the eff-like systematics
+ < baseTrackerAnalysis.Systematics.ComputeEfficiency        = 0 >
+
+--- Micro-trees --------
+ < numuCCAnalysis.MicroTrees.AdditionalToyVars = 0 >

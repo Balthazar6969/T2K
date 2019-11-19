@@ -1,0 +1,58 @@
+package highland2/oaAnalysisReader
+version v2r9
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc dict
+
+use ROOT 
+
+# The list below shows the correspondence between a given production,
+# the oaAnalysis version used for that production
+# and the oaAnalysisReader subfolder to be used
+# (to be set below in the PRODUCTIONDIR variable)
+#
+# productions  oaAnalysis           oaAnalysisReader
+#--------------------------------------------
+# 5D           v5r11                prod5D   
+# 5E           v5r15p1               
+# 5F, 5G       v5r15p3              prod5F
+# 
+# 6B-6D_6J     v5r29p19             prod6B 
+# 6E-6K        v5r29p21             prod6E
+# 6F-6G-6L     v5r29p25             prod6G
+# 6H-6I        v5r31p9  (TREX)      prod6TREx 
+#
+# -----        v6r1     (P7 RC1)    prod7_RC1
+
+# the production to be used
+macro PRODUCTIONDIR "prod6B"
+
+# Build methods to include.
+#document rootcint dictionary $(PRODUCTIONDIR)/*_LinkDef.h
+
+# Build information used by packages that use this one.
+macro oaAnalysisReader_ccppflags "-DOAANALYSISREADER_USED -fPIC"
+macro oaAnalysisReader_linkopts "-L$(OAANALYSISREADERROOT)/$(oaAnalysisReader_tag) -loaAnalysisReader"
+macro oaAnalysisReader_stamps " $(OAANALYSISREADERROOT)/$(oaAnalysisReader_tag)/oaAnalysisReader.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(OAANALYSISREADERROOT)"
+path_prepend PATH "$(OAANALYSISREADERROOT)/$(oaAnalysisReader_tag)"
+path_remove LD_LIBRARY_PATH "$(OAANALYSISREADERROOT)"
+path_prepend LD_LIBRARY_PATH "$(OAANALYSISREADERROOT)/$(oaAnalysisReader_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(OAANALYSISREADERROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(OAANALYSISREADERROOT)/$(oaAnalysisReader_tag)"
+
+
+# Needed for highland compilation now that nd280AnalysisTools uses the CONFIG directory for compiling
+macro_append includes "-I$(OAANALYSISREADERROOT)/src/$(PRODUCTIONDIR)"
+
+# The library to build
+#library oaAnalysisReader $(PRODUCTIONDIR)/oaAnalysisReaderProjectSource.cxx
+
+# actually create dictionary and compile
+document external oaAnalysisReader $(PRODUCTIONDIR)/compile_reader

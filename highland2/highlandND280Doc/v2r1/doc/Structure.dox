@@ -1,0 +1,60 @@
+/*!
+\page structure Structure of the framework and package hierarchy
+
+\image html package_hierarchy.png width=1000px	
+
+There PSyChE framework contains eight packages:
+   - \ref psycheCore "psycheCore" 
+   is the lowest-level package and contains the core classes: core data classes, managers, tools classes, etc. 
+   - \ref psycheEventModel "psycheEventModel"  contains the event model for the experiment
+   - \ref psycheUtils "psycheUtils" contains general utility methods needed by the rest of the framework 
+   - \ref psycheND280Utils "psycheND280Utils" contains ND280-specific methods needed by the rest of the framework 
+   - \ref psycheIO "psycheIO" deals with reading input files, and converting the contents to 
+     the format used in the rest of the framework (psycheEventModel data classes)
+   - \ref psycheSelections "psycheSelections"
+   contains the event selection methods. In general there will be two files per selection (.hxx and .cxx) 
+   - \ref psycheSystematics "psycheSystematics"
+   contains the code that propagates numerically the systematics. In general there are two files per systematic (.hxx and .cxx) 
+   - \ref psycheSteering "psycheSteering"
+   contains the interface with fitters (BANFF, MaCh3). This package is not used by highland2
+    
+
+  All these packages are stored as sub-packages in the top-level \c psyche directory.
+  So, psycheCore, for example, is found at psyche/psycheCore in the repository.
+  The "master" package, which specifies which version of packages work together is found
+  at nd280Psyche.
+
+As previously mentioned, the psyche packages are the core of highland2, which extends the psyche functionality with seven more core packages:
+   - \ref highlandCore "highlandCore" contains extensions of the tool classes in psycheCore, more managers, the AnalysisLoop and AnalysisAlgorithm classes, etc
+   - \ref oaAnalysisReader "oaAnalysisReader"  is the package that substitutes nd280AnalysisTools, providing the headers of the oaAnalysis data clases. This is needed
+     to read oaAnalysis files
+   - \ref highlandEventModel "highlandEventModel" contains extension of the event model in psycheEventModel
+   - \ref highlandTools "highlandTools"   contains the \ref DrawingTools "DrawingTools" and several tools for Systematics. 
+   - \ref highlandUtils "highlandUtils" contains utility methods needed by the rest of the framework, which are not in psycheUtils 
+   - \ref highlandCorrections "highlandCorrections" contains the corrections that should be applied to the input data before performing any other operation 
+   - \ref highlandIO "highlandIO" deals with reading input files, and converting the contents to 
+     the format used in the rest of the framework. It also creates the flat-tree and the mini-tree.
+   - \ref highlandRecPack "highlandRecPack" is the interface between highland2 and RecPack. It makes possible to perform certain operations in a straightforward way:
+     propagation (magnetic field + material), estimation of momentum from range, broken tracks association etc. This package is optional,since it requires RecPack and 
+     the packages neded by it.
+  
+And several top level analysis packages. Some examples are:
+
+   - \ref baseAnalysis "baseAnalysis" provides the structure for any analysis: adds common corrections and systematics, basic variables to the output tree, etc. 
+   - \ref baseTrackerAnalysis "baseTrackerAnalysis" provides the structure for a tracker based analysis: adds common corrections and systematics, basic variables to the output tree, etc. 
+   - \ref baseP0DAnalysis "baseP0DAnalysis" provides the structure for a p0d based analysis: adds common corrections and systematics, basic variables to the output tree, etc. 
+   - \ref numuCCAnalysis "numuCCAnalysis" : Inclusive numu CC selection in FGD. It inherits from baseTrackerAnalysis. 
+   - \ref nueCCAnalysis "nueCCAnalysis": Inclusive nue CC selection in FGD. It inherits from baseTrackerAnalysis.  
+   - \ref antiNumuCCAnalysis "antiNumuCCAnalysis": Inclusive anti-numu CC selection in FGD. It inherits from baseTrackerAnalysis.  
+   - \ref numuCCMultiPiAnalysis "numuCCMultiPiAnalysis": multipion numu CC selection for BANFF input. It inherits from baseTrackerAnalysis and uses numuCCAnalysis.
+   - \ref p0dNumuCCAnalysis "p0dNumuCCAnalysis" : Inclusive numu CC selection in P0D using the tracker. It inherits from baseTrackerAnalysis and uses numuCCAnalysis.
+   - \ref p0dExampleAnalysis "p0dExampleAnalysis" : Example for contained P0D analysis. It inherits from baseP0DAnalysis. 
+
+
+All these packages are stored as sub-packages in the top-level \c highland2 directory.
+So, highlandTools, for example, is found at highland2/highlandTools in the repository.
+The "master" package, which specifies which version of packages work together is found
+at nd280Highland2.
+
+
+*/

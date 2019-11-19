@@ -1,0 +1,209 @@
+/*! \page migration From highland to highland2
+
+
+\section migration_intro Things you need to know  
+
+
+- psyche: Propagation of SYstematics and CHaracterization of Events 
+- highland: HIGH Level ANalysis Development 
+- psyche is a generalization of the BANFF interface. It has:  
+  + Event selections and systematic propagation 
+  + Is the core of highland2: 
+     - Basic data classes, tools, selections and systematics 
+- highland2 provides in addition: 
+  + Corrections 
+  + Functionality to create micro-trees for analysis 
+  + Drawing tools (also for systematics) 
+  + Data reduction tools: Flat Tree creation
+
+- Analyses do not inherit from each other anymore, but use each other. i.e numuCCMultiPiAnalysis uses numuCCAnalysis
+- All Analyses inherit ultimately from AnalysisAlgorithm in highlandCore. 
+- All tracker analyses inherit from baseTrackerAnalysis class (which inherits from baseAnalysis)
+- All P0D analyses inherit from baseP0DAnalysis class (which inherits from baseAnalysis) 
+- The concept of selection has been separated from the one of analysis. A highland analysis could use several selections. 
+  Thus a new class SelectionBase has been introduced. The selection has to be defined in that class and not in the 
+  analysis it self as it was done in highland. Have a look at numuCCAnalysis.cxx (in highland2/numuCCAnalysis/v0r0/src) 
+  and numuCCSelection.cxx (in psyche/psycheSelections/vXrY/src), and this distiction should be clear.
+- All corrections are in highland2: the input  tree for psyche contains all corrections 
+- Mature selections and systematics are in psyche. However new selections and systematics MUST be developed first in highland2: 
+- You can have your mySelection.cxx file in your highland2/myAnalysis directory and move it to psycheSelections 
+  once it is mature enough. 
+- highland2 analysis packages should mainly take care of filling micro-tree variables for the selection and systematics development. 
+
+- highland2 is much faster than highland (>100 times)
+  + use of arrays instead of vectors in psyche and highland
+  + use of vectors instead of maps
+  + Many things were unecessarily computed several times
+  + direct access to branch addreses when filling micro-tree variables by specifying the variable index and not the variable name
+
+
+\section migration_bug Bugzilla
+
+We already have separated entries for psyche and highland2 in bugzilla
+
+
+\section migration_structure Structure
+
+nd280AnalysisTools: highland2 needs this to understand oaAnalysis files and make the true-reco association.
+
+psyche
+ - psycheCore
+ - psycheEventModel
+ - psycheUtils
+ - psycheND280Utils 
+ - psycheIO
+ - psycheSelections
+ - psycheSystematics
+ - psycheSteering
+
+highland2
+ - highlandCore
+ - highlandEventModel
+ - highlandUtils
+ - highlandTools
+ - highlandIO
+ - highlandCorrections
+ - baseAnalysis
+ - numuCCAnalysis
+ - numuCCMultiPiAnalysis
+ - nueCCAnalysis 
+ - antiNumuCCAnalysis
+ - highlandRecPack
+ - ...
+ 
+nd280Psyche: this is the psyche master package used for releases and recursive check out
+nd280Highland2: this is the highland2 master package used for releases and recursive check out
+
+\section migration_selection Event selection
+
+- Every event selection inherits from SelectionBase class in psycheCore
+  and implements 4 mandatory methods: 
+  + DefineSteps: The selection is a collection of steps (cuts and actions) that msut be defined
+  + MakeBox: The box  (AnaBoxB) contains information that has to be passed from one step to another. This method 
+             creates the box of the appropriate type (AnaBoxB or a derived one)   
+  + FillEventSummary: The EventSummary class contains relevant info for the fitters (BANFF, MaCh3), 
+		      as LeptonCandidate properties, True Vertex properties or event sample in which 
+		      the event has been classified
+  + GetSampleEnum: It should return the appropriate sample type (from nd280amples.hxx in psycheCore)
+
+- Several selections that are related (share some steps) can be run in parallel using the branch functionaliy. 
+  This was already available in highland but it is much better now.
+
+  + As example for a single branch selection you can have a look at numuCCSelection under psycheSelections 
+  + As example of simple multiple branch analysis you can have a look at numuCCMultiPiSelection under psycheSelections 
+  + As example of advanced multiple branch selection have a look at numuCCMultiTargetSelection under numuCCMultiTargetAnalysis
+
+\section migration_analysis Creating a new analysis in highland2
+
+1. Create a cmt package (i.e. myAnalysis) inside highland2. 
+   + go outside highland2 directory 
+   + cmt create myAnalysis v0r0 highland2
+   + This will create a cmt package highland2/myAnalysis
+    
+2. In the src directory create: 
+   + myAnalysis.cxx/hxx 
+   + mySelection.cxx/hxx 
+
+3. Fill those files taking as examples numuCCAnalysis or numuCCMultiPiAnalysis, both in highland2, and 
+   numuCCSelection or numuCCMultiPiSelection, both under psyche/psycheSelections 
+
+4. Once mySelection is mature enough it could be officialized (moved into psycheSelections) 
+
+
+\section migration_migration Migrating an analysis from highland to highland2
+
+Following the previous instructions migration from highland to highland2 can proceed. Some recommendations: 
+
+- Don't expect to have same number of events with highland and highland2 if your selection is not based on the numuCCMultiPi or antiNumuCC selections. 
+  + Only those selectons have been validated
+
+- Don't worry about systematics yet. Just make sure that you can run your selection with 
+  highland2 and produce some reasonable plots with the DrawingTools 
+
+- Once your analysis/selection is implemented, compiled and run, compare the results with the old highland 
+  + Final number of selected events 
+  + Events after each cut, since we should try to see at which point in the selection the results differ 
+  + Events for each category
+
+- Submit a bug report (there are separate entries for psyche and highland2 in bugzilla) specifying the problem 
+  and any clues you may have 
+
+
+\section migration_flattrees Flat Trees
+
+FlatTree is now fully working and validated in highland2. It is highly recomended to use highland2 files since few issues has been solved. 
+
+In previous versions oo highland2 it was possible to run over old  highland FlatTrees, although to do that you had to comment ou the line 
+
+#define USEHIGHLAND2
+
+in FlatTreeConverter.hxx
+
+This functionality is not available anymore. Everyone is supposed to use highland2 FlatTrees when running highland2 analyses
+
+\section migration_drawingtools DrawingTools
+
+They are similar to the ones in highland. Some interesting new methods you can use:
+
+  - DumpConfigurations()
+  - DumpConfiguration(name)
+  - DumpSystematics()
+  - DumpCorrections()
+  - DumpSofwareVersions()
+
+\section migration_quicktable highland --> highland2 quick table
+
+- TVector3 and TLorentzVector are now arrays, therefore
+  - .X()  --->  [0]
+  - .Y()  --->  [1]
+  - .Z()  --->  [2]
+
+- For arguments in functions:
+  -  const TVector3& pos --->  const Float_t* pos  (same for TLorenzVector)
+  -  --> a 4-vector can be passed without .Vect() (that is not defined anymore)
+
+- Vars in the microtree are now indexed in a enum in yourAnalysis.hxx (enum enumStandardMicroTrees_yourAnalysis):
+  - AddVar("varname", "I");                  --->  AddVarI(output(), varname, "dox"); (the last argument might be empty but not removed: WithDoc by default)
+  - AddToyVar("varname", "I");               --->  AddToyVarI(output(), varname, "dox");
+  - AddVectorVar("varname", "dox", "I", 3);  --->  AddVar3VI(output(), varname, "dox"); (AddVar4VI for 4-vectors)
+    - for float, just replace I with F or D or C (all definitions in highlandTools/vXrY/src/OutputManager.hxx)
+    - in DefineTruthTree() same method, no need to add "truth" as first argument
+
+- Similarly for filling the vars:
+  - FillVar("varname", varvalue);   --->   output().FillVar(varname, varvalue);
+  - FillToyVar("varname", varvalue);   --->   output().FillToyVar(varname, varvalue);
+  - FillVectorVar("varname", varvalue);   --->   output().FillVectorVar(varname, varvalue, vectorsize); (note the vectorsize to be added!)
+
+- ND::box().       --->   box().
+- ND::your_box().  --->   _your_box->   (to be defined in InitializeAnalyis as a class to be defined in yourSelection.hxx)
+- numuCCAnalyis::  --->   _numuCCAnalysis->   (to be defined in yourSelection.hxx)
+  - same for baseAnalysis or other inherited packages
+
+- std::string det = "FGD1"  --->  SubDetId::SubDetEnum = SubDetId::kFGD1 (etc for other subdetectors)
+
+-For  categories
+  - COUTFV     --->  CATOUTFV
+  - COOUTFV    --->  COLOUTFV
+  - CNOTRUTH   --->  CATNOTRUTH
+  - CONOTRUTH  --->  COLNOTRUTH
+  - COTHER     --->  CATOTHER
+  - COOTHER    --->  COLOTHER
+
+- Some AnaTrueVertex need to become AnaTrueVertexB (if pointing to psyche, "B" stand for "Base", i.e. it is in psyche)
+and afterwards it might need to be casted to AnaTrueVertex with: static_cast<AnaTrueVertex*>(trueTrack->TrueVertex)
+  - same for AnaVertex, AnaTrueTrack and AnaTrack.
+
+- std_actions::   --->   anaUtils::
+(common methods might be in psycheUtils or in baseAnalysis/CategoriesUtils or in highlandUtils (just created in the head), with the same namespace anaUtils, and you have to #include the needed hxx, i.e. AnalysisUtils.hxx or CategoriesUtils.hxx or ??? (see in highlandUtils)
+
+- In yourAnalysis.hxx / .cxx:
+  - #include yourSelection.hxx instead of StandardsActionsYour.hxx, StandardCutsYour.hxx and AnalysisBoxYour.hxx: yourSelection has to contain all of them
+  - #include OutputManager.hxx
+  - void -> virtual void
+  - DefineSelection -> DefineSelections (plural)
+  - Separate DefineCorrections and DefineSystematics from DefineConfigurations (that will just contain single/all parameters)
+
+- MultiAnalysisTools -> DataSample
+
+
+*/

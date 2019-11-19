@@ -1,0 +1,965 @@
+
+#-- start of constituents_header ------
+
+include ${CMTROOT}/src/Makefile.core
+
+ifdef tag
+CMTEXTRATAGS = $(tag)
+else
+tag       = $(CMTCONFIG)
+endif
+
+tags      = $(tag),$(CMTEXTRATAGS)
+
+psycheSteering_tag = $(tag)
+
+ifdef READONLY
+cmt_local_tagfile = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+else
+#cmt_local_tagfile = $(psycheSteering_tag).make
+cmt_local_tagfile = $(bin)$(psycheSteering_tag).make
+endif
+
+#-include $(cmt_local_tagfile)
+include $(cmt_local_tagfile)
+
+ifdef READONLY
+cmt_local_setup = /tmp/CMT_psycheSteeringsetup$(cmt_lock_pid).make
+cmt_final_setup = /tmp/CMT_psycheSteeringsetup.make
+else
+#cmt_local_setup = $(bin)psycheSteeringsetup$(cmt_lock_pid).make
+cmt_local_setup = $(bin)$(package)setup$$$$.make
+#cmt_final_setup = $(bin)psycheSteeringsetup.make
+cmt_final_setup = $(bin)$(package)setup.make
+endif
+
+#--------------------------------------------------------
+
+#cmt_lock_setup = /tmp/lock$(cmt_lock_pid).make
+#cmt_temp_tag = /tmp/tag$(cmt_lock_pid).make
+
+#first :: $(cmt_local_tagfile)
+#	@echo $(cmt_local_tagfile) ok
+ifndef QUICK
+first :: $(cmt_final_setup) ;
+else
+first :: ;
+endif
+
+##	@bin=`$(cmtexe) show macro_value bin`
+
+#$(cmt_local_tagfile) : $(cmt_lock_setup)
+#	@echo "#CMT> Error: $@: No such file" >&2; exit 1
+$(cmt_local_tagfile) :
+	@echo "#CMT> Warning: $@: No such file" >&2; exit
+#	@echo "#CMT> Info: $@: No need to rebuild file" >&2; exit
+
+$(cmt_final_setup) : $(cmt_local_tagfile) 
+	$(echo) "(constituents.make) Rebuilding $@"
+	@if test ! -d $(@D); then $(mkdir) -p $(@D); fi; \
+	  if test -f $(cmt_local_setup); then /bin/rm -f $(cmt_local_setup); fi; \
+	  trap '/bin/rm -f $(cmt_local_setup)' 0 1 2 15; \
+	  $(cmtexe) -tag=$(tags) show setup >>$(cmt_local_setup); \
+	  if test ! -f $@; then \
+	    mv $(cmt_local_setup) $@; \
+	  else \
+	    if /usr/bin/diff $(cmt_local_setup) $@ >/dev/null ; then \
+	      : ; \
+	    else \
+	      mv $(cmt_local_setup) $@; \
+	    fi; \
+	  fi
+
+#	@/bin/echo $@ ok   
+
+config :: checkuses
+	@exit 0
+checkuses : ;
+
+env.make ::
+	printenv >env.make.tmp; $(cmtexe) check files env.make.tmp env.make
+
+ifndef QUICK
+all :: build_library_links
+	$(echo) "(constituents.make) all done"
+endif
+
+javadirs ::
+	@if test ! -d $(javabin) ; then $(mkdir) -p $(javabin) ; fi
+
+srcdirs ::
+	@if test ! -d $(src) ; then $(mkdir) -p $(src) ; fi
+
+dirs ::
+	@if test ! -r requirements ; then echo "No requirements file" ; fi; \
+	  if test ! -d $(bin) ; then $(mkdir) -p $(bin) ; fi
+
+build_library_links : dirs requirements
+	$(echo) "(constituents.make) Rebuilding library links"; \
+	if test ! -d $(bin) ; then $(mkdir) -p $(bin) ; fi; \
+	$(build_library_links)
+
+.DEFAULT ::
+	$(echo) "(constituents.make) $@: No rule for such target" >&2
+#	@echo "#CMT> Warning: $@: Using default commands" >&2; exit
+
+#	@if test "$@" = "$(cmt_lock_setup)"; then \
+	#  /bin/rm -f $(cmt_lock_setup); \
+	 # touch $(cmt_lock_setup); \
+	#fi
+
+#-- end of constituents_header ------
+#-- start of group ------
+
+all_groups :: all
+
+all :: $(all_dependencies)  $(all_pre_constituents) $(all_constituents)  $(all_post_constituents)
+	$(echo) "all ok."
+
+#	@/bin/echo " all ok."
+
+clean :: allclean
+
+allclean ::  $(all_constituentsclean)
+	$(echo) $(all_constituentsclean)
+	$(echo) "allclean ok."
+
+#	@echo $(all_constituentsclean)
+#	@/bin/echo " allclean ok."
+
+allclean :: makefilesclean
+
+#-- end of group ------
+#-- start of group ------
+
+all_groups :: cmt_actions
+
+cmt_actions :: $(cmt_actions_dependencies)  $(cmt_actions_pre_constituents) $(cmt_actions_constituents)  $(cmt_actions_post_constituents)
+	$(echo) "cmt_actions ok."
+
+#	@/bin/echo " cmt_actions ok."
+
+clean :: allclean
+
+cmt_actionsclean ::  $(cmt_actions_constituentsclean)
+	$(echo) $(cmt_actions_constituentsclean)
+	$(echo) "cmt_actionsclean ok."
+
+#	@echo $(cmt_actions_constituentsclean)
+#	@/bin/echo " cmt_actionsclean ok."
+
+cmt_actionsclean :: makefilesclean
+
+#-- end of group ------
+#-- start of group ------
+
+all_groups :: documentation
+
+documentation :: $(documentation_dependencies)  $(documentation_pre_constituents) $(documentation_constituents)  $(documentation_post_constituents)
+	$(echo) "documentation ok."
+
+#	@/bin/echo " documentation ok."
+
+clean :: allclean
+
+documentationclean ::  $(documentation_constituentsclean)
+	$(echo) $(documentation_constituentsclean)
+	$(echo) "documentationclean ok."
+
+#	@echo $(documentation_constituentsclean)
+#	@/bin/echo " documentationclean ok."
+
+documentationclean :: makefilesclean
+
+#-- end of group ------
+#-- start of constituent_lock ------
+
+cmt_doxygen_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_doxygen_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_doxygen = /tmp/CMT_$(psycheSteering_tag)_doxygen.make$(cmt_lock_pid)
+cmt_final_setup_doxygen = /tmp/CMT_psycheSteering_doxygensetup.make
+cmt_local_doxygen_makefile = /tmp/CMT_doxygen$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_doxygen = $(psycheSteering_tag)_doxygen.make
+cmt_local_tagfile_doxygen = $(bin)$(psycheSteering_tag)_doxygen.make
+cmt_final_setup_doxygen = $(bin)psycheSteering_doxygensetup.make
+cmt_local_doxygen_makefile = $(bin)doxygen.make
+endif
+
+doxygen_extratags = -tag_add=target_doxygen
+
+#$(cmt_local_tagfile_doxygen) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_doxygen) ::
+else
+$(cmt_local_tagfile_doxygen) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_doxygen)"
+	@if test -f $(cmt_local_tagfile_doxygen); then /bin/rm -f $(cmt_local_tagfile_doxygen); fi ; \
+	  $(cmtexe) -tag=$(tags) $(doxygen_extratags) build tag_makefile >>$(cmt_local_tagfile_doxygen); \
+	  if test -f $(cmt_final_setup_doxygen); then /bin/rm -f $(cmt_final_setup_doxygen); fi; \
+	  $(cmtexe) -tag=$(tags) $(doxygen_extratags) show setup >>$(cmt_final_setup_doxygen)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_doxygen = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_doxygen = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_doxygen_makefile = /tmp/CMT_doxygen$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_doxygen = $(psycheSteering_tag).make
+cmt_local_tagfile_doxygen = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_doxygen = $(bin)psycheSteeringsetup.make
+cmt_local_doxygen_makefile = $(bin)doxygen.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_doxygen_makefile) :: $(doxygen_dependencies) $(cmt_local_tagfile_doxygen) build_library_links dirs
+else
+$(cmt_local_doxygen_makefile) :: $(cmt_local_tagfile_doxygen)
+endif
+	$(echo) "(constituents.make) Building doxygen.make"; \
+	  $(cmtexe) -tag=$(tags) $(doxygen_extratags) build constituent_makefile -out=$(cmt_local_doxygen_makefile) doxygen
+
+doxygen :: $(doxygen_dependencies) $(cmt_local_doxygen_makefile)
+	$(echo) "(constituents.make) Creating doxygen${lock_suffix} and Starting doxygen"
+	@${lock_command} doxygen${lock_suffix} || exit $$?; \
+	  retval=$$?; \
+	  trap '${unlock_command} doxygen${lock_suffix}; exit $${retval}' 1 2 15; \
+	  $(MAKE) -f $(cmt_local_doxygen_makefile) cmt_lock_pid=$${cmt_lock_pid} doxygen; \
+	  retval=$$?; ${unlock_command} doxygen${lock_suffix}; exit $${retval}
+	$(echo) "(constituents.make) doxygen done"
+
+clean :: doxygenclean
+
+doxygenclean :: $(doxygenclean_dependencies) ##$(cmt_local_doxygen_makefile)
+	$(echo) "(constituents.make) Starting doxygenclean"
+	@-if test -f $(cmt_local_doxygen_makefile); then \
+	  $(MAKE) -f $(cmt_local_doxygen_makefile) cmt_lock_pid=$${cmt_lock_pid} doxygenclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_doxygen_makefile) $(bin)doxygen_dependencies.make
+
+install :: doxygeninstall
+
+doxygeninstall :: $(doxygen_dependencies) $(cmt_local_doxygen_makefile)
+	$(echo) "(constituents.make) Starting install doxygen"
+	@-$(MAKE) -f $(cmt_local_doxygen_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install doxygen done"
+
+uninstall :: doxygenuninstall
+
+doxygenuninstall :: $(cmt_local_doxygen_makefile)
+	$(echo) "(constituents.make) Starting uninstall doxygen"
+	@-$(MAKE) -f $(cmt_local_doxygen_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall doxygen done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ doxygen"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ doxygen done"
+endif
+
+
+#-- end of constituent_lock ------
+#-- start of constituent ------
+
+cmt_psycheSteering_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_psycheSteering_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_psycheSteering = /tmp/CMT_$(psycheSteering_tag)_psycheSteering.make$(cmt_lock_pid)
+cmt_final_setup_psycheSteering = /tmp/CMT_psycheSteering_psycheSteeringsetup.make
+cmt_local_psycheSteering_makefile = /tmp/CMT_psycheSteering$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_psycheSteering = $(psycheSteering_tag)_psycheSteering.make
+cmt_local_tagfile_psycheSteering = $(bin)$(psycheSteering_tag)_psycheSteering.make
+cmt_final_setup_psycheSteering = $(bin)psycheSteering_psycheSteeringsetup.make
+cmt_local_psycheSteering_makefile = $(bin)psycheSteering.make
+endif
+
+psycheSteering_extratags = -tag_add=target_psycheSteering
+
+#$(cmt_local_tagfile_psycheSteering) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_psycheSteering) ::
+else
+$(cmt_local_tagfile_psycheSteering) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_psycheSteering)"
+	@if test -f $(cmt_local_tagfile_psycheSteering); then /bin/rm -f $(cmt_local_tagfile_psycheSteering); fi ; \
+	  $(cmtexe) -tag=$(tags) $(psycheSteering_extratags) build tag_makefile >>$(cmt_local_tagfile_psycheSteering); \
+	  if test -f $(cmt_final_setup_psycheSteering); then /bin/rm -f $(cmt_final_setup_psycheSteering); fi; \
+	  $(cmtexe) -tag=$(tags) $(psycheSteering_extratags) show setup >>$(cmt_final_setup_psycheSteering)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_psycheSteering = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_psycheSteering = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_psycheSteering_makefile = /tmp/CMT_psycheSteering$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_psycheSteering = $(psycheSteering_tag).make
+cmt_local_tagfile_psycheSteering = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_psycheSteering = $(bin)psycheSteeringsetup.make
+cmt_local_psycheSteering_makefile = $(bin)psycheSteering.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_psycheSteering_makefile) :: $(psycheSteering_dependencies) $(cmt_local_tagfile_psycheSteering) build_library_links dirs
+else
+$(cmt_local_psycheSteering_makefile) :: $(cmt_local_tagfile_psycheSteering)
+endif
+	$(echo) "(constituents.make) Building psycheSteering.make"; \
+	  $(cmtexe) -tag=$(tags) $(psycheSteering_extratags) build constituent_makefile -out=$(cmt_local_psycheSteering_makefile) psycheSteering
+
+psycheSteering :: $(psycheSteering_dependencies) $(cmt_local_psycheSteering_makefile)
+	$(echo) "(constituents.make) Starting psycheSteering"
+	@$(MAKE) -f $(cmt_local_psycheSteering_makefile) cmt_lock_pid=$${cmt_lock_pid} psycheSteering
+	$(echo) "(constituents.make) psycheSteering done"
+
+clean :: psycheSteeringclean
+
+psycheSteeringclean :: $(psycheSteeringclean_dependencies) ##$(cmt_local_psycheSteering_makefile)
+	$(echo) "(constituents.make) Starting psycheSteeringclean"
+	@-if test -f $(cmt_local_psycheSteering_makefile); then \
+	  $(MAKE) -f $(cmt_local_psycheSteering_makefile) cmt_lock_pid=$${cmt_lock_pid} psycheSteeringclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_psycheSteering_makefile) $(bin)psycheSteering_dependencies.make
+
+install :: psycheSteeringinstall
+
+psycheSteeringinstall :: $(psycheSteering_dependencies) $(cmt_local_psycheSteering_makefile)
+	$(echo) "(constituents.make) Starting install psycheSteering"
+	@-$(MAKE) -f $(cmt_local_psycheSteering_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install psycheSteering done"
+
+uninstall :: psycheSteeringuninstall
+
+psycheSteeringuninstall :: $(cmt_local_psycheSteering_makefile)
+	$(echo) "(constituents.make) Starting uninstall psycheSteering"
+	@-$(MAKE) -f $(cmt_local_psycheSteering_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall psycheSteering done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ psycheSteering"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ psycheSteering done"
+endif
+
+
+#-- end of constituent ------
+#-- start of constituent ------
+
+cmt_RunSyst_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_RunSyst_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_RunSyst = /tmp/CMT_$(psycheSteering_tag)_RunSyst.make$(cmt_lock_pid)
+cmt_final_setup_RunSyst = /tmp/CMT_psycheSteering_RunSystsetup.make
+cmt_local_RunSyst_makefile = /tmp/CMT_RunSyst$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunSyst = $(psycheSteering_tag)_RunSyst.make
+cmt_local_tagfile_RunSyst = $(bin)$(psycheSteering_tag)_RunSyst.make
+cmt_final_setup_RunSyst = $(bin)psycheSteering_RunSystsetup.make
+cmt_local_RunSyst_makefile = $(bin)RunSyst.make
+endif
+
+RunSyst_extratags = -tag_add=target_RunSyst
+
+#$(cmt_local_tagfile_RunSyst) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_RunSyst) ::
+else
+$(cmt_local_tagfile_RunSyst) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_RunSyst)"
+	@if test -f $(cmt_local_tagfile_RunSyst); then /bin/rm -f $(cmt_local_tagfile_RunSyst); fi ; \
+	  $(cmtexe) -tag=$(tags) $(RunSyst_extratags) build tag_makefile >>$(cmt_local_tagfile_RunSyst); \
+	  if test -f $(cmt_final_setup_RunSyst); then /bin/rm -f $(cmt_final_setup_RunSyst); fi; \
+	  $(cmtexe) -tag=$(tags) $(RunSyst_extratags) show setup >>$(cmt_final_setup_RunSyst)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_RunSyst = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_RunSyst = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_RunSyst_makefile = /tmp/CMT_RunSyst$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunSyst = $(psycheSteering_tag).make
+cmt_local_tagfile_RunSyst = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_RunSyst = $(bin)psycheSteeringsetup.make
+cmt_local_RunSyst_makefile = $(bin)RunSyst.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_RunSyst_makefile) :: $(RunSyst_dependencies) $(cmt_local_tagfile_RunSyst) build_library_links dirs
+else
+$(cmt_local_RunSyst_makefile) :: $(cmt_local_tagfile_RunSyst)
+endif
+	$(echo) "(constituents.make) Building RunSyst.make"; \
+	  $(cmtexe) -tag=$(tags) $(RunSyst_extratags) build constituent_makefile -out=$(cmt_local_RunSyst_makefile) RunSyst
+
+RunSyst :: $(RunSyst_dependencies) $(cmt_local_RunSyst_makefile)
+	$(echo) "(constituents.make) Starting RunSyst"
+	@$(MAKE) -f $(cmt_local_RunSyst_makefile) cmt_lock_pid=$${cmt_lock_pid} RunSyst
+	$(echo) "(constituents.make) RunSyst done"
+
+clean :: RunSystclean
+
+RunSystclean :: $(RunSystclean_dependencies) ##$(cmt_local_RunSyst_makefile)
+	$(echo) "(constituents.make) Starting RunSystclean"
+	@-if test -f $(cmt_local_RunSyst_makefile); then \
+	  $(MAKE) -f $(cmt_local_RunSyst_makefile) cmt_lock_pid=$${cmt_lock_pid} RunSystclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_RunSyst_makefile) $(bin)RunSyst_dependencies.make
+
+install :: RunSystinstall
+
+RunSystinstall :: $(RunSyst_dependencies) $(cmt_local_RunSyst_makefile)
+	$(echo) "(constituents.make) Starting install RunSyst"
+	@-$(MAKE) -f $(cmt_local_RunSyst_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install RunSyst done"
+
+uninstall :: RunSystuninstall
+
+RunSystuninstall :: $(cmt_local_RunSyst_makefile)
+	$(echo) "(constituents.make) Starting uninstall RunSyst"
+	@-$(MAKE) -f $(cmt_local_RunSyst_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall RunSyst done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ RunSyst"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ RunSyst done"
+endif
+
+
+#-- end of constituent ------
+#-- start of constituent ------
+
+cmt_RunExample_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_RunExample_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_RunExample = /tmp/CMT_$(psycheSteering_tag)_RunExample.make$(cmt_lock_pid)
+cmt_final_setup_RunExample = /tmp/CMT_psycheSteering_RunExamplesetup.make
+cmt_local_RunExample_makefile = /tmp/CMT_RunExample$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunExample = $(psycheSteering_tag)_RunExample.make
+cmt_local_tagfile_RunExample = $(bin)$(psycheSteering_tag)_RunExample.make
+cmt_final_setup_RunExample = $(bin)psycheSteering_RunExamplesetup.make
+cmt_local_RunExample_makefile = $(bin)RunExample.make
+endif
+
+RunExample_extratags = -tag_add=target_RunExample
+
+#$(cmt_local_tagfile_RunExample) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_RunExample) ::
+else
+$(cmt_local_tagfile_RunExample) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_RunExample)"
+	@if test -f $(cmt_local_tagfile_RunExample); then /bin/rm -f $(cmt_local_tagfile_RunExample); fi ; \
+	  $(cmtexe) -tag=$(tags) $(RunExample_extratags) build tag_makefile >>$(cmt_local_tagfile_RunExample); \
+	  if test -f $(cmt_final_setup_RunExample); then /bin/rm -f $(cmt_final_setup_RunExample); fi; \
+	  $(cmtexe) -tag=$(tags) $(RunExample_extratags) show setup >>$(cmt_final_setup_RunExample)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_RunExample = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_RunExample = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_RunExample_makefile = /tmp/CMT_RunExample$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunExample = $(psycheSteering_tag).make
+cmt_local_tagfile_RunExample = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_RunExample = $(bin)psycheSteeringsetup.make
+cmt_local_RunExample_makefile = $(bin)RunExample.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_RunExample_makefile) :: $(RunExample_dependencies) $(cmt_local_tagfile_RunExample) build_library_links dirs
+else
+$(cmt_local_RunExample_makefile) :: $(cmt_local_tagfile_RunExample)
+endif
+	$(echo) "(constituents.make) Building RunExample.make"; \
+	  $(cmtexe) -tag=$(tags) $(RunExample_extratags) build constituent_makefile -out=$(cmt_local_RunExample_makefile) RunExample
+
+RunExample :: $(RunExample_dependencies) $(cmt_local_RunExample_makefile)
+	$(echo) "(constituents.make) Starting RunExample"
+	@$(MAKE) -f $(cmt_local_RunExample_makefile) cmt_lock_pid=$${cmt_lock_pid} RunExample
+	$(echo) "(constituents.make) RunExample done"
+
+clean :: RunExampleclean
+
+RunExampleclean :: $(RunExampleclean_dependencies) ##$(cmt_local_RunExample_makefile)
+	$(echo) "(constituents.make) Starting RunExampleclean"
+	@-if test -f $(cmt_local_RunExample_makefile); then \
+	  $(MAKE) -f $(cmt_local_RunExample_makefile) cmt_lock_pid=$${cmt_lock_pid} RunExampleclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_RunExample_makefile) $(bin)RunExample_dependencies.make
+
+install :: RunExampleinstall
+
+RunExampleinstall :: $(RunExample_dependencies) $(cmt_local_RunExample_makefile)
+	$(echo) "(constituents.make) Starting install RunExample"
+	@-$(MAKE) -f $(cmt_local_RunExample_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install RunExample done"
+
+uninstall :: RunExampleuninstall
+
+RunExampleuninstall :: $(cmt_local_RunExample_makefile)
+	$(echo) "(constituents.make) Starting uninstall RunExample"
+	@-$(MAKE) -f $(cmt_local_RunExample_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall RunExample done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ RunExample"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ RunExample done"
+endif
+
+
+#-- end of constituent ------
+#-- start of constituent ------
+
+cmt_RunPreloadExample_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_RunPreloadExample_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_RunPreloadExample = /tmp/CMT_$(psycheSteering_tag)_RunPreloadExample.make$(cmt_lock_pid)
+cmt_final_setup_RunPreloadExample = /tmp/CMT_psycheSteering_RunPreloadExamplesetup.make
+cmt_local_RunPreloadExample_makefile = /tmp/CMT_RunPreloadExample$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunPreloadExample = $(psycheSteering_tag)_RunPreloadExample.make
+cmt_local_tagfile_RunPreloadExample = $(bin)$(psycheSteering_tag)_RunPreloadExample.make
+cmt_final_setup_RunPreloadExample = $(bin)psycheSteering_RunPreloadExamplesetup.make
+cmt_local_RunPreloadExample_makefile = $(bin)RunPreloadExample.make
+endif
+
+RunPreloadExample_extratags = -tag_add=target_RunPreloadExample
+
+#$(cmt_local_tagfile_RunPreloadExample) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_RunPreloadExample) ::
+else
+$(cmt_local_tagfile_RunPreloadExample) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_RunPreloadExample)"
+	@if test -f $(cmt_local_tagfile_RunPreloadExample); then /bin/rm -f $(cmt_local_tagfile_RunPreloadExample); fi ; \
+	  $(cmtexe) -tag=$(tags) $(RunPreloadExample_extratags) build tag_makefile >>$(cmt_local_tagfile_RunPreloadExample); \
+	  if test -f $(cmt_final_setup_RunPreloadExample); then /bin/rm -f $(cmt_final_setup_RunPreloadExample); fi; \
+	  $(cmtexe) -tag=$(tags) $(RunPreloadExample_extratags) show setup >>$(cmt_final_setup_RunPreloadExample)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_RunPreloadExample = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_RunPreloadExample = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_RunPreloadExample_makefile = /tmp/CMT_RunPreloadExample$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunPreloadExample = $(psycheSteering_tag).make
+cmt_local_tagfile_RunPreloadExample = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_RunPreloadExample = $(bin)psycheSteeringsetup.make
+cmt_local_RunPreloadExample_makefile = $(bin)RunPreloadExample.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_RunPreloadExample_makefile) :: $(RunPreloadExample_dependencies) $(cmt_local_tagfile_RunPreloadExample) build_library_links dirs
+else
+$(cmt_local_RunPreloadExample_makefile) :: $(cmt_local_tagfile_RunPreloadExample)
+endif
+	$(echo) "(constituents.make) Building RunPreloadExample.make"; \
+	  $(cmtexe) -tag=$(tags) $(RunPreloadExample_extratags) build constituent_makefile -out=$(cmt_local_RunPreloadExample_makefile) RunPreloadExample
+
+RunPreloadExample :: $(RunPreloadExample_dependencies) $(cmt_local_RunPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting RunPreloadExample"
+	@$(MAKE) -f $(cmt_local_RunPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} RunPreloadExample
+	$(echo) "(constituents.make) RunPreloadExample done"
+
+clean :: RunPreloadExampleclean
+
+RunPreloadExampleclean :: $(RunPreloadExampleclean_dependencies) ##$(cmt_local_RunPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting RunPreloadExampleclean"
+	@-if test -f $(cmt_local_RunPreloadExample_makefile); then \
+	  $(MAKE) -f $(cmt_local_RunPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} RunPreloadExampleclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_RunPreloadExample_makefile) $(bin)RunPreloadExample_dependencies.make
+
+install :: RunPreloadExampleinstall
+
+RunPreloadExampleinstall :: $(RunPreloadExample_dependencies) $(cmt_local_RunPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting install RunPreloadExample"
+	@-$(MAKE) -f $(cmt_local_RunPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install RunPreloadExample done"
+
+uninstall :: RunPreloadExampleuninstall
+
+RunPreloadExampleuninstall :: $(cmt_local_RunPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting uninstall RunPreloadExample"
+	@-$(MAKE) -f $(cmt_local_RunPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall RunPreloadExample done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ RunPreloadExample"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ RunPreloadExample done"
+endif
+
+
+#-- end of constituent ------
+#-- start of constituent ------
+
+cmt_RunExpPreloadExample_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_RunExpPreloadExample_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_RunExpPreloadExample = /tmp/CMT_$(psycheSteering_tag)_RunExpPreloadExample.make$(cmt_lock_pid)
+cmt_final_setup_RunExpPreloadExample = /tmp/CMT_psycheSteering_RunExpPreloadExamplesetup.make
+cmt_local_RunExpPreloadExample_makefile = /tmp/CMT_RunExpPreloadExample$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunExpPreloadExample = $(psycheSteering_tag)_RunExpPreloadExample.make
+cmt_local_tagfile_RunExpPreloadExample = $(bin)$(psycheSteering_tag)_RunExpPreloadExample.make
+cmt_final_setup_RunExpPreloadExample = $(bin)psycheSteering_RunExpPreloadExamplesetup.make
+cmt_local_RunExpPreloadExample_makefile = $(bin)RunExpPreloadExample.make
+endif
+
+RunExpPreloadExample_extratags = -tag_add=target_RunExpPreloadExample
+
+#$(cmt_local_tagfile_RunExpPreloadExample) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_RunExpPreloadExample) ::
+else
+$(cmt_local_tagfile_RunExpPreloadExample) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_RunExpPreloadExample)"
+	@if test -f $(cmt_local_tagfile_RunExpPreloadExample); then /bin/rm -f $(cmt_local_tagfile_RunExpPreloadExample); fi ; \
+	  $(cmtexe) -tag=$(tags) $(RunExpPreloadExample_extratags) build tag_makefile >>$(cmt_local_tagfile_RunExpPreloadExample); \
+	  if test -f $(cmt_final_setup_RunExpPreloadExample); then /bin/rm -f $(cmt_final_setup_RunExpPreloadExample); fi; \
+	  $(cmtexe) -tag=$(tags) $(RunExpPreloadExample_extratags) show setup >>$(cmt_final_setup_RunExpPreloadExample)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_RunExpPreloadExample = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_RunExpPreloadExample = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_RunExpPreloadExample_makefile = /tmp/CMT_RunExpPreloadExample$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_RunExpPreloadExample = $(psycheSteering_tag).make
+cmt_local_tagfile_RunExpPreloadExample = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_RunExpPreloadExample = $(bin)psycheSteeringsetup.make
+cmt_local_RunExpPreloadExample_makefile = $(bin)RunExpPreloadExample.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_RunExpPreloadExample_makefile) :: $(RunExpPreloadExample_dependencies) $(cmt_local_tagfile_RunExpPreloadExample) build_library_links dirs
+else
+$(cmt_local_RunExpPreloadExample_makefile) :: $(cmt_local_tagfile_RunExpPreloadExample)
+endif
+	$(echo) "(constituents.make) Building RunExpPreloadExample.make"; \
+	  $(cmtexe) -tag=$(tags) $(RunExpPreloadExample_extratags) build constituent_makefile -out=$(cmt_local_RunExpPreloadExample_makefile) RunExpPreloadExample
+
+RunExpPreloadExample :: $(RunExpPreloadExample_dependencies) $(cmt_local_RunExpPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting RunExpPreloadExample"
+	@$(MAKE) -f $(cmt_local_RunExpPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} RunExpPreloadExample
+	$(echo) "(constituents.make) RunExpPreloadExample done"
+
+clean :: RunExpPreloadExampleclean
+
+RunExpPreloadExampleclean :: $(RunExpPreloadExampleclean_dependencies) ##$(cmt_local_RunExpPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting RunExpPreloadExampleclean"
+	@-if test -f $(cmt_local_RunExpPreloadExample_makefile); then \
+	  $(MAKE) -f $(cmt_local_RunExpPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} RunExpPreloadExampleclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_RunExpPreloadExample_makefile) $(bin)RunExpPreloadExample_dependencies.make
+
+install :: RunExpPreloadExampleinstall
+
+RunExpPreloadExampleinstall :: $(RunExpPreloadExample_dependencies) $(cmt_local_RunExpPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting install RunExpPreloadExample"
+	@-$(MAKE) -f $(cmt_local_RunExpPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install RunExpPreloadExample done"
+
+uninstall :: RunExpPreloadExampleuninstall
+
+RunExpPreloadExampleuninstall :: $(cmt_local_RunExpPreloadExample_makefile)
+	$(echo) "(constituents.make) Starting uninstall RunExpPreloadExample"
+	@-$(MAKE) -f $(cmt_local_RunExpPreloadExample_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall RunExpPreloadExample done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ RunExpPreloadExample"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ RunExpPreloadExample done"
+endif
+
+
+#-- end of constituent ------
+#-- start of constituent ------
+
+cmt_MakeBANFFEventHistograms_has_no_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_MakeBANFFEventHistograms_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_MakeBANFFEventHistograms = /tmp/CMT_$(psycheSteering_tag)_MakeBANFFEventHistograms.make$(cmt_lock_pid)
+cmt_final_setup_MakeBANFFEventHistograms = /tmp/CMT_psycheSteering_MakeBANFFEventHistogramssetup.make
+cmt_local_MakeBANFFEventHistograms_makefile = /tmp/CMT_MakeBANFFEventHistograms$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_MakeBANFFEventHistograms = $(psycheSteering_tag)_MakeBANFFEventHistograms.make
+cmt_local_tagfile_MakeBANFFEventHistograms = $(bin)$(psycheSteering_tag)_MakeBANFFEventHistograms.make
+cmt_final_setup_MakeBANFFEventHistograms = $(bin)psycheSteering_MakeBANFFEventHistogramssetup.make
+cmt_local_MakeBANFFEventHistograms_makefile = $(bin)MakeBANFFEventHistograms.make
+endif
+
+MakeBANFFEventHistograms_extratags = -tag_add=target_MakeBANFFEventHistograms
+
+#$(cmt_local_tagfile_MakeBANFFEventHistograms) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_MakeBANFFEventHistograms) ::
+else
+$(cmt_local_tagfile_MakeBANFFEventHistograms) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_MakeBANFFEventHistograms)"
+	@if test -f $(cmt_local_tagfile_MakeBANFFEventHistograms); then /bin/rm -f $(cmt_local_tagfile_MakeBANFFEventHistograms); fi ; \
+	  $(cmtexe) -tag=$(tags) $(MakeBANFFEventHistograms_extratags) build tag_makefile >>$(cmt_local_tagfile_MakeBANFFEventHistograms); \
+	  if test -f $(cmt_final_setup_MakeBANFFEventHistograms); then /bin/rm -f $(cmt_final_setup_MakeBANFFEventHistograms); fi; \
+	  $(cmtexe) -tag=$(tags) $(MakeBANFFEventHistograms_extratags) show setup >>$(cmt_final_setup_MakeBANFFEventHistograms)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_MakeBANFFEventHistograms = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_MakeBANFFEventHistograms = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_MakeBANFFEventHistograms_makefile = /tmp/CMT_MakeBANFFEventHistograms$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_MakeBANFFEventHistograms = $(psycheSteering_tag).make
+cmt_local_tagfile_MakeBANFFEventHistograms = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_MakeBANFFEventHistograms = $(bin)psycheSteeringsetup.make
+cmt_local_MakeBANFFEventHistograms_makefile = $(bin)MakeBANFFEventHistograms.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_MakeBANFFEventHistograms_makefile) :: $(MakeBANFFEventHistograms_dependencies) $(cmt_local_tagfile_MakeBANFFEventHistograms) build_library_links dirs
+else
+$(cmt_local_MakeBANFFEventHistograms_makefile) :: $(cmt_local_tagfile_MakeBANFFEventHistograms)
+endif
+	$(echo) "(constituents.make) Building MakeBANFFEventHistograms.make"; \
+	  $(cmtexe) -tag=$(tags) $(MakeBANFFEventHistograms_extratags) build constituent_makefile -out=$(cmt_local_MakeBANFFEventHistograms_makefile) MakeBANFFEventHistograms
+
+MakeBANFFEventHistograms :: $(MakeBANFFEventHistograms_dependencies) $(cmt_local_MakeBANFFEventHistograms_makefile)
+	$(echo) "(constituents.make) Starting MakeBANFFEventHistograms"
+	@$(MAKE) -f $(cmt_local_MakeBANFFEventHistograms_makefile) cmt_lock_pid=$${cmt_lock_pid} MakeBANFFEventHistograms
+	$(echo) "(constituents.make) MakeBANFFEventHistograms done"
+
+clean :: MakeBANFFEventHistogramsclean
+
+MakeBANFFEventHistogramsclean :: $(MakeBANFFEventHistogramsclean_dependencies) ##$(cmt_local_MakeBANFFEventHistograms_makefile)
+	$(echo) "(constituents.make) Starting MakeBANFFEventHistogramsclean"
+	@-if test -f $(cmt_local_MakeBANFFEventHistograms_makefile); then \
+	  $(MAKE) -f $(cmt_local_MakeBANFFEventHistograms_makefile) cmt_lock_pid=$${cmt_lock_pid} MakeBANFFEventHistogramsclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_MakeBANFFEventHistograms_makefile) $(bin)MakeBANFFEventHistograms_dependencies.make
+
+install :: MakeBANFFEventHistogramsinstall
+
+MakeBANFFEventHistogramsinstall :: $(MakeBANFFEventHistograms_dependencies) $(cmt_local_MakeBANFFEventHistograms_makefile)
+	$(echo) "(constituents.make) Starting install MakeBANFFEventHistograms"
+	@-$(MAKE) -f $(cmt_local_MakeBANFFEventHistograms_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install MakeBANFFEventHistograms done"
+
+uninstall :: MakeBANFFEventHistogramsuninstall
+
+MakeBANFFEventHistogramsuninstall :: $(cmt_local_MakeBANFFEventHistograms_makefile)
+	$(echo) "(constituents.make) Starting uninstall MakeBANFFEventHistograms"
+	@-$(MAKE) -f $(cmt_local_MakeBANFFEventHistograms_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall MakeBANFFEventHistograms done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ MakeBANFFEventHistograms"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ MakeBANFFEventHistograms done"
+endif
+
+
+#-- end of constituent ------
+#-- start of constituent_lock ------
+
+cmt_make_has_target_tag = 1
+
+#--------------------------------------------------------
+
+ifdef cmt_make_has_target_tag
+
+ifdef READONLY
+cmt_local_tagfile_make = /tmp/CMT_$(psycheSteering_tag)_make.make$(cmt_lock_pid)
+cmt_final_setup_make = /tmp/CMT_psycheSteering_makesetup.make
+cmt_local_make_makefile = /tmp/CMT_make$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_make = $(psycheSteering_tag)_make.make
+cmt_local_tagfile_make = $(bin)$(psycheSteering_tag)_make.make
+cmt_final_setup_make = $(bin)psycheSteering_makesetup.make
+cmt_local_make_makefile = $(bin)make.make
+endif
+
+make_extratags = -tag_add=target_make
+
+#$(cmt_local_tagfile_make) : $(cmt_lock_setup)
+ifndef QUICK
+$(cmt_local_tagfile_make) ::
+else
+$(cmt_local_tagfile_make) :
+endif
+	$(echo) "(constituents.make) Rebuilding setup.make $(cmt_local_tagfile_make)"
+	@if test -f $(cmt_local_tagfile_make); then /bin/rm -f $(cmt_local_tagfile_make); fi ; \
+	  $(cmtexe) -tag=$(tags) $(make_extratags) build tag_makefile >>$(cmt_local_tagfile_make); \
+	  if test -f $(cmt_final_setup_make); then /bin/rm -f $(cmt_final_setup_make); fi; \
+	  $(cmtexe) -tag=$(tags) $(make_extratags) show setup >>$(cmt_final_setup_make)
+	$(echo) setup.make ok
+
+else
+
+ifdef READONLY
+cmt_local_tagfile_make = /tmp/CMT_$(psycheSteering_tag).make$(cmt_lock_pid)
+cmt_final_setup_make = /tmp/CMT_psycheSteeringsetup.make
+cmt_local_make_makefile = /tmp/CMT_make$(cmt_lock_pid).make
+else
+#cmt_local_tagfile_make = $(psycheSteering_tag).make
+cmt_local_tagfile_make = $(bin)$(psycheSteering_tag).make
+cmt_final_setup_make = $(bin)psycheSteeringsetup.make
+cmt_local_make_makefile = $(bin)make.make
+endif
+
+endif
+
+ifndef QUICK
+$(cmt_local_make_makefile) :: $(make_dependencies) $(cmt_local_tagfile_make) build_library_links dirs
+else
+$(cmt_local_make_makefile) :: $(cmt_local_tagfile_make)
+endif
+	$(echo) "(constituents.make) Building make.make"; \
+	  $(cmtexe) -tag=$(tags) $(make_extratags) build constituent_makefile -out=$(cmt_local_make_makefile) make
+
+make :: $(make_dependencies) $(cmt_local_make_makefile)
+	$(echo) "(constituents.make) Creating make${lock_suffix} and Starting make"
+	@${lock_command} make${lock_suffix} || exit $$?; \
+	  retval=$$?; \
+	  trap '${unlock_command} make${lock_suffix}; exit $${retval}' 1 2 15; \
+	  $(MAKE) -f $(cmt_local_make_makefile) cmt_lock_pid=$${cmt_lock_pid} make; \
+	  retval=$$?; ${unlock_command} make${lock_suffix}; exit $${retval}
+	$(echo) "(constituents.make) make done"
+
+clean :: makeclean
+
+makeclean :: $(makeclean_dependencies) ##$(cmt_local_make_makefile)
+	$(echo) "(constituents.make) Starting makeclean"
+	@-if test -f $(cmt_local_make_makefile); then \
+	  $(MAKE) -f $(cmt_local_make_makefile) cmt_lock_pid=$${cmt_lock_pid} makeclean; \
+	fi
+
+##	  /bin/rm -f $(cmt_local_make_makefile) $(bin)make_dependencies.make
+
+install :: makeinstall
+
+makeinstall :: $(make_dependencies) $(cmt_local_make_makefile)
+	$(echo) "(constituents.make) Starting install make"
+	@-$(MAKE) -f $(cmt_local_make_makefile) cmt_lock_pid=$${cmt_lock_pid} install
+	$(echo) "(constituents.make) install make done"
+
+uninstall :: makeuninstall
+
+makeuninstall :: $(cmt_local_make_makefile)
+	$(echo) "(constituents.make) Starting uninstall make"
+	@-$(MAKE) -f $(cmt_local_make_makefile) cmt_lock_pid=$${cmt_lock_pid} uninstall
+	$(echo) "(constituents.make) uninstall make done"
+
+ifndef PEDANTIC
+.DEFAULT::
+	$(echo) "(constituents.make) Starting $@ make"
+	$(echo) Using default action for $@
+	$(echo) "(constituents.make) $@ make done"
+endif
+
+
+#-- end of constituent_lock ------
+#-- start of constituents_trailer ------
+
+clean :: remove_library_links
+
+remove_library_links ::
+	$(echo) "Removing library links"; \
+	  $(remove_library_links)
+
+makefilesclean ::
+
+###	@/bin/rm -f checkuses
+
+###	/bin/rm -f *.make*
+
+clean :: makefilesclean
+
+binclean :: clean
+	$(echo) "Removing binary directory $(bin)"
+	@if test ! "$(bin)" = "./"; then \
+	  /bin/rm -rf $(bin); \
+	fi
+
+#-- end of constituents_trailer ------

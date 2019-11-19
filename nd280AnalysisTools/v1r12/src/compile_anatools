@@ -1,0 +1,44 @@
+#! /bin/bash
+#
+# A script to configure and compile the nd280AnalysisTools package.  This is executed as 
+# follows.
+#   
+#  - To compile the library:
+#       compile_anatools compile package_root tag
+#
+#  - To clean up the library:
+#       compile_anatools clean package_root tag
+#
+# DON'T CALL THIS SCRIPT DIRECTLY. USE "cmt make", WHICH WILL CALL IT FOR YOU!
+
+COMMAND=$1; shift
+PACKAGE=$1; shift
+TAG=$1; shift
+
+# Make sure the environment is properly configured.
+source ../cmt/setup.sh
+
+INPUTFILE=`head -n 1 ${PACKAGE}/AnalysisTools/input-file.list`
+
+case ${COMMAND} in 
+compile)
+  if [[ -f $INPUTFILE ]]; then
+    # The input file exists - try to compile.
+    cd ${PACKAGE}/AnalysisTools && python makeAnalysisTools.py && cd ${PACKAGE}/cmt && make applications
+  else
+    # The oaAnalysis file does not exist - tell the user.
+    # We don't mark the compilation as failed, as this isn't a critical
+    # package, and GRID installs especially don't care whether the tools
+    # we're compiled or not.
+    echo "****************************************************************"
+    echo "* WARNING! nd280AnalysisTools has not been compiled!           *"
+    echo "* You must set the first line in AnalysisTools/input-file.list *"
+    echo "* to point to an oaAnalysis file.                              *"
+    echo "****************************************************************"
+  fi
+    ;;
+
+clean)
+  python ${PACKAGE}/AnalysisTools/nd280AnalysisToolsClean.py 
+    ;;
+esac

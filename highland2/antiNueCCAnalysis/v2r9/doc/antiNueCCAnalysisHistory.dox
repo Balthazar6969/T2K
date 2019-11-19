@@ -1,0 +1,81 @@
+/*! \page highland2/antiNueCCAnalysisHistory History for the highland2/antiNueCCAnalysis Package 
+
+\section antiNueCCAnalysis_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Mon Feb 29 15:45:34 2016
+   - Freeze User: lasorak
+   - Freeze Host: heppc400.ph.qmul.ac.uk
+
+Freeze information:
+   - Freeze Date: Mon Feb 29 15:36:09 2016
+   - Freeze User: lasorak
+   - Freeze Host: heppc400.ph.qmul.ac.uk
+
+
+
+\section antiNueCCAnalysis_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 10:31:54 2016
+   - Freeze User: georgios
+   - Freeze Host: hep163.ph.liv.ac.uk
+
+
+
+Quick freeze to basically update the package version to v2 highland2 era. New highland2/psyche functionality will be added soon. 
+
+\section antiNueCCAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Fri May  6 17:34:53 2016
+   - Freeze User: georgios
+   - Freeze Host: hep163.ph.liv.ac.uk
+
+
+
+Anti-nue analysis freeze to catch up with the latest changes in psyche/highland2. 
+Anti-nue analysis is now decoupled from the nue analysis (although both analysis share most of the cuts) and it has been added in psyche. 
+Analysis validation and cut optimisation will follow.
+
+\section antiNueCCAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Fri Jun 10 18:23:32 2016
+   - Freeze User: georgios
+   - Freeze Host: hep163.ph.liv.ac.uk
+
+
+
+antiNueAnalysis freeze: All the datacard parameters are now moved to psyche.
+
+\section antiNueCCAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 13:13:06 2016
+   - Freeze User: georgios
+   - Freeze Host: kappa.ph.liv.ac.uk
+
+Minor updates to incorporate the latest developments in nue selection in psyche.
+
+
+\section antiNueCCAnalysis_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Tue Oct 18 16:36:55 2016
+   - Freeze User: georgios
+   - Freeze Host: hep163.ph.liv.ac.uk
+
+Add the option to run the gamma initiator from here as well.
+
+
+\section antiNueCCAnalysis_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 14:44:35 2017
+   - Freeze User: georgios
+   - Freeze Host: kappa.ph.liv.ac.uk
+
+Add FGD2 PID for FGD1 analysis. Accum_level is now set differently for FGD1 and FGD2 selections.
+
+*/

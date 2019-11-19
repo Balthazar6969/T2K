@@ -1,0 +1,247 @@
+/*! \page outsideND280AnalysisTools nd280AnalysisTools for tough customers (a.k.a. how to setup the nd280AnalysisTools package outside of the ND280 software toolchain)
+
+\brief An explanation of how to setup the nd280AnalysisTools package without the rest of the ND280 software toolchain.
+
+@section introduction Introduction
+
+The nd280AnalysisTools package contains the functionality to work completely outside of the ND280 software framework.
+
+@section setup Setting up the package
+
+@subsection setupCMT Wanna have fun?
+
+To CMT, or not to CMT: that is the question:<br>
+Whether 'tis nobler in the mind to suffer<br>
+The slings and arrows of outrageous Operating System,<br>
+Or to take arms against a sea of troubles,<br>
+And by installing CMT end them?
+
+Well, you need to answer this question yourself for you.
+From my point of view, you can live without CMT but, sooner or later (I tip on "sooner"), you will learn it the hard way that life's much easier if you have CMT in place.
+
+You can easily build CMT using instructions from the "ND280 Software Workbook" <tt>http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/Workbook.html</tt> : see <tt>http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/Install_bash.html</tt> or <tt>http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/Install_csh.html</tt>
+
+Of course, you can also simply re-use the same CMT binaries that were used to download and build the whole ND280 software toolchain (if you have it around on your local machine).
+
+Note: in general, if you do not plan to use any other piece of the whole ND280 software toolchain, you do NOT need to define the "CMTPATH" environment variable at all (and you may even <tt>unset(env) CMTPATH</tt> if it is set).
+
+Once the CMT is ready, execute <tt>source /path/to/your/local/CMT/installation/setup.(c)sh</tt> and you are prepared (hopefully this forces your session to use this particular version of CMT).
+
+Note: another good reason, to have a working CMT around, is ... it makes it easy to "checkout" the nd280AnalysisTools package from the ND280 repository, see : <tt>http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/PartSoftware.html</tt><br>
+However, you do NOT need CMT if you just want to download the source code. You can simply use the standard CVS (all CVS related environment variables, "CVSROOT", "CVS_RSH" and "CVS_SERVER", should be set exactly the same way as if you were using CMT), try : <tt>cvs checkout -r vXrYpZ nd280AnalysisTools</tt><br>
+The only drawback of this method is that CVS will always download the source code into a "./nd280AnalysisTools" subdirectory (regardless of which revision you ask for), while CMT will create a revision specific "./nd280AnalysisTools/vXrYpZ" subdirectory. That's not really a problem as you do NOT need revision specific subdirectory names at all, even though the commands shown below seem to suggest so (and of course, you can always simply <tt>mv nd280AnalysisTools vXrYpZ</tt> after checking it out, if you want).
+
+@subsection setupRoot Setting up ROOT
+
+In principle, the version of ROOT you are using on your local machine should be exactly the same (that means both, the "version" and its "patch level") as the version used to produce your oaAnalysis files.
+To get an appropriate version of ROOT, download the source code from <tt>http://root.cern.ch/drupal/content/downloading-root</tt> and build it as described on the <tt>http://root.cern.ch/drupal/content/installing-root-source</tt> web page.
+
+In general, you will often need python ROOT bindings (requires python >= 2.2). I don't think that they are strictly required, but they will really be helpful (e.g. many nd280AnalysisTools python scripts need them).
+So, after the "configure" step, make sure that the "config.log" file contains <tt>"Result: Enabled support for ... python, ..."</tt> somewhere near its end. If not, you need to install appropriate python binary and development packages, then re-run the ROOT's "configure" script.
+
+Note: you can also test an existing ROOT installation if it provides python bindings. Try <tt>root-config --features</tt> and see if the output contains <tt>"python"</tt>, or try <tt>root-config --has-python</tt> and see if you get <tt>"yes"</tt>.
+
+Once the ROOT is ready, execute <tt>source /path/to/your/local/ROOT/installation/bin/thisroot.(c)sh</tt> and you are prepared (this forces your session to use this particular version of ROOT).
+
+Of course, you can also simply re-use the same ROOT binaries that are present in the whole ND280 software toolchain. For example, you can install CMT locally then checkout ROOT, EXTERN and MYSQL from the ND280 repository. These should build correctly and then you should be able to compile the nd280AnalysisTools package as normal.
+
+@subsection gettingAnalysisTools What now?
+
+You need to get a local copy of the nd280AnalysisTools package.
+Either use CMT (or CVS, see instructions above) to get it directly from the ND280 repository, or simply copy the contents of the nd280AnalysisTools package from an existing ND280 software toolchain installation (to your local machine).
+
+Afterwards, if you have CMT installed on your local machine, execute (you need to do it only once, each time you move the package's contents to another subdirectory, i.e. after the "absolute path" to the package is changed):
+
+@code
+cd nd280AnalysisTools/vXrYpZ/cmt
+cmt config
+@endcode
+
+and if you do NOT have CMT installed, you will need to manually set the ND280ANALYSISTOOLSROOT environment variable:
+
+@code
+cd nd280AnalysisTools/vXrYpZ
+# if you use bash ...
+export ND280ANALYSISTOOLSROOT="`pwd`"
+# if you use (t)csh ...
+setenv ND280ANALYSISTOOLSROOT "`pwd`"
+@endcode
+
+Note: if you use CMT, the ND280ANALYSISTOOLSROOT environment variable will automatically be set by the <tt>nd280AnalysisTools/vXrYpZ/cmt/setup.(c)sh</tt> script (see instructions below).
+
+@section buildingAnalysisTools Building nd280AnalysisTools (libraries and executables)
+
+First, check to make sure that the <tt>nd280AnalysisTools/vXrYpZ/AnalysisTools/input-file.list</tt> contains the path to an existing oaAnalysis root file.
+
+Then, if you have CMT installed on your local machine, simply execute (builds libraries first and then executables which will reside in something like a "${ND280ANALYSISTOOLSROOT}/Linux-i686" subdirectory):
+
+@code
+cd nd280AnalysisTools/vXrYpZ/cmt
+cmt config # needed only once, after the absolute path to the package was changed
+source setup.(c)sh
+make analysisTools
+@endcode
+
+and if you do NOT have CMT installed, you will need to execute several steps manually (ND280ANALYSISTOOLSROOT should manually be set in advance, as described above):
+
+@code
+cd ${ND280ANALYSISTOOLSROOT}/AnalysisTools
+python makeAnalysisTools.py # builds libraries
+@endcode
+
+and if it fails, try:
+
+@code
+cd ${ND280ANALYSISTOOLSROOT}/AnalysisTools
+root -l compileAnalysisTools.C
+@endcode
+
+and then (builds all available "standard" executables which will reside in the "${ND280ANALYSISTOOLSROOT}/AnalysisTools" subdirectory):
+
+@code
+`root-config --cxx --cflags` -I../ -o ProcessNumuFlatTree.exe ../app/ProcessNumuFlatTree.cxx ./*_cxx.so -LlibReadoaAnalysis -lReadoaAnalysis `root-config --libs`
+`root-config --cxx --cflags` -I../ -o nd280AnalysisToolsEventDisplay.exe ../app/nd280AnalysisToolsEventDisplay.cxx ./*_cxx.so -LlibReadoaAnalysis -lReadoaAnalysis `root-config --glibs`
+`root-config --cxx --cflags` -I../ -o EventDisplay.exe ../app/EventDisplay.cxx ./*_cxx.so -LlibReadoaAnalysis -lReadoaAnalysis `root-config --evelibs`
+@endcode
+
+In any case, regardless whether you use CMT or you do not, if you want to compile (and link) your own analysis, execute something like:
+
+@code
+`root-config --cxx --cflags` -I${ND280ANALYSISTOOLSROOT} -o MyOwnAnalysis.exe MyOwnAnalysis.cxx ${ND280ANALYSISTOOLSROOT}/AnalysisTools/*_cxx.so -L${ND280ANALYSISTOOLSROOT}/AnalysisTools/libReadoaAnalysis -lReadoaAnalysis `root-config --evelibs`
+@endcode
+
+Note: the command shown above will work when run from any subdirectory. That means that you can put your own analysis code in any subdirectory of your choice (i.e. you do NOT need to work in the "${ND280ANALYSISTOOLSROOT}/AnalysisTools" subdirectory at all).
+
+@section usingAnalysisTools Using nd280AnalysisTools
+
+If you have CMT installed on your local machine, simply execute:
+
+@code
+cd nd280AnalysisTools/vXrYpZ/cmt
+cmt config # needed only once, after the absolute path to the package was changed
+source setup.(c)sh
+@endcode
+
+and if you do NOT have CMT installed, execute (ND280ANALYSISTOOLSROOT should manually be set in advance, as described above):
+
+@code
+export PATH="${ND280ANALYSISTOOLSROOT}/AnalysisTools:${PATH}"
+export LD_LIBRARY_PATH="${ND280ANALYSISTOOLSROOT}/AnalysisTools:${ND280ANALYSISTOOLSROOT}/AnalysisTools/libReadoaAnalysis:${LD_LIBRARY_PATH}"
+@endcode
+
+Afterwards, you should be able to use all compiled (and linked) executables, e.g.:
+
+@code
+cd /to/any/subdirectory/that/you/want
+EventDisplay.exe /path/to/any/anal/file.root
+@endcode
+
+Note: if you encounter errors in form <tt>"AnExecutable.exe: error while loading shared libraries: [ libEve.so | libGui.so | libGpad.so | libCore.so | libCint.so | ... ] : cannot open shared object file: No such file or directory"</tt>, that means that you forgot to setup ROOT in the current session. Simply execute <tt>source /path/to/your/local/ROOT/installation/bin/thisroot.(c)sh</tt> and run this executable again.
+
+You can easily load all available nd280AnalysisTools shared libraries into a ROOT interactive session, e.g. in order to browse oaAnalysis root files, simply by doing (again, you can do this while working in any subdirectory of your choice, regardless whether you use CMT or you do not):
+
+@code
+root [0] .x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C
+@endcode
+
+Where ${VARNAME} is using ROOT's environment variable expansion. This naming convention was included to facilitate multi-arch installs.
+
+In order to make the loading of the "oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C" fully automatic (works for ROOT interactive and batch sessions), in the subdirectory in which you are starting your ROOT session, simply create a "rootlogon.C" file which contains (but do NOT put this into the "${ND280ANALYSISTOOLSROOT}/AnalysisTools/rootlogon.C" file, as it may break the "runAnalyses.py" and the "compileAnalysisTools.C" utilities which reside in the same subdirectory):
+
+@code
+{ // rootlogon.C ...
+  // std::cout << "... ND280 rootlogon.C ..." << std::endl;
+  if (gSystem->Getenv("ND280ANALYSISTOOLSROOT"))
+    gROOT->ProcessLine(".x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C");
+} // ... rootlogon.C
+@endcode
+
+Do remember that, if you want to prevent ROOT from executing the "rootlogon.C" macro on start-up, simply start ROOT using <tt>root -n</tt> (try <tt>root -h</tt> to see all available options).
+
+Note that, even if your analysis macro requires the prior loading of the "oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C" file and you did not create appropriate "rootlogon.C" file as described above, you can still easily run your macro (e.g. the "exampleAnalysisScript.C" from the "${ND280ANALYSISTOOLSROOT}/macros" subdirectory) in a ROOT batch session, either as as an interpreted code, e.g.:
+
+@code
+root -q -l ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C 'exampleAnalysisScript.C("path/to/MC/analysisfile.root", 2)'
+@endcode
+
+or as an ACLiC precompiled code, e.g.:
+
+@code
+root -q -l ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C 'exampleAnalysisScript.C++("path/to/MC/analysisfile.root", 2)'
+@endcode
+
+@section ubuntuIssues Problems encountered using Ubuntu
+
+@subsection pyROOT Creating a python enabled version of ROOT
+
+Firstly, you must make sure that the version of ROOT you are using is python enabled.  To do this, you need the <tt>python-dev</tt> package, obtainable by typing <tt>sudo apt-get install python-dev</tt> in a terminal.
+
+Now you must re-make ROOT:
+@code
+~$ cd ROOT/v5r28p00n01/${ROOTCONFIG}/root // cd to the root directory in your version of ROOT
+~$ ./configure
+@endcode
+
+To check python is enabled:
+@code
+~$ cat config.log | grep Python.h
+ Checking for Python.h ...
+    Checking for Python.h in directory /usr/include/python2.6
+    /usr/include/python2.6/Python.h is read-able
+@endcode
+
+If ROOT has not found python, first check that you have a working version by typing:
+@code
+~$ python
+@endcode
+If you have a working version of python, skip the next few paragraphs where we create a symlink and carry on where we set the $PATH and $LD_LIBRARY_PATH variables
+
+If python is not found at this point, check the $PATH and $LD_LIBRARY_PATH on your system:
+@code
+~$ echo $PATH // prints out the whole PATH environment variable
+~$ echo $LD_LIBRARY_PATH // ditto for LD_LIBRARY_PATH
+@endcode
+
+The $PATH variable should contain the path to your python binary file, something like <tt>/usr/local/bin:/some/other/paths/etc</tt>.  Type:
+@code
+~$ ls -l /usr/local/bin/*python*
+@endcode
+which should show every version of python you have installed there and any links that exist between them.  Try opening a version of python by typing:
+@code
+~$ /usr/local/bin/python2.6 // for example
+@endcode
+
+If there are no versions of python that work, try looking in the <tt>/usr/bin/</tt> directory with the <tt>ls -l /usr/bin/*python*</tt> command again.  Find the version of python that opens, producing the following on-screen:
+@code
+Python 2.6.6 (r266:84292, Sep 15 2010, 15:52:39)
+[GCC 4.4.5] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+@endcode
+
+Once you have found a working version of python, create a symbolic link to it from the directory that was present in $PATH
+@code
+~$ sudo ln -s /usr/bin/python2.6 /usr/local/bin/python
+@endcode
+where <tt>/usr/bin/python2.6</tt> is the working version of python and <tt>/usr/local/bin/</tt> is the path stored in $PATH.  You may need to rename the file <tt>/usr/local/bin/python</tt> if it already exists.
+
+Now, typing <tt>python</tt> on the command line should open python properly.
+
+We now need to check the $LD_LIBRARY_PATH to see if it points to the python libraries.  We are looking for the file <tt>libpython2.6.so</tt>, and it should be in <tt>/usr/lib/</tt> or <tt>/usr/local/lib/</tt> or similar.  Once you have found this file, make sure that the path to it is contained in the $LD_LIBRARY_PATH variable and if not, prepend the path to the variable:
+@code
+~$ LD_LIBRARY_PATH=/usr/lib/:$LD_LIBRARY_PATH
+@endcode
+
+Now, your version of ROOT should be able to link to the python libraries it needs, so go back to the <tt>ROOT/v5r28p00n01/Linux-i686/root</tt> directory and run <tt>./configure</tt> again.
+
+Once this has run type <tt>make</tt> then <tt>make install</tt> to complete the building of ROOT.
+
+@subsection forkpty Undefined reference 'forkpty' and 'openpty'  errors
+
+I found this error occurring when I tried to make the applications on my laptop.  To fix it, I had to install the <tt>libtool</tt> package:
+@code
+~$ sudo apt-get install libtool
+@endcode
+Once this has finished, recompile ROOT as described above and it should pick up the library.  If not, again, prepend the path to the newly created libutil.*.so library (which contains the forkpty and openpty stuff) to your LD_LIBRARY_PATH.  Now rebuild ROOT (again) and it should work.
+
+*/

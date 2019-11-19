@@ -1,0 +1,183 @@
+/*!
+\page warnings Common warnings and error messages
+
+\htmlonly
+<b> THIS PAGE DOCUMENTS COMMON WARNINGS AND ERROR MESSAGES SEEN IN THE OLD HIGHLAND. SOME OF THEM WILL BE COMMON TO HIGHLAND2 BUT SOME OTHERS 
+PROBABLY NOT. THIS PAGE SHOULD BE REVIEWED ONCE WE HAVE MORE INFORMATION. </b>
+\endhtmlonly
+
+Each message is categorised 
+according to the severity of the problem, and when the error occurs:
+
+ - <b>Compilation:</b> Errors when trying to compile your analysis package
+ - <b>Runtime:</b> Errors when running your analysis (RunXXXAnalysis.exe)
+ - <b>Analysis-time:</b> Errors when analysing the highland output (using the DrawingTools, for example)
+
+<ul>
+ <li>\ref major
+  <ul>
+   <li>\ref vtable</li>
+   <li>\ref noheader</li>
+   <li>\ref invalidtype</li>
+  </ul>
+ </li>
+ <li>\ref minor
+  <ul>
+   <li>\ref nobsd</li>
+   <li>\ref roo</li>
+  </ul>
+ </li>
+ <li>\ref benign
+  <ul>
+   <li>\ref ttruthutils</li>
+   <li>\ref nodict</li>
+   <li>\ref divide</li>
+  </ul>
+ </li>
+</ul>
+ 
+\section major Major problems
+
+\subsection vtable Compilation: Undefined reference to vtable
+
+<b>Message:</b>
+\code
+#CMT---> building application
+../amd64_linux26/RunNumuCCQEHighAngleAnalysis.exe
+../amd64_linux26/RunNumuCCQEHighAngleAnalysis.o: In function `main':
+RunNumuCCQEHighAngleAnalysis.cxx:(.text+0xb2): undefined reference to
+`NumuCCQEHighAngleAnalysis::NumuCCQEHighAngleAnalysis(int, char**)'
+../amd64_linux26/RunNumuCCQEHighAngleAnalysis.o: In function
+`NumuCCQEHighAngleCuts::~NumuCCQEHighAngleCuts()':
+RunNumuCCQEHighAngleAnalysis.cxx:(.text._ZN21NumuCCQEHighAngleCutsD1Ev[NumuCCQEHighAngleCuts::~NumuCCQEHighAngleCuts()]+0xf):
+undefined reference to `vtable for NumuCCQEHighAngleCuts'
+../amd64_linux26/RunNumuCCQEHighAngleAnalysis.o: In function
+`NumuCCQEHighAngleAnalysis::~NumuCCQEHighAngleAnalysis()':
+RunNumuCCQEHighAngleAnalysis.cxx:(.text._ZN25NumuCCQEHighAngleAnalysisD1Ev[NumuCCQEHighAngleAnalysis::~NumuCCQEHighAngleAnalysis()]+0xf):
+undefined reference to `vtable for NumuCCQEHighAngleAnalysis'
+\endcode
+
+<b>Explanation:</b> The most likely reason for this is that your \c requirements file in the \c cmt directory
+has some typos in it. 
+
+<b>Action:</b> Check that you have consistent captalisation when referring to your
+package (if your package is myPackageAnalysis, it should always be referred to as 
+myPackageAnalysis or MYPACKAGEANALYSIS, depending on context - see the tutorial for an 
+example). Carefully check your spelling and capitalisation!
+
+\subsection noheader Analysis-time: No header tree
+
+<b>Message:</b>
+\code
+Warning! "header" tree wasn't found - make sure you have loaded a configuration!
+\endcode
+
+<b>Explanation:</b> This error means that your output file probably doesn't contain a 
+\c header tree (you can verify this by opening the file in ROOT and typing ".ls"). The 
+\c header tree is only written at the END of each analysis job, so this means that your 
+job didn't complete successfully (either due to running out of memory, crashing, or taking 
+too long on a batch queue). 
+
+<b>Action:</b> Check the output from your analysis job to see what the problem was.
+
+\subsection invalidtype Analysis-time: Invalid type
+
+<b>Message:</b>
+\code
+Error: Invalid type 'DataSample' in declaration of ...
+Error: Invalid type 'DrawingTools' in declaration of ...
+\endcode
+
+<b>Explanation:</b> This error occurs if you haven't sourced setup.sh in the cmt directory of your package
+
+<b>Action:</b> Source \c $HIGHLEVELANALYSISROOT/cmt/setup.sh, then try running your macro again.
+
+\section minor Minor problems
+
+\subsection nobsd Runtime: No BSD
+
+<b>Message:</b>
+\code
+INFO: run ***, subrun ***, event *** has no beam summary data. Event will be ignored if you're using the event_quality cut.
+\endcode
+
+<b>Explanation:</b> This message means that the event does not have any Beam Summary Data.
+ - If you are looking at cosmic files, then this is expected
+ - If you are using official files, then this is benign (unless you're an expert and are
+ validating a new production!)
+ - If you are using your own files, then this might be a problem.
+ 
+<b>Action:</b> If you've produced your own beam spill files and these messages appear for
+every event, then you will not be able to check whether then beam quality was good. You
+should run the \c nd280-get-beam command in \c $OABEAMDATAROOT/src to download the BSD
+files (warning - they're quite big!). You will then need to regenerate your oaAnalysis
+files.
+ 
+\subsection roo Runtime: No RooTracker information
+
+<b>Message:</b>
+\code
+!!!! NNVtx 0 NTruthVertices *** 
+ truthvertex not match to rootracker vertex!!!!!
+\endcode
+
+<b>Explanation:</b> This message is caused by 
+<a href="https://bugzilla.nd280.org/show_bug.cgi?id=925">Bug 925</a>. The final event in a
+MC file may be empty, but in Production 5 oaAnalysis would fill the true vertices and true 
+tracks using information from the previous event. Reconstructed information and 
+RooTrackerVtx information was still empty (as it should be). This means that highland sees 
+an AnaTrueVertex in the final event, but can't find the associated RooTrackerVtx. 
+
+<b>Action:</b> No action needs to be taken. You should be aware that the truth information
+in the final event of MC files <i>may</i> be a duplicate of the previous event. This
+happens for ~9% of files, so affects ~0.002% of events overall. No analyses using
+Production 5 files should be sensitive to this issue.
+
+\section benign Benign warnings
+
+\subsection ttruthutils Runtime: TTruthUtils
+
+<b>Message:</b>
+\code
+[ERROR][TTruthUtils] Trajectory was not found - it is not present in the oaAnalysis file
+\endcode
+
+<b>Explanation:</b> This message is printed to screen a lot if you are using nd280AnalysisTools v0r7p1 or
+earlier. The message is benign, but very annoying and can hide other warnings in the
+large log file. 
+
+<b>Action:</b> Upgrade to a new version of nd280AnalysisTools, preferably v1r7 or higher. Or use nd280Highland2 v2r13 or higher, which don't need 
+nd280AnalysisTools. In either case you will need to make clean and re-compile. 
+
+\subsection nodict Analysis-time: No dictionary for class
+
+<b>Message:</b>
+\code
+Warning in <TClass::TClass>: no dictionary for class ND::JNuBeamFlux is available
+Warning in <TClass::TClass>: no dictionary for class ND::NRooTrackerVtx is available
+Warning in <TClass::TClass>: no dictionary for class ND::RooTrackerVtxBase is available
+\endcode
+
+<b>Explanation:</b> These three warnings are expected when opening your output file. 
+We don't interact with these classes, so don't require the dictionaries. If you only get
+warnings about these classes, then there is no problem.
+
+<b>Action:</b> If you get warnings for other classes, then you should source setup.sh in 
+highland/highLevelAnalysis/vXrX/cmt and try again.
+
+\subsection divide Analysis-time: Attempt to divide histograms with different bin limits
+
+<b>Message:</b>
+\code
+Warning in <TH1F::Divide>: Attempt to divide histograms with different bin limits
+\endcode
+
+<b>Explanation:</b> In highland v0r17 and earlier, the efficiency and purity vs. cut plots
+did not satisfy all of ROOT's requirements for avoiding this warning (although enough
+requirements were satisfied that there wasn't really a problem - the warning was benign).
+
+<b>Action:</b> If you're using highland v0r17 or earlier, you should really upgrade. If
+you're using a newer version and still see this warning when using the DrawingTools, please
+inform the highland developers.
+
+*/

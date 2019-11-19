@@ -1,0 +1,32 @@
+#!/bin/sh
+# Make sure the environment is properly configured.
+source setup.sh
+
+PRODUCTIONDIR=prod5F
+LIBS=`root-config --libs`
+CC=`root-config --cxx` 
+CFLAGS=`root-config --cflags`
+
+# Get the system identifier.
+cd $OAANALYSISREADERROOT/src/$PRODUCTIONDIR
+
+rm -f oaAnalysisReaderProjectDict.*
+cp -f oaAnalysisReaderProjectHeaders.h0 oaAnalysisReaderProjectHeaders.h
+
+echo "GENERATING DICTIONARY"
+rootcint -f oaAnalysisReaderProjectDict.cxx -c -I$ROOTSYS/include/root  -I"$ROOTSYS/include/root"  oaAnalysisReaderProjectHeaders.h oaAnalysisReaderLinkDef.h 
+
+echo "COMPILING"
+$CC -c -O2 -fPIC $CFLAGS  -I$OAANALYSISREADERROOT/src/$PRODUCTIONDIR oaAnalysisReaderProjectSource.cxx -o $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReaderProjectSource.o
+
+echo "LINKING"
+LIBNAME=liboaAnalysisReader.so
+if [ $CMTCONFIG == Darwin ]; then
+    LIBNAME=liboaAnalysisReader.dylib
+fi
+
+$CC $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/oaAnalysisReaderProjectSource.o  -dynamiclib -shared $LIBS  -o $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/$LIBNAME
+cp ND__*.h $OAANALYSISREADERROOT/$OAANALYSISREADERCONFIG/
+
+echo "ADDING VERSION"
+cat oaAnalysisReaderProjectHeaders.h0 Version.h > oaAnalysisReaderProjectHeaders.h

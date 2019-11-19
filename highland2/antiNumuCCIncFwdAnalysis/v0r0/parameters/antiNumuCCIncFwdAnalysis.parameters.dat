@@ -1,0 +1,38 @@
+--- Cut levels --------
+
+ < antiNumuCCIncFwdAnalysis.MinAccumLevelToSave = 2 >   // minimum accum level to save the event
+
+=========================================================================
+antiNumu CC Analysis cuts
+=========================================================================
+--- Timing PID ----------
+ < antiNumuCCIncFwdAnalysis.Cuts.OOFV.TimeTECalMin = 0.2 >
+ < antiNumuCCIncFwdAnalysis.Cuts.OOFV.TimeFGD2Min = -13.4 >
+ < antiNumuCCIncFwdAnalysis.Cuts.OOFV.TimeOtherMin = 0.6 >
+
+--- TPC PID ------------
+ < antiNumuCCIncFwdAnalysis.Cuts.PID.LikeMIPMin = 0.61 >
+ < antiNumuCCIncFwdAnalysis.Cuts.PID.LikeMuMin = 0.07 >	
+ < antiNumuCCIncFwdAnalysis.Cuts.PID.LikeMuMax = 10.0 >
+
+--- ECal PID ------------	
+ < antiNumuCCIncFwdAnalysis.Cuts.PID.ECalContMomMax = 1280.0 >
+ < antiNumuCCIncFwdAnalysis.Cuts.PID.ECalContMipPionMax = 22.6 >
+ < antiNumuCCIncFwdAnalysis.Cuts.PID.ECalOtherMipPionMax = 28.6 >
+
+
+=========================================================================
+antiNumu CC Analysis corrections
+=========================================================================
+--- Timing PID ----------
+ < antiNumuCCIncFwdAnalysis.Corrections.EnableToFDSECalMC = 1 >
+
+=========================================================================
+antiNumu CC Analysis systematics
+=========================================================================
+--- Timing PID ----------
+ < antiNumuCCIncFwdAnalysis.Systematics.EnableToFDSECalVariationSystematic = 1 >
+ < antiNumuCCIncFwdAnalysis.Systematics.EnableToFECalOtherVariationSystematic = 1 >
+
+--- ECal PID ------------	
+ < antiNumuCCIncFwdAnalysis.Systematics.EnableECalMipPionVariationSystematic = 1 >

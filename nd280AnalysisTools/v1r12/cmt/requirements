@@ -1,0 +1,101 @@
+package nd280AnalysisTools
+version v1r12
+
+manager Dominic Brailsford <d.brailsford11@ic.ac.uk>
+manager Luke Pickering <luke.pickering08@imperial.ac.uk>
+
+author nd280-software@mailman.t2k.org
+
+branches cmt doc app
+
+use ROOT
+
+action analysisTools "(cd $(ND280ANALYSISTOOLSROOT)/AnalysisTools && python makeAnalysisTools.py) && (cd $(ND280ANALYSISTOOLSROOT)/cmt && make applications)"
+
+# The paths to find this library.
+path_remove LD_LIBRARY_PATH "$(ND280ANALYSISTOOLSROOT)"
+path_prepend LD_LIBRARY_PATH "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)"
+path_prepend LD_LIBRARY_PATH "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools"
+path_prepend LD_LIBRARY_PATH "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis"
+
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(ND280ANALYSISTOOLSROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools"
+path_prepend DYLD_LIBRARY_PATH "" \
+             Darwin            "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis"
+
+path_remove PATH "$(ND280ANALYSISTOOLSROOT)"
+path_prepend PATH "$(ND280ANALYSISTOOLSROOT)/$(nd280AnalysisTools_tag)" \
+      WIN32      "$(ND280ANALYSISTOOLSROOT)/$(nd280AnalysisTools_tag)"
+
+path_prepend PATH "$(ND280ANALYSISTOOLSROOT)/AnalysisTools" \
+      WIN32      "$(ND280ANALYSISTOOLSROOT)/AnalysisTools"
+path_prepend PATH "$(ND280ANALYSISTOOLSROOT)/AnalysisTools/libReadoaAnalysis" \
+      WIN32      "$(ND280ANALYSISTOOLSROOT)/AnalysisTools/libReadoaAnalysis"
+
+path_remove PYTHONPATH "$(ND280ANALYSISTOOLSROOT)"
+path_prepend PYTHONPATH "$(ND280ANALYSISTOOLSROOT)/macros"
+
+include_dirs $(ND280ANALYSISTOOLSROOT) $(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG) $(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools $(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis $(ND280ANALYSISTOOLSROOT)/AnalysisTools
+
+macro cppflags " -g "
+
+#macro nd280AnalysisTools_IgnoreVersionInfo "true"
+
+application Stage2GasSelection -group=applications -target_tag ../app/Stage2GasSelection.cxx
+macro_append nd280AnalysisTools_linkopts "" target_Stage2GasSelection "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/Stage2GasSelection_cxx.so $(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/TTruthUtils_cxx.so -L$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis -lReadoaAnalysis `root-config --libs`"
+
+application TPCPOTCalculator -group=applications -target_tag ../app/TPCPOTCalculator.cxx
+macro_append nd280AnalysisTools_linkopts "" target_TPCPOTCalculator "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/TPCPOTCalculator_cxx.so -L$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis -lReadoaAnalysis `root-config --libs`"
+
+application PrintECalActiveBBs -group=applications -target_tag ../app/PrintECalActiveBBs.cxx
+macro_append nd280AnalysisTools_linkopts "" target_PrintECalActiveBBs "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/TECALActiveBBFromGeom_cxx.so `root-config --glibs`"
+
+
+## Build information used by packages that use this one.
+macro nd280AnalysisTools_cppflags " -DROOT_USED `root-config --cflags` -Wno-long-long "
+macro nd280AnalysisTools_linkopts " $(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/*_cxx.so -L$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis -lReadoaAnalysis `root-config --ldflags` "
+
+document rootcint dictionary -group=applications EventDisplay/*_LinkDef.h
+library atEveDisplay -group=applications ../src/EventDisplay/*.cxx ../src/EventDisplay/*.hxx ../dict/*.cxx
+#macro_append nd280AnalysisTools_cppflags " -DTTRACKERECALRECONMODULE_USE_EXP -fPIC -I$(ND280ANALYSISTOOLSROOT)/src/EventDisplay "
+macro_append nd280AnalysisTools_cppflags " -fPIC -I$(ND280ANALYSISTOOLSROOT)/src/EventDisplay "
+
+application AnaToolsEveDisplay -group=applications -target_tag ../app/EventDisplay.cxx
+macro_append nd280AnalysisTools_linkopts "" target_AnaToolsEveDisplay "-L$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG) -latEveDisplay -L$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/AnalysisTools/libReadoaAnalysis -lReadoaAnalysis `root-config --libs --glibs --evelibs`"
+
+## Setup a make fragment to build the $(package)_version.hxx file
+make_fragment doxygen -header=doxygen_header
+
+## Build the local documentation.
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+make_fragment anatools -header=anatools_header
+document anatools nd280AnalysisTools compile_anatools
+
+# CMake Build Directives
+########################
+
+#macro ND280ANALYSISTOOLS_SRC $(ND280ANALYSISTOOLSROOT)/src
+#macro ND280ANALYSISTOOLS_APP $(ND280ANALYSISTOOLSROOT)/app
+#macro ND280ANALYSISTOOLS_NCPUCOMPILE 1
+
+#macro cpp11_cppflags " -std=c++11 "
+
+##Include directive goes here for the moment as this is included and nd280AnalysisTools_includes isnt.
+##Need both because of some malformed include statements downstream.
+#macro nd280AnalysisTools_cppflags " -DND280ANALYSISTOOLSUSED -I$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/include -I$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG) -I$(ND280ANALYSISTOOLSROOT)/AnalysisTools"
+#macro nd280AnalysisTools_linkopts " -L$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/lib "
+#macro nd280AnalysisTools_TECALPID_linkopts " -lTECALPidLikelihoodHypothesisTest -lTECALPidLikelihood -lTECALPidDefs -lRooFitCore -lRooFit -lFoam -lMathMore "
+#macro nd280AnalysisTools_TruthUtils_linkopts " -lTTruthUtils "
+
+#include_dirs "$(ND280ANALYSISTOOLSROOT)/AnalysisTools "
+
+#document nd280AnalysisTools $(ND280ANALYSISTOOLSROOT)/cmt/buildnd280AnalysisTools.sh $(ND280ANALYSISTOOLS_SRC)/*.*xx $(ND280ANALYSISTOOLS_APP)/*.*xx
+
+#path_remove PATH "$(ND280ANALYSISTOOLSROOT)"
+#path_prepend PATH "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/bin"
+#path_remove LD_LIBRARY_PATH "$(ND280ANALYSISTOOLSROOT)"
+#path_prepend LD_LIBRARY_PATH "$(ND280ANALYSISTOOLSROOT)/$(ND280ANALYSISTOOLSCONFIG)/lib"
+

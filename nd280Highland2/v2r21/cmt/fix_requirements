@@ -1,0 +1,149 @@
+#!/bin/bash
+
+# This script will replace all the wildcards with the correct package verions,
+# in all requirements files of all pacakges listed in ./requirements.
+# Just run the script, instructions will be prompted.
+# Author: enrico.scanta@cern.ch
+
+
+if [[ $_ != $0 ]] ; then
+   echo "This script has to be run, not sourced."
+   return
+fi
+
+if [[ "$1$2$3" =~ "H" ]] ; then HEAD="-H"; fi
+
+if [ "$HEAD" = "-H" ] ; then
+  echo
+  echo "You are running this script with HEAD option:"
+  echo "it will replace all the package verions with wildcards"
+  echo "in all requirements files of all pacakges listed in ./requirements."
+else
+  echo
+  echo "This script will replace all the wildcards with the correct package verions"
+  echo "in all requirements files of all pacakges listed in ./requirements."
+  echo "Mind not to commit any of those requirements files after these changes!"
+  echo "And before freezing a package you have to restore the wildcards in its requirements file:"
+  echo "editing it or removing it and re-downloading 'cvs update requirements'"
+  echo "or running this script with option -H, that will put wildcards in every package"
+fi
+
+echo -n "Continue? "
+read CONTINUE
+if [ "$CONTINUE" != yes ] && [ "$CONTINUE" != y ] ; then exit ; fi
+echo
+
+# get the path to this folder
+HERE=$(pwd)
+SHPATH=$(dirname $0)
+if [ -f /$0 ] ; then
+    CMTPATH=$SHPATH
+else
+    CMTPATH=$HERE/$SHPATH
+fi
+
+
+# get the path to this script
+SHNAME=$(basename $0)
+SHFULLPATH=$CMTPATH/$SHNAME
+
+nd280PorH="nd280Highland2"
+# get the path to $nd280PorH
+if [[ "$CMTPATH" =~ "$nd280PorH" ]] ; then
+    MAINDIR=${CMTPATH%%"/$nd280PorH"*}
+else
+    echo "WHERE DID YOU PLACE THIS SCRIPT!?!?!?"
+    echo "THIS IS NOT GONNA WORK!"
+    exit
+fi
+
+
+# get this $nd280PorH version
+PorHVERSION=`head -2 ./requirements | tail -1`
+set -- $PorHVERSION
+PorHVERSION=$2
+echo Working on $nd280PorH version $PorHVERSION
+echo
+
+
+while read LINE ; do
+#echo $LINE
+
+    LINE=${LINE/\*/"\*"}
+
+    set -- $LINE
+    SUBPACKAGE=$2
+    VERSION=$3
+    PACKAGE=$4
+#echo $SUBPACKAGE $PACKAGE
+
+    # this is for nd280Psyche in $nd280PorH requirements
+    if [ "$SUBPACKAGE" = "nd280Psyche" ] ; then
+
+        PSYCHEVERSION=$VERSION
+
+        echo -n "Fix also requirements files of nd280Psyche/$VERSION packages? "
+        read -u 3 DOPSYCHE
+        echo
+        if [ "$DOPSYCHE" != yes ] && [ "$DOPSYCHE" != y ] ; then continue ; fi
+
+        echo "Running nd280Psyche/$VERSION/cmt/$SHNAME"
+        echo
+
+        if [ -f $MAINDIR/$SUBPACKAGE/$VERSION/cmt/$SHNAME ] ; then
+            $MAINDIR/$SUBPACKAGE/$VERSION/cmt/$SHNAME -s $HEAD
+            echo Back to $nd280PorH version $PorHVERSION
+        else
+            echo "ERROR: I can't find $SUBPACKAGE/$VERSION/cmt/$SHNAME"
+        fi
+
+        continue
+    fi
+
+    REQUIR=$MAINDIR/$PACKAGE/$SUBPACKAGE/$VERSION/cmt/requirements
+    if [ ! -f $REQUIR ] ; then
+        echo "ERROR: I can't find $PACKAGE/$SUBPACKAGE/$VERSION/cmt/requirements"
+        continue
+    fi
+
+    echo "Checking $SUBPACKAGE/$VERSION/cmt/requirements"
+    while read LINE2 ; do
+    #echo $LINE2
+
+        LINE2=${LINE2/\*/"\*"}
+        if [ "$LINE2" = "" ] ; then
+          continue
+        fi
+        set -- $LINE2
+        PACK2=$2
+        VERS2=$3
+        FIX=`grep "^use $PACK2" $CMTPATH/requirements`
+        if [ "$FIX" = "" ] ; then
+          FIX=`grep "^use $PACK2" $MAINDIR/nd280Psyche/$PSYCHEVERSION/cmt/requirements`
+        fi
+        if [ "$FIX" = "" ] ; then
+          echo "ERROR: 'use $PACK2' not found in $CMTPATH/requirements"
+          exit
+        fi
+        set -- $FIX
+        VERSFIX=$3
+
+        if [ "$HEAD" = "-H" ] ; then
+          VERSFIX="\*"
+          FIX="use $PACK2 \* $4"
+        fi
+
+        echo "  replacing \'$VERS2\' with \'$VERSFIX\' for $PACK2"
+        sed -i -e s/"$LINE2"/"$FIX"/g $REQUIR
+
+    done <<< "$(grep ^use $REQUIR | grep -v nd280 | grep -v ROOT)"
+
+
+done 3<&0 <<< "$(grep ^use $CMTPATH/requirements)"
+
+
+echo
+if [ "$HEAD" != "-H" ] ; then
+  echo "Again, mind not to commit any of those requirements files with the changes just done!"
+  echo
+fi

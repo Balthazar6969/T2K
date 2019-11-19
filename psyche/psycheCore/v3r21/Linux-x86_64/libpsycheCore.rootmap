@@ -1,0 +1,15 @@
+Library.AnaTrueObjectC:                     /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.AnaRecObjectC:                      /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.AnaEventC:                          /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.AnaBunchC:                          /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.AnaSpillC:                          /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.AnaEventSummaryC:                   /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.DataSample:                         /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.Experiment:                         /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.SampleGroup:                        /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.Header:                             /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.HLClonesArray:                      /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.SelectionBase:                      /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.StepBase:                           /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.SystematicBase:                     /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so
+Library.TreeManager:                        /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/Linux-x86_64/libpsycheCore.so libRIO.so libHistPainter.so libMatrix.so libPhysics.so libTree.so libEG.so

@@ -1,0 +1,41 @@
+package highland2/tutorialAnalysis
+version v2r15
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app 
+
+#indicate the packages that are use by this one
+use nueCCAnalysis                     v2r17   highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro tutorialAnalysis_cppflags " -DTUTORIALANALYSIS_USED"
+macro tutorialAnalysis_linkopts " -L$(TUTORIALANALYSISROOT)/$(tutorialAnalysis_tag) -ltutorialAnalysis "
+macro tutorialAnalysis_stamps " $(TUTORIALANALYSISROOT)/$(tutorialAnalysis_tag)/tutorialAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(TUTORIALANALYSISROOT)"
+path_prepend PATH "$(TUTORIALANALYSISROOT)/$(tutorialAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(TUTORIALANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(TUTORIALANALYSISROOT)/$(tutorialAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(TUTORIALANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(TUTORIALANALYSISROOT)/$(tutorialAnalysis_tag)"
+
+
+# The library to build
+library tutorialAnalysis *.cxx  ../dict/*.cxx
+
+# The executables to build (.exe files)
+application RunTutorialAnalysis ../app/RunTutorialAnalysis*.cxx
+application RunUseTutorialAnalysis ../app/RunUseTutorialAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

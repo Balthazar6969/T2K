@@ -1,0 +1,41 @@
+package psyche/psycheSystematics
+version v3r23
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc data
+
+use psycheSelections  v3r25   psyche
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+document rootcint dictionary *_LinkDef.h
+
+
+
+# Build information used by packages that use this one.
+macro psycheSystematics_cppflags "-DPSYCHESYSTEMATICS_USED -fPIC"
+macro psycheSystematics_linkopts "-L$(PSYCHESYSTEMATICSROOT)/$(psycheSystematics_tag) -lpsycheSystematics "
+macro psycheSystematics_stamps " $(PSYCHESYSTEMATICSROOT)/$(psycheSystematics_tag)/psycheSystematics.stamp"
+macro cpplinkflags "" \
+      Linux "-Wl,--no-as-needed"
+
+# The paths to find this library.
+path_remove PATH "$(PSYCHESYSTEMATICSROOT)"
+path_prepend PATH "$(PSYCHESYSTEMATICSROOT)/$(psycheSystematics_tag)"
+path_remove LD_LIBRARY_PATH "$(PSYCHESYSTEMATICSROOT)"
+path_prepend LD_LIBRARY_PATH "$(PSYCHESYSTEMATICSROOT)/$(psycheSystematics_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(PSYCHESYSTEMATICSROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(PSYCHESYSTEMATICSROOT)/$(psycheSystematics_tag)"
+
+
+# The library to build
+library psycheSystematics *.cxx  ../dict/*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

@@ -1,0 +1,3042 @@
+/*! \page nd280Highland2History History for the nd280Highland2 Package 
+
+\section nd280Highland2_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Thu Sep 18 11:18:37 2014
+   - Freeze User: acervera
+   - Freeze Host: neutrinos8.local
+
+first highland2 release. It contains: 
+  - nd280Psyche released version v1r1
+  - highlandTools, highlandIO, highlandCorrections, baseAnalysis
+  - numuCCAnalysis, numuCCQEAnalysis
+
+Other packages are not included in the master package for several reasons 
+as explained in the requirements file:
+
+# These packages are in the repository but need validation
+#use numuCCOuterDetAnalysis v0r1  highland2
+#use numuCCQExsecAnalysis   v0r1  highland2
+
+# The packages below are in the repository but do not compile now
+#use numuCCMultiPiAnalysis  v0r0  highland2
+#use nueCCAnalysis          v0r0  highland2
+
+# The packages below were in highland master package but are not yet migrated to highland2
+#use antiNumuCCAnalysis     v0r0  highland2
+#use gammaAnalysis          v0r0  highland2
+#use fgd2CCAnalysis         v0r0  highland2
+
+
+# The packages below need additional stuff to compile. This is why they are commented out
+# - grtfAnalysis needs nd280AnalysisTools compiled against an oaAnalysis file containing the TReconPerformance module. This package is not yet migrated from highland
+# - highlandRecPack needs RECPACK. A frozen version of this package exists in the repository
+#use grtfAnalysis           v0r0  highland2
+#use highlandRecPack        v0r1  highland2
+
+
+
+\section nd280Highland2_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Wed Oct  8 00:25:43 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+This version is intended to work with psyche v1r5. 
+
+New packages added:
+  - numuCCMultiPiAnalysis
+  - antiNumuCCAnalysis
+
+- Correct few bugs 
+- adopt latest changes in psyche data classes
+- Make sure psyche and highland2 use the same FlatTree conversion
+- Flat tree creation almost working: it creates working flat trees, but there is still a problem with truth info
+
+
+
+\section nd280Highland2_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Thu Oct  9 18:16:11 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+Minor relase addresing some problems with FlatTrees created by highland2, and problems related with DrawingTools methods that need the selection definition 
+
+- write(read) selections into(from) the config tree, such that they are known to the DrawingTools. 
+  This is needed for functions as DrawEffVsCut, etc
+- proper true track <--> true vertex association through vertex index (highland style). It was preventing truth info to be loaded correctly 
+  for the FlatTrees created by Highland2
+- for some reason TrueVertex Lepton and Proton branches were off and some variable in the microtree were not filled: 
+  truemu_truemom, truemu_truedir, etc
+
+This version uses the patched nd280Psyche version v1r5p1 
+
+
+\section nd280Highland2_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Sat Oct 11 00:57:32 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+In this version numuCC, numuCCMultiPi and antiNumuCC selection have been validated with moderate statistics (10^6 events), 
+With and without corrections, the exact same results as in highland are obtained.  
+Although no surprises are expected another validation with more statistics should be done. 
+
+Differences in with highland regaring systematics still need to be understood. 
+
+This version of highland2 uses nd280Psyche v1r5p3
+Main changes are:
+
+- Fix some problems related to the FlatTree created from highland2 
+- Add ability to use prod6 corrections. Prod can be chosen via parameters file in baseAnalysis. 
+  This is needed for subsequent validation against highland
+- in antiNumuCCAnalysis add the ability to choose the selection criteria (CCInc or CCQE/CCnQE) via parameter file
+
+
+
+\section nd280Highland2_v0r9_history Version v0r9
+
+Freeze information:
+   - Freeze Date: Mon Nov 17 18:13:30 2014
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+
+Fully validated	version of FlatTree creation, Selection and Systematics.
+It will be used to create first	official FlatTrees. 
+
+ - Import and externd versioning functionality from highland. There is a run time check of 
+   input file version with nd280AnalysisTools. Also the proper correction files are used depending on the production
+ - Sofware versions of all packages are saved into the config tree, for both FlatTree and microtrees
+ - Corrections can be applied when creating the flat tree or when running on it. 
+   Add functionality to avoid aplying twice the same correction 
+ - Add all missing variables into the FlatTree 
+ - Correct mistmatch between oaAnalysis and Flattree results mainly due to TPC tracks with several segments in the same TPC. 
+   Now the agreement is perfect. 
+ - Save all true tracks in the FlatTree to avoid differences in some of the systematics. To be optimised
+
+
+
+\section nd280Highland2_v0r11_history Version v0r11
+
+Freeze information:
+   - Freeze Date: Sun Nov 30 15:17:15 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Release for the highland to highland2 migration tutorial on Dec 1st 2014.
+Selections give the same results for oaAnalysis and FlatTrees
+Systematics give slighly different results (Under investigation). Not crucial for tutorial
+
+
+- update to changes in psyche related to variable size arrays
+- make the definition of an analysis more user fiendly. Corrections, Systematics and Configurations are now defined in different methods.
+- Correct bug in association between micro-trees and RooTrackerVtx  tree 
+- new highlandUtils package, in which utilities from several highland packages have been put. 
+- Use members in VersioninUtils to control independenty the production for 
+  corrections, systematics and bunching
+
+antiNumuCCAnalysis
+
+- Added flux tuning (for antineutrinos) parameters. Also added parameter to turn on/off FGD1/FGD2 selection. 
+- CC inclusive selection for antineutrinos in FGD2. NOT VALIDATED.
+
+numuCCQEAnalysis
+
+- First version of FGD-ECal->SMRD matching systematics (combined with SMRD reco efficiency), 
+ for the moment only those tracks are considered that have FGD-ECal component, 
+ for this case it is easier to estimate the systematics
+
+
+
+\section nd280Highland2_v0r13_history Version v0r13
+
+Freeze information:
+   - Freeze Date: Wed Dec 10 19:37:35 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+This is n principle the final freeze to be used for the winter oscillation analysis together with nd280Psyche v1r13
+
+This version has corrected several bugs:
+ * DrawEffVSCuts in DrawingTools
+ * RooTrackerVtx link (#1059)
+ * Few bugs in numuCCQEAnalysis
+ * Toy experiment random seed
+
+- Has added more version check functionality to avoid mismatching between input trees and compilation
+- ECAL PID variables, needed by some analyses, has been added
+- Has FGD-ECAL-SMRD and mom range systematics for numuCCQEAnalysis
+- Has corrected few memory leaks in oaAnalysisTreeConverter
+ 
+
+
+\section nd280Highland2_v0r15_history Version v0r15
+
+Freeze information:
+   - Freeze Date: Thu Jan  8 05:19:40 2015
+   - Freeze User: izmaylov
+   - Freeze Host: localhost.localdomain
+
+A new freeze of nd280Highland2;
+the main goal is to have a stable version to provide the flat-trees for winter 2014-2015 oscillation analysis
+
+also includes the first version of "extended" converters/data_classes to provide  ECal local variables
+
+
+Other changes:
+frozen versions of numuCCQEAnalysis/numuCCQExsecAnalysis and highlandRecPack (the latter is disabled by default) for TN-214/216 xsec analysis
+
+antiNumuCCPiZeroAnalysis package (commented out by default)
+
+
+
+\section nd280Highland2_v0r17_history Version v0r17
+
+Freeze information:
+   - Freeze Date: Thu Jan  8 19:19:16 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Main purpose of this release is to allow official FlatTree creation for winter analyses
+Correct few bugs in psyche and highland2: 
+
+psycheCore:
+- SystBox: proper initialization of all variables in the constructor (all pointers to NULL)
+  and proper destructor (correctly delete all array pointers,  so no more compiler dependent since [] was missing),
+  delete pointers to arrays of invPT and invPT_true,  the latter should fix some memory leak
+
+psycheUtils:
+- update table of the fgd mass to account for the latest knowledge of the measured mass of the scintillators 
+
+highlandTools:
+- Temporary workaround in AnalysysAlgorithm for bug #1059. It will now result in many nRooTrackerVtxes being saved twice, 
+  but otherwise very few entries are missing for the truth tree (which is a total show stopper for use with the xsTool and thus not acceptable).
+
+highlandIO:
+- ECal LLR variables of TTrackerECALReconModule are only available for prod6
+  so added a conditional compilation  to account for it
+
+
+
+\section nd280Highland2_v0r19_history Version v0r19
+
+Freeze information:
+   - Freeze Date: Tue Jan 27 22:36:39 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+the main goal is to refelct the recent changes in psyche` SystBoxB
+so have a version for the nd280Highland2 freeze
+
+
+This is probably the last release before the CM. It has lots improvements in documentation, including a new 
+tutorialAnalysis package.
+
+- use psyche v1r21
+- add a tutorialAnalysis package, which explains with working code most of the funtionality
+- add lots of doxigen documentation which should generate the web site
+- solve bugs 1059, 1065, 1066, 1070 and  1071, 
+- in numuCCAnalysis add ability to run fgd1 or fgd2 selections (chosen via paameters file)
+- add ECAL variables
+- Add support for several selections in both the standard micro-trees and the truth tree. 
+- Create a different box for each enabled selection. 
+- Change the way RooTrackerVtx tree is filled. This should probebly solve bug 1059, but we should check
+- adapt to the recent changes in psyche regaring the SystBoxB
+
+
+
+\section nd280Highland2_v0r21_history Version v0r21
+
+Freeze information:
+   - Freeze Date: Wed Feb 18 12:38:57 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- Use nd280Psyche v1r23
+- Two new packages added: numuBkgInAntiNuModeAnalysis and nueCCAnalysis
+- Correct many bugs related with the DrawingTools
+- Solve bug related with RooTrackerVtx link
+- Add default mainpage.dox to all packages shuch that they can be referenced from another one in doxygen using \ref
+- Add local recon infraestructure to DataClasses and input converters (disabled by default)
+- Correct bug in the treatment of IgnoreRightECalRuns3and4Correction
+- Por stuff from highland, mainly related to GlobalVertex and some little bugs corrected there
+- Take into account the ecal alignment
+
+
+\section nd280Highland2_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 19:51:40 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes, mostly in psyche 
+to allow selection depending systematics, and performance optimization. 
+
+This includes: 
+- New methods in Selections to tune the systematics
+- A new definition of boxes to make the code faster and allow selection dependent systematics
+   ToyBoxB: Previously called AnaBox, with more variables. It is toy dependent
+   EventBoxB: allows saving objects that are valid for all toys in the same event
+   SystBoxB: To save the relevant tracks and true tracks for each systematic, depending on the selection
+- Preselection cuts t make the code faster
+- Option to not redo the selection, when variations do not change the relevant cuts behaviour.
+- A better way of treating selections in different detectors (FGD1, FGD2, etc)
+- Add all relevant selections for FGD2
+
+All selections and systematics give the exact same results for FGD1 and FGD2 as in the patched version (v0r21p1 and v1r23p1) except:
+- MomentumResoluton and BField which are slightly different due to a bug now corrected
+- antiNumu gives different systematic results for FGD2. To be understood, but notice that this selection was not in psyche previously 
+
+Some packages have been removed from the master package since they are not yet adapted
+
+
+
+\section nd280Highland2_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 18:20:31 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+Many bugs have been corrected in this version. Specially:
+ - bug 1120: we now get a perfect agreement between oaAnalysis and FlatTrees both for selectios and systematics, which was not the case before for systematics, 
+   although the difference was small. The problem was mostly when processing oaAnalysis files directly 
+ - bug 1091: The bug related with POT counting. It is worth noting that the POT counting is now slighly higher for MC. 
+
+Other changes:
+ - the EventBox functionality have been improved
+ - put back the nueCCAnalysis package
+ - new numuCCMultiTargetAnalysis added
+
+psyche:
+Correct many bugs, specially related with FlatTree-oaAnalysis and improve EventBox functionality
+- temporary solution to make SIPion work with event preloading. Make Initialize and FinalizeEvent methods virtual
+- correct important memory leak introduced in previous release. Must delete the arrays created within the steps
+- proper treatment of indices for variation systematics. Worked for the default systematics but not for the ones added by the user
+- the task of creating the EventBox is given to each Selection. This does not mean that there will be an EventBox per selection, 
+ but there could be several boxes. They are created and filled in the InitializeEvent method of the selection
+ Add another level of abstraction in the EventBox. The base class EventBox contains only TracksInGroup and TrueTracksInGroup. 
+ The user should inherit from it. The AnaEventB has now an array of EventBoxes, which are added by index
+- FGD2 selection modified to be exclusive with respect to the anti-nu selection in FGD1
+- move numuCC backward selection to psyche
+- Properly deal with the EventBox, which must be created now in the InitializeEvnet method of the selections
+- Set the preselection accum level to 2 for all selections. That means that only one toy will be run when the 
+  quality_fiducial cut is not passed
+- now that systematics and selections are validated we can start using IsRelevantSystematic to avoid 
+  switching them off manualy in the parameters file
+- OOFVFGD2_p5F.dat  was missing
+- MomResol, BField, TPCClusterEff, TPCTrackEff, TPCFGDMatch and ChargeID where giving different results in oaAnalysis and FlatTrees because 
+ they were using explicitely TPCSegments and FGDSegments with a particular index, assuming ordering is the same in FlatTrees and oaAnalysis. 
+ Also we have to deal with the problem of several segments in the same detector. This solves bug 1120
+
+
+highlandTools:
+- Many bugs solved (944, 1043, 1103, 1107, 1014, 1112, 1113, 1114, 1117). 
+
+baseAnalysis:
+- Schedule for adding RooTrackerVtx and fill RooVtxEntry, RooVtxIndex, and TruthVertexID (now toy vars) in FillToyVarsInMicroTrees. 
+ In this way if any of the toys in any of the configurations 
+ has the proper accum level the RooVtxTracker entry will be saved. This solves bug 998 
+ Don't fill the RooTrackerVtx tree here, but schedule the vertex to be saved. In that way filling is more transparent and is done in a single place
+
+highlandCorrections:
+- added a fix to account (for a problem related) to bug 1102,  do not use covUtils method
+ to set the sub-detector used bit (since the latter uses some hard-coded values to account for oaAnalysis numbering)
+
+highlandIO:
+Many bugs corrected. It is worth noting that the POT counting is now slighly higher for MC (bug 1091): 
+
+- partially fix bug 1097
+- in truth tree save also 2p2h for nuwro (that has reaction code 70)
+- To get the POT from the RooTrackerVtx tree loop over estries until the POT for a given vertex is not 0. 
+  Previously only the last entry was checked. This should solve bug 1091
+- fix bug 1101 (suppress warnings from GetParticle for flattrees without RooTrackerVtx)
+- wrong offset for sPOTSincePreviousSpill produces a runtime error becaouse of index beaing added twice
+- Fixed double counting GENIE POTs
+- fix bug 1107
+- avoid crash before warnings when running over a prod5 file with highland compiled with prod6
+- add protection against empty spills to solve bug 1104. Skip the spill when the RooTrackerVtx 
+ has no vertices. This condition is not applied for cosmics
+- add antinu NC in truth tree explicitly
+
+
+
+\section nd280Highland2_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Tue Jun 23 10:12:04 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Many changes in psyche and highland2, most of them related with new functionality:
+- MiniTree: Create and read MiniTrees. Validated against oaAnalysis
+- Systematics tunning. switched off by default
+- Automatic geometry: loaded from the input file(s)
+- PerSpill POT for MC and also for MiniTree
+- etc. 
+
+
+In addition:
+ - correct several "minor" bugs in oaAnalysisTreeConverter
+ - Add new systematics: ProtonSI and Momentum by range resolution
+ - Improve PileUp and TpcDeDx corrections and systematics
+ - Use new method for propagation of eff-like systematics
+
+
+This version has been partially validated:
+ - numuCCMultiPi selection gives same results as summer analysis patched version, and same results 
+   with oaAnalysis, FlatTrees and MiniTrees
+ - systematics for numuCCMultiPi give same results as patched version except ChargeID (very small difference under investigation) 
+   and TpcTrackEff (expected) 
+
+Hope to start using highlandValidation for next freeze
+
+
+\section nd280Highland2_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 16:42:48 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Release motivated mainly by baseAnalysis splitting:
+
+- split baseAnalysis package such that it only keeps what is common to all analyses (p0d and tracker). 
+  Many things from baseAnalysis moved to new package baseTrackerAnalysis. Add new baseP0dAnalysis
+
+But also quite a few improvements in psyche:
+
+- Solve several problems related to the MiniTree (bug 1124) including memory leaks and linking between objects
+- Make it work with event preloading
+- Update OOFVSystematics and  TPCTrackEffSystematics to new methods used in the patched version. Results are now identical
+- Flux tuning: correctly handle Run 6 flux tunings. update to new files from http://www.t2k.org/beam/NuFlux/FluxRelease/13arelease/tunedflux13av1.1_june
+- Some small changes in the TPC detector definition, which should affect slighly the OOFV systematic
+
+Partial validation done: numuCCMultiPiAnalysis gives identical results for selection and systematics as in the official patch version, 
+except a small difference in OOFV systematic due to the change in the tpc volume definition. 
+We hope yo move to continues validation using Jenkins before the next release 
+
+
+\section nd280Highland2_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Sat Aug  1 14:52:02 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+This release has been fully validated with jenkings. This is why the highlandValidation package is included now. 
+
+- Performance improvements with the new CheckRedoSelection method, enabled now by default for the first time.
+  It gives the same results but selections run much faster. 
+- remove toy variation and weights from the micro-trees, since they imply saving the same numbers for each event (2 x NTOYS x NSYSTPARMS > 60000 floats for eaxh event), increasing by almost a factor 
+ of 10 the micro-tree size. Those numbers are now saved in the config tree as part of each configuration
+ ( CONF._toys.variations and CONF._toys.weights, see ConfigurationBase.hxx). This will have implications in the validation, which will fail for the removed variables, and on the xsTool
+ This change improves the performance considerably 
+- Update systematic propagation to official patched version
+- Several bugs solved, including small memory leaks
+- DOn't allow non-exclusive selections by default
+
+Change variable names as suggested in bug 1144
+
+    truemu_truemom      --> truemu_mom
+    truemu_truecostheta --> truemu_costheta
+    truemu_truepos      --> truemu_pos
+    truemu_truedir      --> truemu_dir
+    vertex_det          --> selvtx_det
+    vertex_pos          --> selvtx_pos
+    vertex_truepos      --> selvtx_pos
+    nu_vertex_truepos   --> truevtx_pos 
+
+
+
+\section nd280Highland2_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Thu Sep 24 15:49:27 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+
+SUMMARY: 
+- This version solves many bugs: 1087, 1143, 1149, 1167, 1169, 1172, 1174, 1175, 1179, 1181, 1183
+- Several memory leaks corrected, specially the ones related with reading the MicroTree and using the localReconBunch
+- Several systematics and corrections added
+- Selections are now more robust since the selection construction is validated
+- fully validated with jenkins: 24 expected failures because of bugs corrected
+
+nd280Psyche: 
+- Many bugs corrected 1175, 1179, 1169, 1181, 1087  (1087 and 1175 waiting for confirmation)
+- Selection validation introduced
+- solve bug 1167 releated with finding the right entry in the RooTrackerVtx tree
+- adapt to new selection validation: two steps cannot have same title in the same branch
+- added ToF resolution systematics,  
+- split EventBoxB::GroupEnum into TrackGroupEnum and TrueTrackGroupEnum
+- Update run number -> run enumeration code to handle the full Run 6 MC file set
+
+highlandTools:
+- Solve bugs: 1169, 1175, 1179
+- Fix memory leaks when using AnaLocalReconBunch
+- Fix problem with POT when adding many files due to numerical precission. Change to doubles 
+
+highlandUtils:
+- ToFSenseCorrector.cxx:  a new class that can deal with different ToF business,  check whether a track needs bwd flipping,  flip it
+ etc. guess eventually it should be migrated to psyche(Utils),  keep it here for the moment till is approved by highland/psyche gods
+- parameters file for highlandUtils,  for the moment some ToF stuff
+- CheckRooTrackerVtxLink.cxx: don't count as failures events that have no true vertex associated because the vertex is not yet associatet either 
+ (the accum level is to low). In those cases TruthVertexID=-999. 
+ Reduce the fraction of allowed failures to 1 per mil
+
+highlandCorrections:
+- added ToF correction (smears MC to match data) and also there is an option to actually flip/reverse tracks if needed
+based on ToF info. the correction may be useful for various analysis so should be kept in a general package (similar one exists in numuCCBwdAnalysis)
+
+
+highlandIO:
+- Correct Bug 1167: Highland2 analyses can get stuck in an infinite loop if using the skip events (-s) command line option.
+- Correct Bug 1172:  oaAnalysisTreeConverter::DeleteBadObjects crash
+- Correct Bug 1174: issues in deleting fully contained events
+- Correct Bug 1143: RunCreateFlatTree crashes with prod 5 control sample files
+- Solve bug with rooTrackerVtx links in mini tree
+- Fix memory leaks related to local recon objects
+
+baseTrackerAnalysis: new systematics:
+ ToFResolSystematics
+ TPCECalMatchEffSystematics
+ TPCP0DMatchEffSystematics
+ FGDECalMatchEffSystematics
+ FGDECalSMRDMatchEffSystematics
+ ECalTrackEffSystematics
+
+baseAnalysis:
+- use the new HighlandMiniTreeConverter such that the correct AnaSpillB type is created
+
+all analysis packages: 
+- attept to solve bugs 1183, 1149 and 1169 by moving most code in the analyses constructors to their Initialize methods. 
+  At the moment only the package version and the UseAnalysis functionality is kept in the constructors
+
+
+
+\section nd280Highland2_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Sun Jan 10 14:37:00 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+SUMMARY: 
+- Solve many bugs: 1193, 1210, 1214, 1216, 1221, 1222, 1229, 1234, 1237, 1238
+- Many improvements in ECAL and P0D related systematics
+- Modifications in numuCCMultiPiSelection
+- Many DrawingTools improvements
+- add example of P0D analysis using native highland2 objects fully integrated into the system. 
+- DOCUMENTATION IS NOT FULLY UPDATED. PENDING FOR NEXT RELEASE
+
+nd280Psyche: 
+- Many improvements in ECAL and P0D related systematics
+- ToFSenseCorrector: moved here from hihglandUtils. Many improvements
+- Variables for 4pi analysis added
+- Modifications in numuCCMultiPiSelection
+- New way of initializing selections. Still to be improved !!!!
+- Functionality to load all parameters files following the package hierarchy, 
+  such that the top level package is read first and its parameters are fixed
+
+highlandTools:
+- Many DrawingTools improvements
+- Solve many bugs: 1193, 1210, 1214, 1216, 1221, 1222, 1229, 1234, 1237
+- New approach for categories
+
+highlandUtils:
+
+- Added functions that compute PID likelihoods including the kaon hypothesis.
+ This is necessary because the kaon dE/dx variables are not in psyche.
+- add FillCategories method taking a AnaTrueVertexB as argument instead of AnaTrackB. In that way selections with no MainTrack defined (i.e. NC in P0D) can still fill the categories
+- add "nuparent" and get rid of obsolete GetAntiNuParent
+- add CATSAND code to all categories when is sand MC (addressing bug 1237)
+- remove GetReactionSand* methods
+- reflect the fact that the AnaTrueVertexB::Detector member is now properly filled with psyche bits:
+ for drawing/colors use oaAnalysis definitions
+- Use the GetCategories method with a true vertex and event as input from FillTruthTreeCategories, which was essentially the same. 
+ Mark the last as deprecated. 
+- add some utilities for P0D. They will be probably moved somewhere else once this is stable
+- ToFSenseCorrector moved into psycheUtils
+
+highlandCorrections:
+
+- dEdx corrections for data for run6 (April to June2015) are now available. Corrections for run 6 are all the same for all subset of runs (semi-rdp, pc1_Jan-to-April and pc1_April-to-June) 
+- Improvements in ToFCorrection
+- new FlipKinematicsCorrection to recover reverse fit failures, needs highlandRecPack
+- new MomRangeCorrection: use highlandRecPack to substitute prange values (since is easier to estimate the systematics this way)
+  only RangeMomentumMuon is affected
+
+highlandIO:
+- Add functionality for complete treatment of P0D contained objects 
+- Don't read branches not present in the tree, to solve bug 1238. 
+- add SpillsSincePreviousSavedSpill functionality for the MiniTree
+
+highlandValidation:
+
+- Updated nominals to latest frozen versions in nd280Highland2 v1r11
+- Basic tests for minitree version validation
+- basic tests using drawingtools
+- added additional tests specific to p0d analyses (e.g. nmichel, np0d)
+- added parameters directory and included systematics.paramters and p0danalyses.parameters
+- remove sand type checks, since they don't exist now
+
+baseTrackerAnalysis: 
+
+- reflect changes in syst package (removed copying of SystematicSource)
+- added ECal PID syst
+- some minor re-organization of the order
+- to define configurations use parameters from the base class, instead of 
+ reading them from param file (they are being read from the baseClass anyway)
+- use zero-var configuration
+
+baseAnalysis:
+
+- If a true vertex does not exist (e.g. can happen that reco vertex is not yet available
+ at this step of the selection) then store the accum_level to all true vertices
+ of the bunch -> i.e. this basically corresponds to the fact that event as a whole passed some cuts)
+- added a zero_variation configuration, grabs the enabled systematics from all_syst 
+ but runs only one toy with zero variation, in this way one gets a separate tree that 
+ can be used to study/use the corrections applied by the systematics (wieght ones through 
+ weight_syst/weight_syst_total weights)
+- since baseAnalysis provides/controls configurations for downstream packages,  use the corresponding
+ parameters so not to read param file in each downstream analysis
+- correct bug affecting cases in which not all selections are enabled. The size of the AnaTrueVertex::AccumLevel vector must match the number of enabled 
+ selections and not the total number of selections
+- FillTruthTreeCategories(vtx, det, IsAntinu);  ---> anaUtils::FillCategories(&vtx, det, IsAntinu, input().GetSpill().GetIsSandMC());
+ such that sand muons are taken into account also in truth tree. This should solve bug 1237
+
+baseP0dAnalysis:
+- add example of P0D analysis using native highland2 objects fully integrated into the system. Examples on how to get the information are given 
+ This example will be use to further improve the data model and utilities for p0d analysis. It can be used by people to learn how to 
+ do p0d analyses. 
+- add macro p0dExamplePlots.C with some plot examples about the selection  
+
+
+
+
+
+\section nd280Highland2_v1r15_history Version v1r15
+
+Freeze information:
+   - Freeze Date: Tue Feb 23 11:54:47 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+Increase development version number to v2 before major reorganization
+
+SUMMARY: 
+- Solve some bugs: 1244, 1260, 1259, 1237
+- Many improvements in ECAL and P0D related systematics
+- New base class for SecondaryInteraction systematics
+- Utilities to compute transverse kinematics taking into account the off-axis angle
+- DOCUMENTATION IS NOT FULLY UPDATED. PENDING FOR NEXT RELEASE
+
+
+nd280Psyche
+- numuCCFGD2Selection: to be consistent with FGD1 selection (in terms of how the systematics are applied)
+  added IsRelevant...InToy() methods (they call FGD1` ones at the moment)
+- Changes in TPCECalMatchEff.dat, TPCClusterEffSystematics, TPCFGDMatchEffSystematics, ECalTrackEffSystematics, ECalPIDSystematics, 
+  TPCECalMatchEffSystematics, ECalPID.dat, TPCTrackEff_p6B.dat: 
+- DetectorDefinition and FiducialVolumeDefinition: fix FGDs FV on layers border, as of bug 1244. Update default p0d fv to one in tn-73
+- EventBoxUtils: corrected a stupid typo so to fix bug 1260  
+- SecondaryInteractionSystematic: a new class to be the base one for various SI systematics:
+  for the moment proton and kaon SI will inherit from it. 
+
+highlandTools:
+- P0DDataClasses: Remove Type and Position from AnaP0DHit and add GeomID and Time. Add an EventBox for P0D, EventBoxP0D2 because 
+  p0dNumuCCAnalysis already defines EventBoxP0D. To be changed there
+- BaseDataClassesIO: Add MostUpStreamLayerHit to AnaEcalTrackBIO in order to fix bug 1259.
+- DrawingToolsBase: add DumpFV(). fix issue which was introduced in the last freeze with PrintPurities and option PUR for sand and notruth categories (bug 1237)
+
+highlandCorrections: MomRangeCorrection:
+- used kFGD volume as a default detector
+- use IsRelevantTrack() method: a track should
+ start/stop in a given det and fail TPC quality
+
+highlandUtils: 
+- TransverseUtils: Add utils for calculating transverse kinematics.
+- CategoriesUtils: add optional argument useCATSAND in FillCategories to allow sand muons dedicated studies
+  (setting it to false sand muons will be categorized)
+- P0DAnalysisUtils: The P0DHit has no Position anymore. get the time from the new data member Time. Add utilities to fill new EventBoxP0D2
+
+highlandIO:
+- oaAnalysisTreeConverter: Remove Type and Position from AnaP0DHit and add GeomID and Time. 
+- CreateFlatTree: added MomRangeCorrection
+
+baseTrackerAnalysis:
+- fixed a typo when adding the ECalEMSyst into the single syst configuration
+- FlipKinematics, ToF and MomRange correcitons,  OFF by default, need highlandRecPack
+ to fully work
+
+p0dNumuCCAnalysis:
+- setting default p0d-fv in psycheUtils. Remove override here. 
+- Highland2 class now uses geometry to determine material.
+- Also decoupled water throws from non-water as advised by Clark
+- Changed data files to split things into different materials
+
+p0dNumuCCQEAnalysis:
+- Initial version of data files for OOFV systematic
+- Added new OOFV class. Varies non-P0D detectors using rate values from FGD OOFV class. Includes possible reco systematics for: P0D USECal, P0D CECal, P0D WT.
+
+baseP0dAnalysis: 
+- don't increase version number to v2 because this package will dissapear. 
+  It will be renamed as baseP0DAnalysis, as suggested by P0D people
+- Fill P0DHit Position and Type from the GeomID
+- use the new EventBox for P0D
+
+
+
+\section nd280Highland2_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Tue Mar  8 11:20:38 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+Major reorganization 
+
+- Two new packages added: highlandEventModel and highlandCore
+  - Most stuff from highlandTools moved to highlandCore
+  - DataClasses and P0DDataClasses moved to highlandEventModel
+  - highlandTools keeps the DrawingTools and SystematicTools
+- Get rid of singletons (CategoryManager and DocStringManager)
+- decouple highlandCore from analysis/detector dependent stuff
+- many changes to adapt to new psyche
+
+nd280Psyche: 
+- Two new packages: psycheEventModel and psycheND280Utils
+ - psycheCore is split in psycheCore and psycheEventModel
+ - psycheUtils is split in psycheUtils and psycheNd280Utils
+- Many changes in class names
+- reorganization of utilities. 
+- psycheStreering is crashing (we now why). We will make a patch
+
+
+\section nd280Highland2_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 22:20:38 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- There were two freezes of psyche (v3r3 and v3r5) for a single highland freeze (this)
+- This freeze includes mainly the new conception of weights, which includes correction and systematics in the same object 
+- Many bugs corrected: 1144, 1224, 1237, 1247, 1257, 1262#c3, 1278, 1282, 1283, 1296, 1304, 1306, 1307, and others not in Bugzilla
+
+CHANGES IN PSYCHE (v3r5)
+---------------------
+
+MAINLY CORRECT BUGS IN MACHINERY. ALSO NEW FUNCTIONALITY IN SYSTEMATICS AND SELECTIONS (BUT NOT IN MACHINERY)
+
+Correct bugs 1306, 1307,  1257, 1247, 1282, 1224, 1278, 1262#c3
+
+psycheCore: correct potential bug in WeightType constructor: give the correction as first argument and the systematic as second argument
+psycheEventModel: use dynamic_cast instead of static_cast in conversions from AnaParticleB to AnaTrackB since P0D objects are not AnaTracks. 
+   This affects only MiniTree reading (and is only one per spill, so no problem with speed)
+psycheSelections: protonSI improvements in numuCC and antiNumuCC
+psycheSteering: remove obsolete CCQE stuff, which was removed from psycheSelections
+psycheSystematics:
+- TPCP0DMatchEffSystematics FGD-ECal/SMRD matching : use fine-tuning (IsRelevant...)
+- TPCClusterEffSystematics, TPCFGDMatchEffSystematics: correct bug, correction should be given as first argument to Weight_h
+- FluxWeightSystematics: Use ToyBoxND280, which is common for P0D and Tracker
+
+CHANGES IN HIGHLAND PACKAGES:
+--------------------------------
+
+- BinnedData --> BinnesParams to avoid confusion (Data vs MC)
+- SystematicWeightBase    --> EventWeightBase, SystematicVariationBase --> EventVariationBase
+- The return type of the EventWeightBase::Apply is now Weight_h which is used as typedef in WeightType
+- Changes in method names: TrackCategory --> Category, TrackType --> CategoryType
+
+highlandCore:
+- We are in the process of converting all weight systematics into a weight correction + systematic. In that way the default configuration can have all corrections associated with 
+ weight systematics. Add weight_corr and weight_corr total variables to the micro-trees (including default). weight_corr contains all weight corrections included 
+ the pileup and flux that were previously in the weight variable (kept for the moment, but not used anywere)
+- use the new EventWeight and EventVariation Managers
+- For the moment add a ZeroToyMaker (with zero variation), which is used for the default configuration  
+- port from highland2 v1r15 the fix for bug 1237
+
+highlandEventModel:
+- for AnaECALParticle moved Length var into BaseDataClasses,  hence no need to depend on AnaSubTrack, 
+- temporary use dynamic_cast to discriminate between AnaTrack and AnaParticle
+- SMRD EDeposit added, added Length variable for AnaTrack, needed for some tests
+- add new classes to P0DDataClasses_LinkDef.h, needed for MiniTree creation
+
+highlandIO: 
+- treat new variables in highlandEventModel
+- use dynamic_cast to discriminate between AnaTrack and Other AnaParticleB types. 
+ We have to see if this is the best solution. Temporarily Don't call DeleteBadObjects when using p0D native objects (_isUsingReconDirP0DNew=true) since it is giving problems. 
+- oaAnalysisP0DTreeConverter: Proper treetmeant of objects created by global and local recon in FillP0DVertexInfo
+- FlatTreeConverter: Enable P0D nodes branch, Properly treat inheritance from RedoTreeConverter 
+- DataClassesIO: fixed a bug in filling the Length variable for the sub-detectors
+- added the missing correction into the mini-tree creator
+- enable TPC PID pull MC correction
+
+highlandUtils:
+- CategToolsNueCC: Add nue categories utils.
+- P0DAnalysisUtils: Use dynamic_cast to distinguish between p0d objects inheriting from AnaTrack and from AnaParticleB. 
+- TranseversUtils removed and moved to psycheUtils
+
+highlandTools:
+- SystematicTools: COMPUTE SYSTEMATICS WITH RESPECT TO THE AVERAGE OF ALL TOYS
+- DrawingToolsBase: correct bugs 1304, 1283, 1237, 1296, and some others not in bugzilla
+- New WeightTools namespace, where weights are applied
+- DrawUtils: add new option for weight corrections WCi NWCi and WCORR. New method to add a legend entry with a defined height
+
+highlandCorrections: 
+- Inprovements in ToFCorrection, FlipKinematicsCorrection and TPCPIDPullMCCorrection.
+- add correction enums, CorrId.hxx
+
+baseAnalysis:
+- add parameters to control weight corrections. Only FluxWeight is enabled
+- weight corrections added to all configurations. zero var weight systematics to the default configuration. Only Flux enabled
+
+baseTrackerAnalysis:
+- Add the nue specific systematics.
+- enable TPC PID pull MC correction
+- weight corrections added to all configurations (only pileup enabled)
+
+numuCCAnalysis:
+- SMRD vars (similar to ECal),  needed for possible tests
+- add reconstructed energy variable (which only use muon kinematics) from QE formula: selmu_nuErecQE, truemu_nuErecQE,
+- correct bug 1144
+
+baseP0DAnalysis: 
+- ToyBoxP0D inherits now from ToyBoxND280, which contains the TrueVertex
+
+p0dNumuCCAnalysis:
+- p0dDataClasses->p0dAnaDataClasses so not to coincide with highlandEventModel/P0DDataClasses on certain systems
+
+nueCCAnalysis:
+ - FULLY INTEGRATE INTO PSYCHE: systematics, selections and utilities moved to psyche. Pileup rorrections removed (they are now weights)
+
+numuCCMultiTargetAnalysis:
+- Changes in Erec variables 
+
+highlandTutorial:
+- Add example of using reconstructed neutrino direction. This should solve bug 1247
+- update comments to new version
+
+
+
+\section nd280Highland2_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Mon Jun 13 00:16:12 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+
+- new 4pi selection introduced
+- Many bugs corrected: 1006, 1247, 1260, 1263, 1278, 1296, 1301, 1312, 1317, 1319, 1321, 1322, 1323, 1324, 1328
+
+CHANGES IN PSYCHE (v3r7)
+---------------------
+
+Many bugs corrected. Main changes are: 
+- bug in SubRun reading from FlatTrees
+- bug in GetIsMC() that resulting in isMC=true for data
+- First version of the 4pi selection in psyche
+- many improvenments in nue, antiNue and gamma selections
+- renaming of numuBkg selections
+- BunchPosition.dat:  New temporary Bunch timing to include the first Run 7 data. 
+
+
+CHANGES IN HIGHLAND PACKAGES:
+--------------------------------
+
+
+highlandCore:
+- rootmap_setup: Only the packages highlandCore depends on should be specified
+- CategoryClasses: add methods to get colors, names and codes for a given catagory to solve bug 1006
+- AnalysisAlgorithm, AnalysisLoop 
+ - Add FillConfigTree() method to AnalysisAlgorithm and call it from AnalysisLoop such that one can add user's defined 
+   config tree variables. Move common config tree variables from AnalysisLoop to AnalysisAlgorithm
+ - Add analysis point functionality. AnalysisLoop sets into AnalysisAlgorithm the point at which it is. 
+   This allows for example avoiding to use the ToyBox from FillTruthTree (see bug 1321)
+
+
+highlandEventModel:
+- DirectionStartFlip var moved here from the base class
+- Add bools IsTruePrimaryPi0DecayPhoton and
+  IsTruePrimaryPi0DecayPhotonChild to AnaTrueParticle class, since
+  determining these properties after the fact is laborious.
+- rootmap_setup.csh: add rootmap file for .csh. 
+
+
+highlandIO: 
+ - many changes in FlatTreeConverter
+ - New variables saved to FlatTree: spill trigger; IsTruePrimaryPi0DecayPhoton and IsTruePrimaryPi0DecayPhotonChild in AnaTrueParticle; 
+   IsPauliBlocked, IsCohOnH, NPrimaryParticles from the TrueVertex into the FlatTree
+ - highlandIO.parameters.dat: enable momentum resolution MC correction
+ - add MiniTreeConverter to FlatTree creation such that we create a FlatTree from a MiniTree
+
+highlandUtils:
+- P0DAnalysisUtils: Added class to fill P0D michel clusters from AnaP0DVertex
+- CategToolsNueCC: Minor. Make sure that signal electron is not coming from a pi0.
+- HighlandTreeConverterUtils: move FillTrueVertexRooInfo from the tree converters to HighlandTreeConverterUtils, since the method was common for FlatTree and oaAnalysis
+
+
+highlandTools:
+- rootmap_setup: remove dependency on highlandEventModel. Fix .csh script
+- DrawingToolsBase: 
+ - correct bug in arrow directions for cut lines (bug 1322)
+ - specify default options for AddCategory in method ChangeCategory. related to bug 1006
+   as explained in bug 1296:
+   0 correspond to no style change, 1 to old T2K style and 2-4 to new T2K style. Default is 1
+   In this way we keep the old behavior for DraingTools("",false)
+ - give access to config tree tools. 
+ - truemu --> truelepton
+ - GetSameLevel was called when it shouln't producing bugs as bug 1329
+ - add methods to set auto colors and auto markers to solve bug 1329
+- ConfigTreeTools: Add set of tools to deal with the config tree. For the moment just a method to retrieve the Weight order for a given weight name
+
+
+
+highlandCorrections: in MomResolMCCorrection
+- adopting to changes in psycheND280Utils
+- use methods with ToyExperiment input (so to be general between systematics and correction)
+- use a paramter (read from psycheSystematics) to contol whether to use new smearing based on TPC-local info propagated
+ to global
+
+baseAnalysis:
+
+baseTrackerAnalysis:
+- got rid of -Alt systematics (they only add additional ProtonMomentum smearing, 
+ will be re-implemented (and properly,  no a simple full code copy) if needed)
+- enable MomentumResol MC correction (smearing to match data)
+
+numuCCAnalysis:
+
+
+- fill new var true_signal
+- fix selmu_nuErecQE (need to use GetToyVarValue instead of GetVarValue)
+- var renaming (bug 1144)
+   truemu_fgd     -> truemu_det
+   selmu_fgd      -> selmu_det
+ remove     (truelepton_fgd -> truelepton_det) since it is similar to detector
+ (follow better conventions and actually the value filled is any detector enum)
+- move truelepton TruthTree variables from numuCCAnalysis to baseAnalysis after changing name from truemu to truelepton (bug 1144)
+- add truelepton_pdg since it was removed from baseAnalysis. This is not the same as particle in the micro-trees since 
+ particle corresponds to the pdg code of the true particle associated to the candidate muon (it would be selmu_pdg), while 
+ truelepton_pdg is the pdg code of the true lepton from the true vertex associated to the candidate
+- add FillConfigTree method with nNucleons variables (see https://bugzilla.nd280.org/show_bug.cgi?id=1188#c45)
+- add truevtx_mass_component (see https://bugzilla.nd280.org/show_bug.cgi?id=1188#c45)
+- ContituenetsUtils methods related ith the mass component and the Fgd module type take now "bool IsMC" as argument, and not event, since event is not avaiable 
+ in FillTruthTree
+
+
+nueCCAnalysis: All the datacard parameters are now moved to psyche.
+
+numuCCMultiPiAnalysis
+- fill true_signal
+- minor: in FillToyVarsForMicroTree() added a protection that the MainTrack exists
+- Get MichelElectrons from EventBox and not from ToyBox, since they are toy independent
+
+highlandValidation
+  tests.py 
+  - now truemu variables are called truelepton both for truth tree and micro-trees
+  - remove truelepton_pdg from truth tree validation and add particle both for truth and default trees
+  - add one more plot for systematic weights to cover all enabled ones. Put the right ranges
+
+ systematics.parameters.dat: disable antinu flux and sandmu systematics. Keep flux nu enabled for new version but disabled for all version
+
+
+
+\section nd280Highland2_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Fri Aug 12 17:38:41 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+SUMMER RELEASE !!!!
+
+
+SUMMARY:
+
+Many bugs solved: 
+
+1303 Syst tuning - some possible inconsistency in which tracks TPC-track-eff, TPC-cluster-eff and FGD-TPC-tracl-eff are applied to
+1304 DrawingTools cut lines with log scales
+1311 with latest highland2 v2r3, non-weight systematics trees don't have NWEIGHTSYST and weight_syst_total
+1318 having different true var names in truth and reco trees (truemu_mom renamed)
+1329 The default colour cycle is hard to distinguish (DrawingTools)
+1333 Compilation Error in numuCCMultiTargetAnalysis.cxx due to "Protected Variables"
+1335 numuCCAnalysis does not fill base(Tracker)Analysis microtree variables
+1338 with options HIST and AREA1 markers should not be drawn
+1343 highland2 and xsTool seemingly incompatible
+1344 ShowerPosition from AnaECALParticleB not properly filled
+1345 SetTitle doesn't work for DrawEff / DrawGraph
+1349 some toy_index and weight_syst_total are -999
+1350 default.GetEntries(signal) differs from truth.GetEntries(signal)
+1353 TH1F or TH1D in DrawingTools
+1354 get the relative errors with DrawingTools
+1355 Discrepancy in the number of entries between default and eff-like trees
+1363 Frozen version v2r5 of nd280Highland2 : error at compilation
+
+Main changes: 
+
+- Many improvements in specific selections and systematics
+- add fast mechanism to check variable types when Filling at running time. This should solve bug 1341
+- remove dependency of highlandTools on  psycheND280Utils by moving the target utilities to psycheND280Utils
+- P0DDataClasses: AnaP0DBunch::P0DWaterStatus, AnaP0DParticle::Type, AnaP0DCluster::Moments
+- New treatment of RooTrackerVtx variables, which should keep the links when a list of files is used. This required adding new variables
+  RooVtxEntry and InputFileNameIndex to AnaSpill. Those variables and manily used for RooTrackerVtx links. THIS IS STILL UNDER TEST !!!!
+  However don't save InputFileIndex and RooVtxEntry spill members in the MiniTree for the moment since they produce a seg fault
+
+
+CHANGES IN EACH PACKAGE:
+
+psycheCore
+--------------
+
+- WeightType: added new operators: +=,  -=
+- InputConverter: add _currentFileIndex data member. Make the Reset() method virtual so that the derevied classes
+ implementations will be used.
+
+psycheEventModel
+-------------------
+
+- BaseDataClasses: Added the DSECAL-FGD2 ToF
+- SystId: Pileup -> PileUp for the nue
+
+psycheIO
+---------
+
+- info about entries being run will be printed in a centralized place (AnalysisLoop, SimpleLoopBase, ...) 
+
+RedoTreeConverter: 
+- Implement a Reset() method that sets the _firstFile data member to
+ true so that the branch addresses will be reset when there is a new
+ TChain.
+
+psycheSelections
+-------------------
+
+- antiNumuCCMultiPi ...: added anti-numu multi-pi selection into psyche (compiles,  does give the output)
+- numuCC4Pi: do not apply pile-systematic for branch 1 (bwd track in TPC). the code uses lots of vectors and push_back`s, hence needs a review for psyche usage 
+- nue and antiNue: Updates to the (anti-)nue analysis. TPC veto now applied differently for FGD1 and FGD2. Enable ToF cut (fhc only). Add OOFV activity and momentum quality cuts.
+ TPC track efficiency syst now applied to all tracks to include latest changes in analysis.
+- trackerSelectionUtils: delete properly the arrays (thanks Nick for spotting it)
+- gammaFGD2Selection: Added and extra TPC2 veto so that the gammaSelection in FGD2 is orthogonal to FGD1 and things using the FGD2Shower cut (antinue)
+  Allow it to calculate the TPC pile up. Added a pair veto in the FGD1 when selecting gamma in the FGD2 to get orthogonal selection.
+  changed Pileup -> PileUp for consistancy with other pile up systs
+
+
+psycheSystematics
+------------------
+
+- MomRangeResolSystematics: adopted to work with both FGDs, 2D->3D with the corresponding bins. in UndoSystematic is RangeMomentumMuon the variable that has to be reset
+- OOFV: New implementation of OOFV systematic compatible with 4pi selection.
+ - Addition of sense concept via IsRelevantRecObjectForSystematicInToy.
+ - Proper definition of lastmodule for FGD1.
+- ECalPIDSystematics: proper differntiate between eff and 1-eff cases and added some comments about that
+- ECalEMEnergyScaleSystematics: when failed to find the proper bin do not proceed further
+- ECalTrackEffSystematics: Increase the array to avoid crash.
+- MomRangeResol.dat: updated the systematics with some preliminary p6 numbers, 
+ FGD1/2-ECal-(SMRD) topologies updated,  iso FGD is pending  but not relevant for the current numu interation
+- MomentumResolSystematics: correct bug introduce recently (june 2 2016) preventing the systematic to be undone. 
+- SIPionSystematics: the correction is available so do not allow it to be modified by the quality of the systematic, 
+ also do not treat in a special way weight=0 zero,  let the downstream code take care (only account for inf/nan case)
+- SandMuonsSystematics: Correct bug 1360. Correction weight was not computed
+- ECalEmHipPIDSystematics: Generalise the usage of the ECalEmHipPIDSystematics to be applied for tracks as well, not only for showers (similar to the ECalPID).
+- ECal_EMHIPPID.dat: Should cover all momentum region.
+- PileUpFGD1_p6B.dat PileUpFGD2_p6B.dat : Added the number for the rest of run6 (all are the same, waiting for evaluation)
+- FGD2Shower.dat: Update data-mc efficiencies for the nue FGD2Shower systematic.
+
+psycheND280Utils
+-----------------
+ProtonInteractionSystematic: add #include <cmath> (trying to solve compilation issue in some platform)
+ConstituentsUtils.: GetAllTracking(Not)UsingDet() functions moved to SubDetUtils, GetConstituentInDet functionality was lacking P0D
+
+
+ND280AnalysisUtils: Minor. Be constistent when returning run period for fhc or rhc in runs 5+6.
+
+nueCCUtils, nueCutUtils:
+- Update nue utils for the tof and oofv cuts.
+- Added FindLe adingTrackInDet to get the leading track in the gamma pairs in FGD1 when the box fv is FGD2,
+- Add a warning if the highlandIO.FlatTree.UseReconDirTrackerECal is not turned on - bug 1344.
+- Do not use the extended EMEnergy cut for anti-nue. Add some protection for sand muons against the veto cuts.
+
+psycheND280Tools: add class with utilities that can be instantiated from a interactive rood session. In this way we don't need the DrawingTools 
+                   to do that. 
+
+psycheSteering
+-----------------
+
+AnalysisManager: 
+- added new selections available: numu bkg in anti-nu mode, nue, anti-nue and gamma  
+   restore some prvious ones for consistency
+- Print info about entries being run, not anymore in converters
+- Added ToF, EcalEMEnergyScale, EcalEMEnergyResol, ECalPID, TPCECalMatching
+  Changed Pileup -> PileUp for the nue 
+
+
+RunPreloadExample: Move the omp lines to the start of the event loop and add the
+ reduction so the npassed counter is correct.
+
+RunExample: Print info about entries being run, not anymore in converters
+
+
+
+highlandCore
+-----------------
+
+SimpleLoopBase: 
+- Initialize, InitializeSpill, Finalize, FinalizeSpill, DefineOutputTree cannot be pure virtual since 
+ they are implemented in SimpleLoopBase.cxx. 
+- Print info about entries being run, not anymore in converters
+
+AnalysisLoop:
+
+- Properly dump entries being run and percentage, as explained in bug 1332. 
+ Also dump here that info, since this is not done in converters anymore
+- Fill allways the toy_index variable to address bug 1349
+- move RooTrackerVtx stuff to baseAnalysis
+
+OutputManager:
+- add fast mechanism to check variable types when Filling at running time. This should solve bug 1341
+- move RooTrackerVtx stuff from OutputManager (which is supposed to be general) to a RooTrackerVtxManager in highlandUtils
+
+HighlandInputManager:
+- remove DEPRECATED method InputIsoaAnalysisTree(), mark as deprecated for several releases !!!
+
+AnalysisAlgorithm:
+- Remove any RooTrackerVtx stuff. Most of it was obsolete. The few remaining things are moved to baseAnalysis
+
+
+highlandTools
+--------------
+
+- remove dependency on psycheND280Utils
+- replace floats by double everywhere. Speed nor memory are important here, but precission is
+- Now handles properly the NOVARBIN option and variable binnings with 2D histograms
+
+DrawingTools: 
+- Use typedef TH1_h and TH2_h such that we can chose between float and double precission (TH1D and TH1F). 
+  Correct warning in clang (and probably bug): !uroot_opt.find("BOX") == std::string::npos   ------> uroot_opt.find("BOX") != std::string::npos
+- add Draw...Errors methods return now the average differencial error, as suggested in bug 1354
+- fix bugs 1338 and 1345
+- Initialize the config_tree tools from a file and not from the managers, such that the config tree is also available
+- GetNTargets, GetNucleonsPerNucleus, GetAreaFF, DumpFV, DumpVolume, DumpFGDInfo
+ moved to psycheND280Tools class under psycheND280Utils. 
+ This methods can be instantiated from a root interactive session
+
+
+DrawingUtils:
+- There was a problem with the legend because before the legend is drawn NDC coordinates might have random values. 
+ With leg->ConvertNDCtoPad(), we make sure NDC values are correct, and can be properly updated
+
+ConfigTreeTools: add methods to initialize the tools with an input file. 
+                Add methods to retrieve variable values from the config tree
+
+
+highlandEventModel
+--------------------
+
+- P0DDataClasses: AnaP0DBunch::P0DWaterStatus, AnaP0DParticle::Type, AnaP0DCluster::Moments
+- DataClasses: add RooVtxEntry and InputFileNameIndex to AnaSpill. Those variables and manily used for RooTrackerVtx links.
+ don't save InputFileIndex and RooVtxEntry spill members in the MiniTree for the moment since they produce a seg fault
+
+
+highlandUtils
+-------------
+
+- CategToolsNueCC: correct bug detected by warning:  abs(reac < 30)  ---> abs(reac) < 30
+- RooTrackerVtxManager: move RooTrackerVtx stuff from OutputManager (which is supposed to be general) to a RooTrackerVtxManager in highlandUtils
+
+highlandIO
+-----------
+
+- info about entries being run will be printed in a centralized place (AnalysisLoop, SimpleLoopBase, ...) 
+
+CreateFlatTree.cxx CreateMiniTree.cxx 
+- don't AddPackage highlandTools since this is not used anymore by cmt in highlandIO
+- use the new RooTrackerVtxManager
+- Fill the correct RooVtxEntry depending on whether the RooTrackerVtx tree is saved in the flat tree or not
+
+oaAnalysisTreeConverter
+
+- in genie oa files sometimes the GRooTracker vtx has issues (to be debugged): if so, use TTruthTraj info
+- Read P0DWaterStatus from BasicHeaderModule
+- Added the DSECAL-FGD2 ToF
+- deal with RooVtxEntry and InputFileIndex from AnaSpill
+
+oaAnalysisP0DTreeConverter.cxx 
+- Fill several new variables: AnaP0DBunch::P0DWaterStatus, AnaP0DParticle::Type and AnaP0DCluster::Moments 
+- build AnaP0DCluster's from clusters and not from nodes for shower-like objects such that moments are available. 
+ Change suggested by Zoya. 
+
+DataClassesIO:
+- Add RooVtxEntry and InputFileNameIndex of AnaSpill to the FlatTree. Those variables and manily used for RooTrackerVtx links
+
+FlatTreeConverter:
+- deal with RooVtxEntry and InputFileIndex from AnaSpill
+- Fix a bug while filling the true pion direction (LeptonDir was filled twice)
+
+basP0DAnalysis
+--------------
+
+make enums public such that they can be used by any analysis. This should salve bug 1333
+
+
+baseTrackerAnalysis
+--------------------
+
+- make enums public such that they can be used by any analysis. This should salve bug 1333
+- nue*Pileup -> nue*PileUp change in SystId
+
+baseAnalysis
+-----------------
+
+- We should set RooTrackerVtx stuff to used algorithms. Temporary solution !!!!
+  Otherwise the RooVtxEntry is not correct for algorithms using other algorithms
+- make enums public such that they can be used by any analysis. This should salve bug 1333
+- use the new RooTrackerVtxManager
+- move RooTrackerVtx stuff from AnalysisLoop and AnalysisAlgorithm. 
+ Add a new test variable RooVtxEntry2, which is filled with GetSpill().RooVtxEntry. 
+ In principle the RooVtxEntry of is the same for all vertices in the spill, so probably 
+ it can be removed from the vertex
+- Add a new variable RooVtxFile, which is filled with  GetSpill().InputFileIndex);
+ In this way we have the correct links when a list of files is provided
+
+numuCCAnalysis
+---------------
+
+- remove useless code to get the mass weights (which is now in FillConfig)
+- add parameter (and code) to set an alternative fiducial volume
+- add var truelepton_nuErecQE also in truth tree (reconstructed energy with true lepton kinematics in CCQE formula)
+
+numuCCMultiPiAnalysis
+-----------------------
+
+- true_signal is a toy var
+
+nueCCAnalysis
+-------------
+
+- Minor updates to incorporate the latest developments in nue selection in psyche.
+
+tutorialAnalysis
+-----------------
+
+- Add FillConfigTree example. 
+- improve comments.
+- Correct warnings
+
+p0dNumuCCAnalysis
+-------------------
+
+- Added line to ensure that the energy loss is sensible.
+- Class for systematics related to veto track veto cut based on TN-080.
+- Migrating OOFV class from p0dNumuCCQEAnalysis to p0dNumuCCAnalysis. Leaving the CCQE version in place for now.
+- Added various utilities for selecting various types of veto/sand tracks
+- Added OOFV and veto systematics, veto cut, and associated parameters.
+ This will increment the accum_level of tracks both here and in p0dNumuCCQAnalysis, so the selection now passes cut3 in CC and cut4 in CCQE.
+- Slight modifications to clean up code, fixed a few typos. Cuts should work properly now.
+
+numuCCMultiTargetAnalysis
+---------------------------
+
+- fix truelepton_nuErecQEoxygen (it was using the carbon Eb)
+- correct warnings
+
+
+\section nd280Highland2_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 18:49:54 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- tracker-based P0D analyses MOVED to PsyCHE
+- Try to solve some bugs: 1188,1333,1366,1368,1372,1385,1392
+- Many improvements in documentation both in tutorialAnalysis and on the web (almost up to date, except the systematics)
+- Many improvements in the DrawingTools
+- Try to address an important bug in the ToF Correction and systematic
+- add -e option to AnalysisLoop (the applications) to use a skim file with run, subrun and event numbers to be processed
+- some changes to make it compile with clang
+
+
+
+CHANGES IN EACH PACKAGE:
+
+tutorialAnalysis
+-------------------
+
+no changes in code, but many improvements in documentation
+
+p0dNumuCCQEAnalysis
+------------------
+
+Updated to work with migration of p0dNumuCCAnalysis to psyche. 
+Updated systematics parameter names to match the current naming scheme in highland2.
+
+p0dNumuCCAnalysis
+------------------
+
+Most stuff moved to psyche:
+
+- Removed parameters that are now in baseAnalysis, baseTrackerAnalysis, or psyche
+- P0D systematics and selections moved to psyche
+- DataClasses and converters deprecated by making small changes to existing classes.
+
+nueCCAnalysis
+----------------
+
+- Add more true info regarding the paired track from the gamma background.
+- add q^2 (true and reco) information and add the inforamtion about the initiator particle for the photon
+- correct warning related to unitialized pointers, and put protection when for NULL values
+
+numuCCAnalysis
+-----------------
+
+save massWeights for each target and each toy in a single entry tree called massWeightTree, to address bug 1188. 
+This is just a prototype !!!
+
+baseTrackerAnalysis
+--------------------
+
+- Added P0D+TPC systematics that are now in psyche to the systematics and configurations.
+- for the moment keep independent flip kinematics and tof corrections, 
+ just add them in a proper order
+
+highlandCorrections
+---------------------
+
+FlipKinematicsCorrection, ToFCorrection, ToFCorrection: 
+- updated to the changes done to the psycheND280Utils::ToFSenseCorrector, 
+ function names,  reutrn values etc
+- FlipKinemaitcs: moved the ToF validity checks into the IsRelevant... function, 
+ added a warning to highlight the correction is being run (compiled) with recpack enabled
+- for the correction, read the parameter on whether to apply the track flip based on ToF from 
+ the psyche systematics,  these two are fully related
+
+highlandCorrections.parameters.dat:
+- read parameter from pyscheSystematics
+
+highlandIO
+--------------
+
+- implement skimming option in all converters
+
+CreateFlatTree, CreateMiniTree:
+- for the moment keep independent flip kinematics and tof corrections, 
+ just add them in a proper order
+
+oaAnalysisTreeConverter
+- Fill P0D segment length and energy/momentum loss
+- Try to address bug 1366. 
+  + The file is skipped when a file is found without RooTrackerVtx tree, while all others have it
+  + The execution stops when Genie and Neut files are mixed
+  + The execution stops when a file is found with RooTrackerVtx tree while all others don't have it
+- improve error messages related with pressence or nature of RooTrackerVtx tree, to fully solve bug 1372
+- for the prod-7 iteration substitute the number of NNodes of tpc constituents with a 
+ a sum of fitted horizontal and vertical clusters
+
+FixMergedRooVtxLink: 
+- Add the possibility to get the correct RooVtxEntry in the systematic trees
+- adapt to genie (if not NRooTrackerVtx look for GRooTrackerVtx)
+- set back all_syst as default syst tree
+
+highlandUtils
+--------------
+
+- CategToolsNueCC: Fix compilation warnings.
+- HighlandTreeConverterUtils: add info about bug 1368 in error output
+
+
+highlandTools
+------------------
+
+DrawingToolsBase, DrawingTools
+- enable SetMarkerSize option for 2D histos (bug 1376)
+- Now the DrawingTools take the option "RATIO" which draws a data/MC ratio beneath the standard stack plot.
+  It's not perfect as the numbers on the y axis are cut.
+  Can be used with the root option "SAME" to check the agreement of 2 different sample.
+- ofstream ---> std::ofstream
+- increase the precision in PrintPurities method (see bug 1385)
+- increase precision and pring total number of events passing the cut in PrintPurities method. See bug 1385
+- Improve cout in PrintPurities() for Experiment
+- use the same format as for experiment in PrintPurities. Don't dump the category by default
+- Add user option to the PrintPurities method. 
+  Use POT normalization in all methods (including GetEffm GetRatio, DrawErrorsBase, etc). This will be used by default since 
+  in general we one to weight the MC according to the POT in its corresponding data period also for efficiencies and errors (see bug 1385)
+  This can be disabled with the NOPOTNORM option. 
+  Also improves the cout in AnalysisResults
+- Add methods DrawToys taking Experiment as argument. See bug 1392
+- put the normalization argument allways at the same position: either after the legend when this option is available or after the user option when it is not
+
+WeightTools: 
+- Check correctly that NWSi and WSi options are used at the same time. Bug 1393
+
+ConfigTreeTools: 
+- forgot to initialize  _fileName and _fromFile in initialize methods of ConfigTreeTools. 
+  See comment 73 in bug 1188
+
+DrawingUtils:
+- GetBinWidth does not exist for a 2D histo. Must get the axis first:
+  h->GetBinWidth(i+1)   --->    h->GetXaxis()->GetBinWidth(i+1);
+- add option NOPOTNORM to disable POT normalization
+- add RELATIVE option
+- add method to get the value of an integer variable from the trees in a Experiment. All MC samples in all sample groups should have the same value. Otherwise it complains
+
+rootmap_setup: 
+- reflect the fact that highlandTools now depends only on highñlandCore and psycheCore
+- remove PSYCHEND280UTILSROOT stuff
+
+requirements 
+- remove make_fragment stuff since there are no fragments for this package
+
+
+highlandEventModel
+-------------------
+
+- P0DDataClasses: Length now in AnaP0DParticleB, so I removed the inheritance from AnaSubTrack, which is just a container for length.
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+highlandCore
+---------------
+
+- OutputManager: add NMAXSPECIALTREES (=20). All trees with index below NMAXSPECIALTREES are considered special trees
+- AnalysisLoop: add functionality to use a file with events to skim. micro-trees start at index NMAXSPECIALTREES
+- HighlandInputManager: use psyche InputManager in the LoadSpill method
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+psycheSteering
+----------------
+
+- RunPreloadExample: Don't use nmax_events/nCores (nmax_events may be -1) to calculate how manycontiguous iterations.
+- RunExpPreloadExample: Count how many events pass the selection.
+- RunSyst: Update the parameter names. Add counters to show the numbers of events passing the cuts.
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+
+psycheSystematics
+--------------------
+
+ BFieldDistortionSystematics,  ChargeIDEffSystematics, TPCClusterEffSystematics, TPCPIDSystematics: Added P0DFV+TPC tracks to relevant track groups.
+- MomentumResolSystematics: Added new parameter to always use the TPC-based smearing if the P0D FV is being used.
+- MomentumScaleSystematics: Added new parameter to use a slightly different smearing if the P0D FV is being used: use the global momentum with the P0D energy loss removed.
+ In general, it might be better for all tracks to apply the smearing to the TPC recon momentum from the nearest TPC (analogous to the MomentumResolSystematics TPC-based smearing).
+- P0DVetoSystematics: P0D+TPC1 veto/pileup/sand muon/cosmic systematic. Data calculated for prod. 6B runs 1-4. Runs 5-7 not done yet.
+ This acts as a weight correction/systematic for the P0D veto cut in p0dNumuCCSelection.
+- P0DELossResolSystematics, P0DELossScaleSystematics: P0D energy/momentum loss scale and resolution. Energy loss is defined in data converters as the difference
+ between the global front momentum and the momentum at the detector crossing into TPC1.
+ Data calculated from Run 4 data and particle gun MC for P0D-stopping FGD cosmics. Currently, use the same throws for water and air and use only one bin in
+ P0D segment length, but this could be improved.
+- ToFResolSystematics: adopted to the changes implemented for ToFSenseCorrector, 
+ use a parameter to check whether to flip a track (tmp and the moment! since needs special treatment throughout the downstream code of 
+ oveall psyche)
+- nueOOFVSystematics: Update reco categories to match the numu oofv. Remove unused variables. Event weight is defined as Weight_h and is splitted in Systematic and Correction.
+
+- psycheSystematics.parameters.dat: Added new parameter to be read by momentum systematics to run the correct smearing to P0D FV tracks.
+ Added new parameter to control whether the ToF should do any track flipping (will be read by highland as well)
+ OFF by default,   since things to discuss and have settled  
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+
+psycheSelections
+--------------------
+
+- trackerSelectionUtils: Added a few lines to make FindLeadingTracks work with the P0DFV+Good quality TPC group
+- p0dNumuCCSelection: P0D+TPC1 numu CC inclusive selection. Psyche equivalent to TN-080 selection (not identical but should be very close).
+ Could still add muon PID cut to increase muon purity (doesn't change selection purity much in FHC beam mode). Simple selection to use as a
+  base for exclusive samples or to extract CC inclusive results on water.
+- antiNueCCSelection: Minor correction in the way the FGD2Shower systematic is applied. Remove unused variables.
+- antiNueCCFGD2Selection: Rename class EOverPCut -----> EOverPCutFGD2.
+- psycheSelections.parameters.dat: remove unused parameters 
+
+
+psycheIO
+-----------
+
+- RedoTreeConverter: Fill new P0D variables (length & energy loss) in RedoTreeConverter
+- MiniTreeConverter: implement skimming option
+
+
+psycheND280Utils
+-------------------
+
+- EventBoxTracker, EventBoxUtils, ConstituentsUtils: 
+  + Added four rec. object groups and three true object groups: for P0D tracks:
+  + Also added functions to fill these in ConstituentsUtils (trajectories) and EventBoxUtils (rec objects) and
+    modified boxUtils::FillTracksWithTPC to fill groups if the P0D is the subdetector being used. 
+  + Fixed bug causing errors when filling P0D true trajectories.
+- CutUtils: Added some functions for a P0D veto cut. The cut creates a box around the standard fiducial volume (limits currently hard coded)
+ and vetoes bunches where a track starts outside the box and ends inside.
+- ToFSenseCorrector: started to review the logic and the names. review the satic-ness and const-ness of functions
+- nueCCUtils: Add a protection against tracks going in the Ecal but no ecal information is available. Remove unused variables. Small change in the way the FGD2Shower cut is applied.
+- FluxWeighting:
+ + FluxTuning now optionally takes a 'planeident' parameter.
+ + Can specifiy nd6/nd13 (magnet/sand) neutrino plane
+ + Constructor arguments are now const references... saving the world
+   one std::string copy at a time.
+ + Also recieved a clang-format.
+
+psycheUtils
+---------------
+
+BinnedParams:  ifstream --> std::ifstream
+
+psycheEventModel
+------------------
+
+- BaseDataClasses: Added P0D segment length & energy loss to AnaP0DParticleB.
+- SampleId, SistId: Added flags P0D Numu CC selection and several P0D systematics.
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+psycheCore
+-------------
+
+
+InputConverter: 
+- add an screen message in IsCorrectType of this kind: "- Converter 'oaAnalysisTree' looking for tree 'ReconDir/Global' --> Yes"
+ such that in the case all trees are missing the user knows what is going on (see bug 1366)
+- improve error messages by adding ERROR to the begining
+- iftream --> std::ifstream
+
+CoreUtils:
+- add method to skip events provided a file with a list of "run subrun evt". To be revisited
+
+requirements: 
+- remove make_fragment stuff since there are no fragments for this package
+
+
+
+\section nd280Highland2_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 13:33:02 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+MAIN CHANGES:
+
+- antiNueCCAnalysis and gammaAnalysis added to nd280Highland2
+- many improvements in documentation. Put many things in the code and use snippet commands to retrieve it
+- many improvements in the validation, including new tests for nue, psycheSteering and RooTrackerVtx.
+  All packages in nd280Highland2 are at least checked for compilation
+- remove zero_var configuration since we now apply all weights also in the default tree
+- correct memory leak in ResizeArray
+- started general cleanup/coding optimizaiton. 
+  template all the Copy/Resreve/Resize/CreateArray methods, 
+- Improvements in many systematics and new systematic: MomBiasFromVertexMigration
+- Correct several bugs in numuCCMultiPiSelection, and changes in many other selections, specially nue related
+
+
+CHANGES IN EACH PACKAGE:
+
+
+
+baseAnalysis
+------------------------------------------------------
+
+
+- remove zero_var configuration since we now apply all weights also in the default tree
+
+baseAnalysis.parameters.dat 
+- improvements in doxygen documentation
+
+baseAnalysis: 
+- In FillTruthTree: Sometimes the same true vertex is asigned to the candidate in another bunch, most likely because of a delayed track. In this case 
+  save the higher accum level into the true vertex. This should solve the discrepancies between truth tree and default trees for the number of 
+  selected signal events
+- implement the temporary solution for RooTrackerVtx also in Initialize method since it needs to be called after all used analyses have been decleared
+
+make enums public such that they can be used by any analysis. This should salve bug 1333
+
+highlandTools
+------------------------------------------------------
+
+- improvements in doxygen documentation
+- remove zero_var configuration since we now apply all weights also in the default tree
+- added MomBiasFromVertexMigration systematic
+- Fixed typo using systematics enum when enabling systematics------------------------------------------------------
+
+AnalysisLoop: 
+ - uncomment  ND::params().LoadParametersFiles(anaUtils::GetPackageHierarchy(), true);
+   was commented out because the GetPackageHierarchy() method was in psycheUtils, while highlandCore does not depend on 
+   that package anymore. So we have now move this method (and the ones used by it) to CoreUtils in psycheCore
+
+AnalysisAlgorithm.hxx AnalysisLoop.cxx 
+- improvements in doxygen documentation
+
+VersionManager:
+- add method to get the version of a specific package
+- add VersionManager_LinkDef.h 
+
+
+highlandIO
+------------------------------------------------------
+
+FlatTreeConverter, oaAnalysisTreeConverter 
+- use new ResizeArray() method
+
+
+highlandTools
+------------------------------------------------------
+
+improvements in doxygen documentation
+
+DrawingTools, WeightTools, SystematicTools
+- added a protection so not to apply the method ApplyWeights() more than once
+
+ConfigTreeTools:
+- add gifts methods GetWeightName and GetNWeights as suggested in bug 1188
+- add a preprocessing variable to be used in xsTool
+
+DrawingToolsBase:
+- add ver() method to return the Versioning singleton. 
+- attemp to solve bug 1402 about the RATIO option
+
+DrawingUtils: 
+- I didn't find yet the proper way of checking the existence of NDC coordinates. 
+  The new solution seems to work for the moment
+
+
+highlandUtils
+------------------------------------------------------
+
+CategToolsNueCC:
+- Check that there is gamma only in the selected fgd. Small correction in the way signal is defined.
+
+P0DAnalysisUtils: 
+- use templates from CoreUtils for Resize/Create/CopyArray() methods
+  for CopyArray() account to the new "consistent" (throughout the classes) changes
+   of arguments` order: (src, target, size)
+
+IntersectionUtils:
+- various useful classes functions that allow to check/get the enrtrance&exit
+  points of the intersection of a ray with a 3D box (axis oriented)  
+  useful for pthoton systematics estimations and possibly some neutrino checks as
+  well, 
+
+  the deeper functionality can be retrieved with highlandRecPack (via RECPACK) but 
+  usage of the RECPACK is considered to be something not generalized and for only
+  specific case,  hence introduced something simplier
+
+  may be useful for checks/systematics by Pierre Lasorak for photons 
+
+
+highlandValidation
+------------------------------------------------------
+
+- add tests for nue, for the moment without systematics
+- add tests for psycheSteeering: comparison of events passing selection for each branch and performance comparison 
+- add tests for RooTrackerVtx
+- Add jenkins automation scripts: highland-build.sh highland-validation.sh nd280-build.sh process-nominal.sh 
+
+process-nominal.sh
+- don't put the ouput directory inside data
+- put code for nominal in a different folder (NOMINAL)
+
+highland-build.sh 
+- Change highland-build.sh to perform cmt br make only over psyche/highland2 packages (for some reason nd280AnalysisTools was getting stuck)
+
+process.py:
+- simplify get_to_process and further improvements for psyche validation
+
+validation_utils.py 
+- add _syst_ to the output file name only for p0danalyses and systematics parameters files
+
+config.py 
+- with flattree.parameters.dat for flat tree creation since the tracker ecal module is needed 
+
+requirements 
+- add all packages in nd280Highland2 such that at least we validate the compilation
+
+systematics.parameters.dat 
+- the multipi selection needs the tracker ecal module
+
+flattree.parameters.dat 
+- switch on the dir tracker ecal parameter
+
+
+numuCCMultiTargetAnalysis
+------------------------------------------------------
+
+- Add variable "selmu_hit1_fgdmoduletype" in DefineMicroTree to make it run
+- This should solve bug 1403. must call baseTrackerAnalysis::Initialize() and the end of Initialize(). 
+  It was not called before. It has to be at the end such that usedAlgorithms are declared. It will be in baseAnalysis where the RooTrackerVtx stuff is handled 
+
+
+p0dNumuCCAnalysis
+------------------------------------------------------
+
+- p0dNumuCCAnalysis: remove zero_var configuration since we now apply all weights also in the default tree
+
+
+p0dNumuCCQEAnalysis
+------------------------------------------------------
+
+- p0dNumuCCQEAnalysis: remove zero_var configuration since we now apply all weights also in the default tree
+
+
+tutorialAnalysis
+------------------------------------------------------
+
+- many improvements in doxygen documentation
+- add  < highlandIO.FlatTree.UseReconDirTrackerECal = 1 > 
+  such that the user does not have to modify highlandIO.parameters.dat
+
+
+psycheCore
+------------------------------------------------------
+
+Deprecated.hxx 
+ - added DEPRECATED_VERBOSE macro so one can add a certain message as well
+ - make some trick (variadic stuff) to add overloading to the macro, 
+ - now can be used with the same name (DEPRECATED) with and w/o a message
+
+
+CoreUtils: 
+- move GetSoftwareVersionFromPath, GetPackageNameFromProgram, GetPackageNameFromPath and GetPackageHierarchy to 
+  from AnalysisUtils in psycheUtils to CoreUtils in psycheCore such that they can be used from highlandCore. 
+  Anyway, those methods are general, assuming a CMT structure
+- started general cleanup/coding optimizaiton
+  template all the Copy/Resreve/Resize/CreateArray methods, 
+  keep only those that are type specific (e.g. provide some default as a parameter)
+- CopyArray() ! an important change: modify all the methods,  so that the
+  structure is (source, target, size): previousely there were differences
+  depending on the types used
+- ResizeArray methods now take the original size as an additional parameter and
+  use proper C++ style of creating a new array so that the memory usage is not
+  corrupted due to a mixture of C (reallocate) and C++ (delete) methods
+  it can be a bit slower but is used generally only on event level
+
+EventVariationBase.cxx EventWeightBase.cxx
+- adopted to the changes in CoreUtils 
+
+
+psycheEventModel
+------------------------------------------------------
+
+SystId: 
+- new systematic: MomBiasFromVertexMigration 
+- the order was changed (indices), hence affects random seeds used for validation (can
+  trivially change), but guess it is better to keep everything in some logical order
+
+BasicUtils: 
+- adopted to changes in psycheCore/CoreUtils.(h)cxx
+  template all the Copy/Resreve/Resize/CreateArray methods,  
+  keep only those that are type specific (e.g. provide some default as a
+  parameter)
+
+- CopyArray() ! an important change: modify all the methods,   so that the
+  structure is (source,  target,  size): previousely there were differences
+  depending on the types used
+
+- ResizeArray() methods now take the original size as an additional parameter and
+  use proper C++ style of creating a new array so that the memory usage is not
+  corrupted due to a mixture of C (reallocate) and C++ (delete) methods
+  it can be a bit slower but is used generally only on event level)))))
+
+
+psycheIO
+------------------------------------------------------
+
+RedoTreeConverter:
+- added ECAL variables (which I guess are relevant for BANFF), 
+  to be reviewed as for the rest of detectors:
+  need to split properly the reading between psycheIO RedoConverter and highlandIO
+  FlatTreeConverter
+- use the new ResizeArray() method that takes into account the original size of
+  the array
+
+
+psycheND280Utils
+------------------------------------------------------
+
+add rootmap stuff such that psycheND280Tools is visible from a root session
+
+ND280AnalysisUtils:
+- fix GetNTargets for fgd2xylike when using a FV different from default, and make fgd2watermodules being the exact sum of fgdwaterlike and virtual xy
+
+EventBoxUtils:
+- adopted to changes in psycheCore/CoreUtils.(h)cxx and
+  psycheEventModel/BasicUtils.(h)cxx related to the arrays
+
+nueCCUtils:
+- Minor. Update warning when the ecal variables are not found.
+- Minor. Update ToF.
+
+
+psycheSelections
+------------------------------------------------------
+
+- use the new ResizeArray method that takes original size of the array as an argument
+- when looking for ECal pi-0 candidates use new method in cutUtils. hence got rid of its actual copy from the packages
+- FindEcalPhotonsAction: prod5cut was obsolete and not used --> got rid of it
+  make all the cut params (e.g. upstream layer) protected
+
+numuCCSelection.hxx 
+- added BasicUtils dependency so that it is propagated to many of the dependents
+- improvements in doxygen documentation
+
+numuCCMultiPiSelection: 
+- ccmultipibox->nIsoEcals must be initialized to 0 for each toy. Although this could be optimised since 
+  we don't expect the number of iso tracks to change from one toy to another
+- Fix error on the increasing number of Pi0EcalTracks
+- Change MostUpstreamLayerHit type from bool to int
+- minor,  for consistency set the nPi0Ecaltracks counter to zero in the method as well
+- IsECALPi0Object --> IsECALPi0Photon
+- get rid of vector usage, use ClearArray methods wherever possible, need to review the usage of the fixed sized arrays!
+- improvements in doxygen documentation
+
+psycheSelections.parameters.dat 
+- Remove unused parameter.
+- Minor. Update ToF.
+
+nueCCSelection: 
+- Reverse the logic when looking for a systematic in IsRelevantSystematic. Move the minimum momentum cut after the PID, to make sure that it is always included when CheckRedoSelection is called.
+- No need to call for the TPC quality cut from the parameters file.
+
+gammaSelection, gammaFGD2Selection 
+- Move the minimum momentum cut after the PID, to make sure that it is always included when CheckRedoSelection is called. Properly fill summary action for FGD2 selection.
+- Apply option for systematics fine tuning. Systematics properly applied to both electron tracks.
+- No need to call for the TPC quality cut from the parameters file.
+
+numuCCBwdSelection: 
+- remove obsolete selection, fully included into numu CC 4pi. approved by Pierre Bartet
+
+antiNumuCCMultiPiSelection:
+- started code review/cleanup. use ClearArray methods wherever possible, need to review the need/speed of the usage of fixed sized arrays
+- got rid of push_ backs (a)
+- stating getting rid of  any stuff beyoned plansearrays (on-going)
+- this is the verbosity-based commit, 
+  but it is important to mention that the
+  recent bugs (treatment of the most MostUpstreamtLayer etc have been fixed th
+  reflect the changes/fixes in CC multi-pi )
+- use ClearArray() methods, 
+  minor: for consistency set counters to zero in the methods as well (are reset in
+  the Reset() method anyway)
+- IsECALPi0Object --> IsECALPi0Photon
+
+psycheSystematics
+------------------------------------------------------
+
+- MomentumResolSystematics, PileUpSystematics: improvements in doxygen documentation
+- MomBiasFromVertexMigrationSystematics: systematic to account for momentum bias due to vertex migration:is supposed to be binned in mom and angle (costheta) bins
+- MomentumScaleSystematics: propagate the systematic for the flipped momentum as well
+- ECalPIDSystematics, ECalEmHipPIDSystematics, ECalEMEnergyResolSystematics, ECalEMEnergyScaleSystematics: Do not evaluate systematic if the ecal variables have unphysical values (for example negative energy), see bug 1390.
+- TPCECalMatchEff.dat: Update TPCECalMatchEff systematic. New numbers with update binning and update event selection. Numbers provided by Andy Chappell.
+- BFieldDistortionSystematics: propagate the systematics to the momentum flipped as well (use TPC with most nodes closest to the track end point). generalize the methods + some clean-up
+- TPCPIDSystematics: Fix typo for P0D. 
+- ECalEMEnergyResol.dat: Update ECalEMEnergyResol based on TN-279.
+- ChargeIDEffSystematics: use new ResizeArray() method
+
+
+psycheUtils
+------------------------------------------------------
+
+BinnedParams.hxx SystematicUtils.cxx 
+ - improvements in doxygen documentation
+
+AnalysisUtils: 
+- move GetSoftwareVersionFromPath, GetPackageNameFromProgram, GetPackageNameFromPath and GetPackageHierarchy to 
+  from AnalysisUtils in psycheUtils to CoreUtils in psycheCore such that they can be used from highlandCore. 
+  Anyway, those methods are general, assuming a CMT structure
+
+
+
+\section nd280Highland2_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 23:37:30 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+MAIN CHANGES:
+
+- removed nd280AnalysisTools dependency ( finally !!!!), instead oaAnalysisReader is intruduced
+- improve Versioning
+- highlandSystematics, a new package for common systemnatics that are not part pof psyche
+- some changes in nue related selections
+
+The rest are minor changes
+
+
+
+CHANGES IN EACH PACKAGE:
+
+
+nd280Psyche
+------------------------------------------------------
+
+
+Minor changes in most packages
+
+- psycheND280AnalysisTools: fix number of targets for water modules
+- psycheSelections: accept events below 200 MeV in nue related selections
+- psycheSystematics: TPC PID should also include electrons with p < 200. For now, this is the same as the next bin (200-400).
+- psycheUtils: Add methods to deal directly with AnaParticleB without any casting. The methods with tracks should be removed at some point.
+  This tries to address bug 1397
+
+
+oaAnalysisReader
+-----------------------------------------------------
+
+This package does part of what nd280AnalysisTools used to do for highland
+In particular it provide oaAnalysis classes through MakeProject. 
+This root commant is not run on the fly but instead the classes for different relevant productions are 
+provided in different folders: prod5D, prod5F, prod6B and prod6TREx. 
+By default prod6B is used in the requirements file. 
+
+Also a script createProd.py is provided to automatically create a production folder, provided the folder name and a root file
+
+
+highlandSystematics
+-----------------------------------------------------
+
+
+A new package dedicated to be a roof for various systematics
+developed inside highland but not subject to be migrated into psyche (i.e. oscillation 
+analysis fitters` usage):
+a good example are various systematics developed for cross-section analysis
+
+for the moment keep the systematics related to smearing due to an uknown position 
+of the parent decay (i.e. neutrino direction effectively), although the latter
+still lacks the proper inputs
+
+More to come
+
+
+highlandCore
+-----------------------------------------------------
+
+AnalysisLoop: 
+- remove commented lines. 
+- Call ana().InitializeBase() after ana.Initialize()
+
+AnalysisAlgorithm
+- Set the initial analysisPoint as kConstructor. 
+- Don't allow calls to UseAnalysis after Initialize
+- Proper ordering in analysis points enum, starting by kConstructor. 
+- Add pure virtual method InitializeBase
+
+
+baseAnalysis
+------------------------------------------------------
+
+baseAnalysis: 
+- Add non virtual InitializeBase method such that it cannot be overwritten by derived classes. This ensures this method is always called 
+ by AnalysisLoop. Is in this method where the   SetSaveRooTracker and SetRooVtxManager are called, such that those settings are propagated to usedAlgorithms, 
+ which are declared in Initialize() the lastest. New implementation for those two methods, which now propagate the settings to used algorithms
+- add PROD5D
+- add production 6HI (the TREX mini production). Rename PROD6BC to PROD6BD
+
+RunRooTrackerVtxExample: 
+- #include "AnalysisTools/libReadoaAnalysis/libReadoaAnalysisProjectHeaders.h"
+  -->  #include "oaAnalysisReaderProjectHeaders.h"
+
+
+numuCCAnalysis
+------------------------------------------------------
+
+added the positions of true letpon entrance and exit points for each TPC
+this is useful to undestand the loss of the selection efficiencies (and possible
+reco failures/limitations)
+
+
+highlandIO
+------------------------------------------------------
+
+
+- Import nd280AnalysisTools functionality needed by highland2 to highland2
+
+oaAnalysisTreeConverter: 
+- create the _ecalPidCalc and initialize it. I don't know whether this has ever worked !!!
+- use the updated pre-processor definitions from the Versioning:
+ prod7 development and trex prod6-based mini production
+
+CreateFlatTree.cxx CreateMiniTree.cxx highlandIO.parameters.dat  
+- do not apply UseGlobalAltMomCorrection since this is analysis dependent. It should be applied at analysis level
+
+DataClassesIO:
+- remove !defined ANATOOLS_FILE_VERSION warnigs, since 
+ with oaAnalysisReader ANATOOLS_FILE_VERSION is removed, the version is always defined
+
+
+
+highlandUtils
+------------------------------------------------------
+
+P0DAnalysisUtils: 
+- Adding Geomtery Utilities to convert GeomID to SP0Dule, P0Dule, Layer and Bar Number. 
+  This is the same calculation as done in SetupP0DTree.H in p0dRecon. 
+  Also, correction for minTime/maxTime which was swtiched for Michel Electron clusters.
+
+HighlandAnalysisUtils: 
+- add PROD5D
+- rename 6BC --> 6BD
+- handle TREx production
+
+requirements 
+- add root libraries needed by TECALPid stuff, imported from nd280AnalysisTools
+
+TECALPidDefs, TTruthUtils
+- import TECALPid... files  and TTruthUtils from nd280AnalysisTools
+
+ecalRecon_likelihood_pdfs ...
+- add ecal likelihood pdfs temporarily under src and set the proper folder in the manager
+
+CategToolsNueCC
+- IsGammaSignalOOFGD is separated between FGD1 and FGD2. Update NuESimpleCat.
+
+
+highlandEventModel
+------------------------------------------------------
+
+requirements 
+- use highland2/oaAnalysisReader instead of nd280AnalysisTools
+
+Versioning: 
+- use EQUALS_... instead BEAFORE_... when possible. Add info about each production from t2k.org
+- #include "AnalysisTools/libReadoaAnalysis/libReadoaAnalysisProjectHeaders.h"
+  -->  #include "oaAnalysisReaderProjectHeaders.h"
+- add PROD5D
+- added new special case:  VERSION_PROD6HI for prod6 TREx based iteration
+- nd280AnalysisTools --> oaAnalysisReader
+- remove ANATOOLS_FILE_VERSION and ANATOOLS_FILE_PROD5. 
+ The version will be always defined
+- added new stuff to treat the obsolete vars removed/changed from oaAnalysis
+related to ECal lhood pid calculations and ttruthutils
+
+P0DDataClasses:
+- added OriginalP0D for momentum from range systematic
+
+
+highlandValidation
+------------------------------------------------------
+
+- Fix problems with production5 validation
+- Changes related to nd280AnalysisTools removal
+
+config.py
+- set  v2r11p1 as nominal
+- temporarily use the flatree parameters file for numu such that  < highlandIO.FlatTree.UseReconDirTrackerECal = 0 >
+
+test.py
+- truemu_momt --> truelepton_momt
+
+pyutils.tar.gz 
+- add new method oaAnalysisReader_prod in tianlu/analysis/utils.py to get the production from the oaAnalysisReader requirements file.
+
+requirements 
+- use oaAnalysisReader
+
+process-nominal.sh 
+- disable UseReconDirTrackerECal for prod5
+
+p0danalyses.parameters.dat 
+- temporarily put  < highlandIO.FlatTree.UseReconDirTrackerECal = 0 > until 
+  the package hierarchy overwride parameters is fixed
+
+
+
+\section nd280Highland2_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Mon Jan  9 16:24:52 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Christmas freeze !!!!
+
+MAIN CHANGES:
+
+- Try to address bug 1152, about indexing params in systematics
+- improve Versioning
+- highlandSystematics, a new package for common systemnatics that are not part pof psyche
+- Improvements in documentation
+
+CHANGES IN EACH PACKAGE:
+
+
+nd280Psyche
+------------------------------------------------------
+
+- psycheCore: some simplification/reorganization in SelectionBase and Step base to allow implementation of Delete, Replace and Insert Step methods
+- psycheEventModel: remove methods that were deprecated for a while
+- psycheUtils: Mainly try to address bug 1152, about indexing params in systematics
+- psycheND280AnalysisTools: first version of alternative true michel electron counter (bug 1273). Update runid for Run7 data. MC is not yet updated as there is no Run7 MC available.
+- psycheSelections: in trackerSelectionUtils mark FindLeadingTracksOld as deprecated 
+- psycheSystematics: address bug 1152 for many systematics. In TPCECalMatchEffSystematics replace track->Momentum with track->MomentumEnd (bug 1361)
+ In MichelElectronEffSystematics fix a typo to use proper indices when applying weights, the ones with offsets
+
+oaAnalysisReader
+-----------------------------------------------------
+
+- added prod6E and prod6G
+- Install the ND__*.h headers in to the binary folder (?)
+- in requirements file add table with correspondence between a given production, the oaAnalysis version used for that production
+ and the oaAnalysisReader subfolder to be used
+
+highlandSystematics
+-----------------------------------------------------
+
+A new package dedicated to be a roof for various systematics
+developed inside highland but not subject to be migrated into psyche (i.e. oscillation 
+analysis fitters` usage):
+a good example are various systematics developed for cross-section analysis
+
+for the moment keep the systematics related to smearing due to an uknown position 
+of the parent decay (i.e. neutrino direction effectively), although the latter
+still lacks the proper inputs
+
+
+highlandCore
+-----------------------------------------------------
+
+VersionManager: make it more rational and user friendly. A production version has a nd280 and oaAnalysis version, and not a low and high version as before. 
+
+
+highlandEventModel
+-----------------------------------------------------
+
+DataClasses*:
+ - Adds P7Dev global ECal segment variables. Protected by preprocessor.
+
+*_LinkDef.h:
+ - Adds ROOT recommended pre-amble to stop over-dictionary generation.
+
+Versioning: 
+- Improve documentation about versions.
+- Define a new variable VERSION_HAS_NUMBER_OF_FITTED_CLUSTERS such that
+ we don't use VERSION_PROD... preprocessor variables outside Versionin.hxx.
+
+
+highlandTools
+-----------------------------------------------------
+
+DrawingTools: test implementation of methods using default/truth to compute efficiencies, instead of truth only. See bug 1406
+
+baseAnalysis
+------------------------------------------------------
+
+- call the new method AddStandardProductions in ProductionUtils.
+- Move all code from Initialize to InitializeBase, since the last is always called from AnalysisLoop (not overwritten by derived classes)
+ will the former is ussualy overwritten and could not be called in analysis using others
+
+numuCCAnalysis
+------------------------------------------------------
+
+numuCCAnalysis: add commented line to enable categories for the bkg (anti) numu contamination 
+(todo: worth having a parameter to enable them)
+
+highlandIO
+------------------------------------------------------
+
+CreateFlatTree, CreateMiniTree
+- call the new method AddStandardProductions in ProductionUtils.
+
+DataClassesIO
+- Clang-format, no other changes.
+
+oaAnalysisTreeConverter
+- Adds P7Dev global ECal segment variables. Protected by preprocessor.
+- clang-format only. I cannot deal with it! (no other changes).
+- don't use VERSION_PROD... preprocessor variables outside Versionin.hxx. Instead define a new variable
+ VERSION_HAS_NUMBER_OF_FITTED_CLUSTERS
+
+
+
+highlandUtils
+------------------------------------------------------
+
+CategToolsNueCC:
+- Update categories to include genie channels not simulated in neut. Correctly name anti-nue categories.
+
+Working file: highland2/highlandUtils/v2r14/src/CategoriesUtils.cxx
+- add particle_detector category as suggested in bug 1413
+- correct bug 1413 by assigning code 999 (CATOTHER) to the detector cathegory when the detector is not found in TreeConverterUtils
+- remove methods that were deprecated for a while
+
+HighlandAnalysisUtils:
+- Production version stuff noved into a different utility files: ProductionUtils.cxx/.hxx
+
+P0DAnalysisUtils: 
+- remove methods that were deprecated for a while
+
+ProductionUtils
+- Production version stuff noved from HighlandAnalysisUtils into a different utility files: ProductionUtils.cxx/.hxx
+ Add more productions. Use directly version and revision numbers instead of preprocessor variables
+
+
+tutorialAnalysis
+------------------------------------------------------
+
+tutorialBranchesSelection: Don't use GetAllTracks methods in selections. Instead use the EventBox
+
+
+highlandValidation
+------------------------------------------------------
+
+config.py: change nominal to v2r13
+process-nominal.sh: setup the python scripts
+
+
+
+\section nd280Highland2_v2r17_history Version v2r17
+
+Freeze information:
+   - Freeze Date: Wed Feb  8 09:15:21 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+MAIN CHANGES:
+
+- Solve important bug (1425): selected events was all_syst is always less than in default tree
+- Documentation now resides under highlandDoc and highlandND280Doc packages
+- new flux tunning from july 2016
+- oaAnalysisReader for Prod7 RC1
+
+
+CHANGES IN EACH PACKAGE:
+
+nd280Psyche
+------------------------------------------------------
+
+- psycheSelections: changes only in nue/gamma selections, mainly simplifications. Also vetoes added to gamma selection
+- psycheND280Utils: many changes, including improvements in Flux weight treatment, that now is controled from there.
+                   Add latest flux files from july 2016, including run7, at tuned13av1.1_july2016
+- psycheSystematics: in FGDECalMatchEffSystematics, MomRangeResolSystematics Try to address bug 1197
+                    using the new groups kTracksWithFGD1AndTECALInFGD1FV and kTracksWithFGD2AndTECALInFGD2FV
+- psycheSteering: centralise the  Flux file parameters in psycheND280Utils
+
+
+oaAnalysisReader
+-----------------------------------------------------
+
+Adds Prod7 RC1 production. This is likely to be the final Prod7 version
+unless bugs are found. It includes update ECal objects in the global tree
+as well as trajectory points for SI reweighting.
+
+highlandCore
+-----------------------------------------------------
+
+AnalysisLoop: 
+
+Add  solution to bug 1425. The check on the accum level to be saved is only done at the toy level. Then if any of the toys 
+has to be saved the whole event is saved in FillMicroTrees. With this changes the toys seem to be distribute correctly around the default, 
+and the results do not depend on the min accum level to save parameter 
+
+
+highlandEventModel
+-----------------------------------------------------
+
+Add mainpage.dox so that highlandEventModel can be \ref'ed
+
+highlandTools
+-----------------------------------------------------
+
+DrawingTools, DrawingToolsBase 
+- Improvements in the way normalization factors are treated. Now it is possible to 
+ provide a factor for the first sample (ussually the real data), which can be treated as a POT value if the 
+ POTNORM option is given, just as for the MC. For more details https://bugzilla.nd280.org/show_bug.cgi?id=1295
+ At the moment this is only available for Draw methods with two trees or two DataSamples. Missing for SampleGroup, Experiment, eff/ratio methods, 
+ etc
+
+- Also the pot_norm argument is removed from GetNormalisationFactor method, and most Draw methods, since it was not used
+- add GetLastStackTotal2D for TH2. clean GetLastStackTotal code
+
+DrawingUtils: 
+- improve doc for POTNORM option
+
+
+baseAnalysis
+------------------------------------------------------
+
+- remove weight variable from micro-trees since flux and pileup are now in weight_corr variable
+- centralise the  Flux file parameters in psycheND280Utils
+
+
+highlandIO
+------------------------------------------------------
+
+CreateMiniTree:
+- Adds parameter highlandIO.MiniTree.ForceSaveAll, which if set
+ overrides all Truth and recon switches. Will still remove recon
+ bunches with absolutely nothing in them.
+
+oaAnalysisTreeConverter:
+- All segments now have their truth info set in:
+ oaAnalysisTreeConverter::FillSubdetectorTrackInfo
+ Previously it seemed that only TPC segments and full
+ global objects go their truth info set. This made
+ making plots of bad global matches fairly impossible...
+
+- Adds parameter
+ highlandIO.oaAnalysis.ForceIgnoreRunNumberClash
+ which shuts up the message and stops early exit if
+ subsequent files have colliding run numbers.
+
+ Off by default but if you're lazy and have a load
+ of particle guns with different seeds but the same
+ run IDs it beats regenerating...
+
+- Replaces TruthVertices/RooTracker energy check with
+ one that uses numeric_limits to define a sensible
+ epsilon.
+
+ Shuts up annoying every vertex error message about 
+ energy difference for vertices that cannot find their
+ rooTracker vertex... for example if you are running a PGun.
+
+- Fixes compiler error that I didn't notice because I committed the 8th
+ unforgivable sin of committing before compiling.
+
+
+highlandIO.parameters.dat 
+- add lines needed for doxygen documentation. 
+ Add comments in latest parameters added
+ 
+highlandUtils
+------------------------------------------------------
+
+CategToolsNueCC: 
+- No need to define again the NOTRUTH topology. This will solve a harmless(?) error printed when running nue analysis.
+
+
+highlandDoc & highlandND280Doc
+------------------------------------------------------
+
+new packages for highland documentation
+
+highlandValidation
+------------------------------------------------------
+
+tests.py: don't test "weight" variable, which has being removed from the trees. 
+          Also truelepton_costheta since it is different for nue
+
+
+
+\section nd280Highland2_v2r19_history Version v2r19
+
+Freeze information:
+   - Freeze Date: Thu Mar  2 12:12:40 2017
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+MAIN CHANGES:
+
+- Many improvements in the DrawingTools: most methods have been checked, code cleaning and simplification, etc
+- May bugs solved (see below)
+- In selections FillEventSummary() and GetSampleId() are mandatory for the moment
+- add latest flux files from july 2016, including run7
+- EventDisplay for highland available in baseAnalysis. It can take as input oaAnalysis, FlatTree and MiniTree files
+
+MANY BUGS SOLVED
+
+1331 Automatic labels in DrawingTools
+1340 should efficiency take into account corrections?
+1341 Overloading of OutputManager::FillVar leading to unexpected behaviour
+1415 DrawingTools systematic errors
+1416 namespace numuCC(4pi)MultiPiUtils should be moved to analUtils
+1419 Highland2 warnings
+1421 ERROR. AnalysisAlgorithm::boxB(). The ToyBox cannot be accessed from FillTruthTree method
+1427 draw.Draw(exp crashes (without TCanvas)
+1429 Minitree bunches cannot be read by analyses.
+1430 RunCreateMiniTree.exe seg faults of specific events/files.
+1431 Production 6D files cannot be processed properly using oaAnalysisReader
+1432 TOFSystematics has missing parameters in its data file
+1433 BeamBunching and FGD Michel Electron
+1434 The selections using other selections should initialise them
+1435 Issue in P0D samples with the TrackerMomentumResol systematic in psyche
+1436 doxygen error when compiling Highland2
+1437 AnalysisManager doesn't handle properly systematics
+
+
+CHANGES IN EACH PACKAGE:
+
+nd280Psyche
+------------------------------------------------------
+
+pyscheCore:
+- SelectionBase: for the fitters related methods: FillEventSummary() and GetSampleId(),
+  make them "pure virtual" for the moment to force the selections aimed to be used by fitters to implement them
+  Although should be careful with the design since:
+  InitializeEvent(),  DefineDetectorFV(),
+  FillEventSummary() and GetSampleId() do not seem to be mandatory
+  to organize/develop a general selection (e.g. in highland)
+- many more changes (look at the package freeze message)
+
+psycheIO:
+- RedoTreeConverter: move dealing with AnaTrigger vars (FGD/TtipT cosmics trigger)
+ into highlandIO,  a proper cleanup to split psyche/highland2 vars is still
+ pending
+
+psycheUtils:
+- new method anaUtils::GetAllTracksUsingOnlyDetFromList()
+
+psycheND280Utils:
+- add latest flux files from july 2016, including run7
+- centralise the selection of Flux parameters here
+- unify multi-pi selections by putting the cuts in CutUtils
+- many more changes (look at the package freeze message)
+
+psycheSelections:
+- All selections: Use the proper method to be overloaded from the SelectionBase
+ to retrieve the SampleId:
+ SampleId_h GetSampleId() instead of SampleId::SampleEnum GetSampleEnum()
+- All MultiPi Selections: multi-pi unification with the usage of general cuts from CutUtils
+- many more changes (look at the package freeze message)
+
+psycheSystematics
+- centralise the  Flux file parameters in psycheND280Utils
+- ECalPID.dat, ECal_EMHIPPID.dat; Fix typos in the Ecal PID systematics.
+- ToFResolution.dat: Errors obtained comparing ToF between NEUT-6B and RDP-6K
+
+psycheSteering:
+- Now listen to the parameter file for systematics (bug 1437)
+- centralise the  Flux file parameters in psycheND280Utils
+
+
+highlandCore
+-----------------------------------------------------
+
+OutputManager:
+- replace GetCurrentTree() method by _current_tree such that it is a bit faster, mainly related with the var type checking
+- optimize the variable type checking, related to bug 1341
+
+highlandEventModel
+-----------------------------------------------------
+
+DataClasses: 
+- AnaTrueVertex: changed the description of Proton and Pion kinematic vars
+ since the most energetic one is actually used
+- AnaTrigger: added a function to check whether a certain bit is set for CTM trigger pattern
+- added variables related to trigger and TripT CTM trigger info. Not saved into the MiniTree for the moment since it gives problems
+
+P0DDataClasses: 
+- Adding Cycle variable to AnaP0DCluster class
+
+
+highlandTools
+-----------------------------------------------------
+
+DrawingTools, DrawingToolsBase: 
+- Many simplifications and code cleaning. Introduce common utility methods that will be used to simplify the code.
+- Add methods DrawToys which allow setting the binning
+- GetMinAccumLevelToSave should return the higher MinAccumLevelToSave among all data samples in the experiment.
+- solve bug 1014 by checking the min accum level for each sample in the Experiment.
+- Improve enormously all Draw...VSCut methods by unifitying all of them and making sure
+ that all options work correctly.
+- rationalize the use of GetSameLevel(), being centralized in few methods
+- further simplification. All methods return use now a copy of the matrix and not a reference.
+ Use the method TMatrixD GetSystematicCovBase(HistoStack* hs1, HistoStack* hs2, const std::string& uopt, const std::string& group);
+ that is valid both for ratios and single tree/samples
+- Cannot call drawUtils::ContainValidOptions(uopt) after adding some internal options to uopt
+- Unify methods drawing errors and cov matrices. They all use now the same intermediate methods GetCovMatrixHistoStack.
+ Also the treatment is the same for tree and Experiment
+- 2D histos must be saven in _saved_histos2D and not in _saved_histos. There were crashes sometimes because of that.
+ Don't show the stats box for 2D histos
+- bug 1331.  auto labels only for 1D ( for the moment).
+ The auto title in Y is only used in DrawHistoStack, but also set into the HistoStack itself such that it works when plotting stacked histograms
+- For 2D histos the box option should only be applied when the option NODATA is used, otherwise
+ the color bar for the colz option does not appear. This should solve bug 1374
+
+DrawingUtils:
+- Added to the DrawingTools ability to apply the external weights with some options to include/exclude particular weights
+- get the units from inside the [ ], as suggested in bug 1331
+- All related to bug 1331
+ Add GetAutoTitleY method, which returs the title in Y #events/min_bin_width or
+ #events/(min_bin_width unit), when the title in X contains the units in parenthesis
+ Add option NOAUTOLABELS.
+
+HistoStack:
+- Simplify, only one internal histo to update the systematics when using several samples in needed in HistoStack
+- set method of Y axis title
+
+SystematicTools: 
+- further simplification. All methods return an copy of the matrix and not a reference.
+ Add a method TMatrixD GetSystematicCovBase(HistoStack* hs1, HistoStack* hs2, const std::string& uopt, const std::string& group);
+ that is valid both for ratios and single tree/samples
+- remove obsolete stuff
+- Simplify, only one internal histo to update the systematics when using several samples in needed in HistoStack
+- Get rid of the method use to get the cov matrix for a single tree. Instead use the same methods as for the Experiment
+- remove condition ((avg[i]>1 && avg[j]>1) || uopt.find("RATIO")!=std::string::npos)
+ to devide the cov matrix by the average, otherwise bins with N<1 (possible when there are weights and low number of events)
+ will have 0 error.
+
+WeightTools: 
+- NOW and NOTOY weights should be independent.
+ NOW switches off weight, weight_syst and weight_corr
+ NOTOYW switches off toy_weight
+- Added to the DrawingTools ability to apply the external weights with some options to include/exclude particular weights
+
+
+highlandIO
+------------------------------------------------------
+
+highlandIO.parameters.dat:
+- related to bug 1336, filter RooTrackerVtx also for FlatTree
+
+CreateFlatTree:
+- fill also the RooTrackerVtx for the last processed entry (the FlatTree was saved but not the RooTrackerVtx).
+ In that way FlatTree and MiniTree will have the same behaviour
+- related to bug 1336, filter RooTrackerVtx also for FlatTree
+
+DataClassesIO:
+- added storing CMTTriggerPattern vars stored as Double_t to have the precision for 32-bit
+
+FlatTreeConverter:
+- reading of AnaTrigger vars: FGD/TripT cosmic trigger moved here from psyche
+- CTMTriggerPattern vars added
+
+oaAnalysisP0DTreeConverter: 
+- Filling the cycle information for cluster + adding hit information for 2D clusters directly from P0D Showers.
+
+oaAnalysisTreeConverter:
+- In DeleteTrueParticle one must consider now segments in all subdetectors since they all have a TrueObject member.
+ This should solve https://bugzilla.nd280.org/show_bug.cgi?id=1430
+- fill CTMTriggerPattern vars of AnaTrigger,
+ split the orginial ones (3 total: SMRD top/left, SMRD bottom/right, p0d/dsecal)
+ into two each,  so to have six 32-bit words (one per sub-module)
+- Add cycle to cluster and a function def to add  hit information for 2D clusters directly from P0D Showers.
+
+
+ 
+highlandUtils
+------------------------------------------------------
+
+app/BuildReWeightedMicroTree: 
+- As requested in bug 1270 this is an application that adds weights to the microtrees provide an external file
+ with weights. The new weights are stored into the vector of floats ext_weight, with size NEXTWEIGHTS. If you run the application
+ over a file that already contains external weights, the new weight will be added to the vector
+- include cstdlib needed for std::exit in jenkins server  
+
+HighlandTreeConverterUtils: 
+- when filling the proton information it is more consistent (between the
+ generators as well) to use the most
+ energeitc one,  not the first one ecountered
+
+new src/EventDisplay folder
+- added some general (well,  depends on BaseDataClasses,  but on very general
+ stuff there) code for a simple EventDisplay,
+ very basic things for the moment,  more to come: e.g. Helix propagator
+ engine
+
+oaAnalysisReader
+-----------------------------------------------------
+
+Prod7_RC1
+- Adds missing files and removes a file that should be generated as part of the build.
+
+
+highlandValidation
+------------------------------------------------------
+
+This is the version used for the validation of these release (nd280Highland2 v2r19)
+
+- config.py: change nominal to v2r17
+- flattree.parameters.dat: Swithch RooTracker filtering of to avoid mistmatching in NVtx between MiniTree/FlatTree and oaAnalysis
+
+
+baseAnalysis
+------------------------------------------------------
+
+baseAnalysis: 
+- Use constructor of FluxWeighting with no arguments. The parameters are read in the constructor from psycheND280Utils.parameters.dat
+
+baseAnalysis.parameters.dat
+- both baseAnalysis.Weights.EnableFluxNeutrino and baseAnalysis.Weights.EnableFluxAntiNeutrino should be enabled. 
+ One or the other will be used depending on the Run period
+
+tutorialAnalysis
+------------------------------------------------------
+
+tutorialBranchesSelection, tutorialSelection,
+- GetSampleId() should return SampleId_h
+- Use the proper method to be overloaded from the SelectionBase
+ to retrieve the SampleId:
+ SampleId_h GetSampleId() instead of SampleId::SampleEnum GetSampleEnum()
+
+
+gammaAnalysis
+------------------------------------------------------
+
+Update MinAccumLevel to adopt to changes in gamma selection in psyche.
+
+
+p0dNumuCCQEAnalysis
+------------------------------------------------------
+
+p0dNumuCCQESelection
+- GetSampleId() should return SampleId_h
+- Use the proper method to be overloaded from the SelectionBase
+ to retrieve the SampleId:
+ SampleId_h GetSampleId() instead of SampleId::SampleEnum GetSampleEnum()
+- Implement mandatory FillEventSummary method for p0dNumuCCQESelection
+
+
+p0dNumuCCAnalysis
+------------------------------------------------------
+
+p0dNumuCCAnalysis:
+- Fixed typo preventing systematics from being initialized
+
+
+numuCCMultiTargetAnalysis
+------------------------------------------------------
+
+numuCCMultiTargetAnalysis:
+- use new MultiPiBox to fill pion selection related vars
+
+numuCCMultiTargetSelection:
+- adopt to the recent changes in numuCCMultiPi selection,
+ this for jenkins validation,  is this package ranked as official?
+
+
+numuCCMultiPiAnalysis
+------------------------------------------------------
+
+use new MultiPiBox to fill pion selection related vars
+
+
+numuBkgInAntiNuModeAnalysis
+------------------------------------------------------
+
+add macros/multitrack and macros/multipi folders with macros
+
+
+
+
+
+\section nd280Highland2_v2r21_history Version v2r21
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 20:51:32 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An "intermediate" freeze with the goal to test the systematics tuning for NuMu analyses
++ some new featers being introduced for systematics/selections with the aim to make 4pi analyses available for BANFF (on-going)
+
+CHANGES IN EACH PACKAGE:
+
+nd280Psyche
+------------------------------------------------------
+
+-psycheCore
+CoreUtils:
+
+since not using c++11 features and so nor ROOT6 
+introduced simple variadic functions to create a vector of ints/floats (known to
+be not good)
+templating it is not available with CINT
+also added pre-processor macros to retrieve a number of params for variadic
+functions
+
+added template utilities:
+KeepUniqueElementsInArray()
+given an array and its size,  keeps only unique and non-NULL elements
+resizes the array and returns the new size
+
+this may be useful e.g. in filling various categories in various places, 
+to be sure no to duplicate objects
+
+CoreDataClasses.hxx 
+increased const UInt_t NMAXRECOBJECTGROUPS = 50
+
+SelectionBase.hxx
+Important structural change: 
+the retrieval of relevant true and reco object groups is removed from the
+systematics and added to selections, 
+this is a selection now that controls which objects to provide to each
+systematic,  in this way we achieve:
+- flexibility and optimisation: get rid of hard-coded groups in systematic which
+  lead to a need to inherit from a systematic if one wants to use it for his own
+  group; no need to use wider groups to cover several selections
+- better user control on systematics, less things hidden in "black box"
+
+added Initialize/FinalizeToy()
+not obligatory but useful
+
+EventVariationBase.cxx EventVariationBase.hxx 
+EventWeightBase.cxx EventWeightBase.hxx 
+Important structural change: 
+the retrieval of relevant true and reco object groups is removed from the
+systematics and added to selections,  
+this is a selection now that controls which objects to provide to each
+systematic,   in this way we achieve:
+
+- flexibility and optimisation: get rid of hard-coded groups in systematic which
+  lead to a need to inherit from a systematic if one wants to use it for his own
+    group; no need to use wider groups to cover several selections
+- better user control on systematics,  less things hidden in "black box"
+    
+The change was motivated by the integration of 4pi samples which need wider groups
+    due to the usage of ToF
+Each systematic calls the following methods from the selection
+  Int_t* groups;
+  anaUtils::CreateArray(groups,  NMAXRECOBJECTGROUPS);
+  Int_t nGroups = sel.GetRelevantRecObjectGroupsForSystematic(_index, groups, 
+ibranch);
+  anaUtils::ResizeArray(groups, nGroups,  NMAXRECOBJECTGROUPS);
+        
+
+SelectionManager.cxx 
+Solve bug 1449:
+replace _objects TClonesArray by _eventSelections array in DumpSelections, since the
+former is only available 
+when using the DrawingTools (not in analysis code). 
+Also increase the out array size such that the name of the selection can be larger
+
+
+
+-psycheEventModel
+SystId.hxx 
+use single kFluxWeight
+ 
+BaseDataClasses.cxx BaseDataClasses.hxx 
+added a function to compare AnaTrackB muon momenta from range
+added DSECal_FGD* 
+ToF vars
+
+For AnaTrueParticleB 
+added variables needed for systematics fine-tuning for selections
+
+GParentID (new)
+
+>From AnaTrueParticle
+Int_t PrimaryID
+bool IsTruePrimaryPi0DecayPhoton;
+bool IsTruePrimaryPi0DecayPhotonChild;
+
+
+-psycheSystematics
+
+FluxWeightSystematics.cxx FluxWeightSystematics.hxx 
+FluxWeight is now 3D_SYMMETRIC_NOMEAN systematic
+no need to use Neutrino and Antineutirno as separate systematics
+
+combine data in one file FluxWeight.dat, 
+for the moment first bin is dummy (0,  1e6) since nu and antinu files seem to be
+the same
+
+FluxWeight.dat 
+combined nu and antinu systematics in one file, 
+for the moment firt bin is dummy (0,  1e6) since nu and antinu data seem to be
+the same
+
+MomBiasFromVertexMigrationSystematics.cxx 
+for the moment smear the momentum-by-range (muon) as well
+
+
+Important structural change for systematics/selections: 
+the retrieval of relevant true and reco object groups is removed from the
+systematics and added to selections,  
+this is a selection now that controls which objects to provide to each
+systematic,   in this way we achieve:
+- flexibility and optimisation: get rid of hard-coded groups in systematic which
+  lead to a need to inherit from a systematic if one wants to use it for his own
+    group; no need to use wider groups to cover several selections
+- better user control on systematics,  less things hidden in "black box"
+    
+The change was motivated by the integration of 4pi samples which need wider groups
+due to the usage of ToF.
+
+Removed GetRelevantRec(True)ObjectGroups() methods, 
+this is now the business of each selection
+
+ToFResolSystematics.cxx ToFResolSystematics.hxx 
+removed a parameter to control applying the ToF based flip in ToF
+correction/systematic,  the latter will just do the smearing
+
+
+SIProtonSystematics.cxx SIProtonSystematics.hxx 
+simplify things:
+use general   si_syst::ParticleSIManager _pInfoManager; manager
+
+and set the proper propagator
+
+// Set the proper propagator 
+_pInfoManager.SetPropagator(new proton_si::ProtonSIPropagator());
+   
+
+properly set the initial status of _initialized to false! (causing crashes)
+
+no need _initialized parameter
+since Initialize method is called only ones when the systematics gets its id
+index
+
+ nueFGD1_P0D_PileUp.dat nueFGD1_TPC_PileUp.dat 
+        nueFGD1_upECal_PileUp.dat nueFGD2_P0D_PileUp.dat 
+        nueFGD2_TPC_PileUp.dat nueFGD2_upECal_PileUp.dat
+
+Updated pile up numbers
+Uses prod6M for data and prod6B for MC
+
+run2water and run2air - Right BrECal tracks ignored in data, MC, sand for consistency
+(because the sand as some dead channels in Right BrECal simulated)
+
+Includes runs up to the end of run6
+
+run6air code 13 and code 14 both estimated with run4air
+
+P0DECal FV reintroduced as requested
+
+
+-psycheSelections
+
+Quite a few changes, some for future developments for 4pi analyses.
+
+GetRelevantRec(True)ObjectGroupsForSystematic() methods
+Systematics tuning revised and turned ON
+for NuMu selections:
+inclusive + mutli-pion  
+
+
+Work still on-going for 4pi selections
+
+
+
+NuE selections:
+Properly FillSummaryAction for all the nue selections
+Systematics tuning added
+Adopted to the changes in SelectionBase
+GetRelevantRec(True)ObjectGroupsForSystematic() methods
+Use DsECal-FGD2 TOF vars (although the correction is not yet available)
+
+
+
+-psycheUtils
+BeamBunching.cxx 
+Add a check to make sure that the bunch_time_data is not accessed out of bound
+(valgrind error)
+
+minor, remove compilation warning
+
+-psycheIO
+
+RedoTreeConverter.cxx RedoTreeConverter.hxx 
+fill DSECal_FGD* ToF vars
+
+Added GParentID variable
+
+Added filling of PrimaryID, 
+IsTruePrimaryPi0DecayPhoton, 
+IsTruePrimaryPi0DecayPhotonChild, 
+Entrance and Exit momenta for detectors
+(all moved from FlatTreeConverter since are relevant for psyche)
+
+Some cleanup:
+FillTrueParticleInfo() is now a unique basic method 
+that takes an additional array of AnaTrueVertexB* as input, 
+in this way can avoid having basically similar methods 
+for event and spill filling
+  
+
+-psycheND280Utils
+
+PionInteractionSystematic.cxx PionInteractionSystematic.hxx 
+Added a virtual method:
+CheckLookForInteraction() to check whether a particular trajectory should be a
+subject to a search for its interactions
+
+This method can be overwritten hence makes the code available for general usage
+for other FV,  e.g. TPC analysis
+
+EventBoxTracker.hxx 
+added new groups *WithStartOrEndInFGD*FV
+needed for 4pi selections
+
+EventBoxUtils.cxx 
+fill new categories in EventBoxTracker
+"WithStartOrEndInFGD*FV*
+
+ProtonInteractionSystematic.hxx 
+simplify things:
+no need to use separate ProtonSIManager
+will just set the proper propagator where needed
+
+TruthUtils.cxx TruthUtils.hxx 
+Check that a give true particle "leads" to the existence of a given reco object
+In case of "Simple" only certain "generations" are considered:
+direct, parent, grandparent and primary
+
+In case of "Full" a looping takes place over parents (from the true particle
+associated with the reco up to the primary) 
+
+bool CheckTrueCausesRecoSimple(const AnaTrueParticleB& trueTrack,  const
+AnaParticleB& track);
+
+
+Also returns the generation is the association is found (0 --> direct
+contributor)
+bool CheckTrueCausesRecoFull(const AnaEventB& event,  const AnaTrueParticleB&
+trueTrack,
+const AnaParticleB& track,  int& gen);
+
+
+CutUtils.cxx 
+following the discussion at the NuMu meeting (April 18th,  2017)
+do not use the upper limit for the AntiMuon TPC PID cut (previousely 0.7), 
+added an explanation and the link to the corresponding material
+
+
+-psycheSteering
+psycheSteering.parameters.dat
+Update the parameter file so that it works for run6 (valid run periods)
+Turn on the proper selections
+Make the nue selections work in nu and antinu mode
+
+remove the wrong sign nues switch which actually don't exist
+
+single param EnableFlux
+
+AnalysisManager.cxx 
+use single kFluxWeight 
+
+highland2
+------------------------------------------------------
+-oaAnalysisReader
+Added ECal vertexing info for prod7 candidate
+highland2/oaAnalysisReader/src/prod7_RC1
+oaAnalysisReaderLinkDef.h oaAnalysisReaderProjectHeaders.h0 
+        oaAnalysisReaderProjectSource.cxx 
+Added Files:
+        ND__TTrackerECALReconModule__TECALReconVertexCandidate.h 
+        ND__TTrackerECALReconModule__TECALReconVertexTrack.h 
+Adds ECal-local vertexing headers to Prod7_RC1
+
+-highlandCore
+
+AnalysisAlgorithm.cxx AnalysisAlgorithm.hxx 
+added the call to Initialize/FinalizeToy of the selection
+
+-highlandEventModel
+
+
+DataClasses.hxx
+DataClasses.cxx
+Added a new class AnaHit that stores basic info
+added a possibility to have links for the corresponding true and reco objects
+has utils for storing/reading from mini-tree
+
+Add FgdHits array for AnaFgdTimeBin, 
+it owns the hits,  added utils for storing/reading hits from mini-tree
+
+Added CopyArrays(Vectors)IntoVectors(Arrays) for AnaSpill
+to call the proper methods for AnaFgdTimeBins
+
+Funcionality tested for mini-tree and it seems to work
+
+Adds PIDMipHip_VACut data member to global ECal track segments.
+
+
+
+Variables
+Int_t PrimaryID;
+bool IsTruePrimaryPi0DecayPhoton;
+bool IsTruePrimaryPi0DecayPhotonChild;
+moved to AnaTrueParticleB
+
+
+DataClasses_LinkDef.h 
+AnaHit class
+
+Versioning.hxx 
+/// P6 iteration with Vector to store the ID of the Trajectory that created the
+//hit in FGD1
+#define VERSION_HAS_FGD_HIT_TRUE_TRAJ_ID (!BEFORE_ANATOOLS_FILE(11, 31, 3))
+
+/// P6 files have or to store information for single hits in FgdTimeBin
+#define VERSION_HAS_FGD_HIT_INFO (!BEFORE_ANATOOLS_FILE(11, 17, 0))))
+
+-highlandIO
+
+ oaAnalysisTreeConverter.cxx oaAnalysisTreeConverter.hxx 
+
+added filling FgdHits for AnaFgdTimeBins
+controlled via param file
+
+Adds global ECal vertex time fix which takes the average time of the global
+vertex constituents as the vertex time because of a bug in the ECal vertexing
+code in TGlobalVertex. Checks the vertex algorithm name before applying.
+
+added DSECal_FGD* ToF vars
+Adds filling of PIDMipHip_VACut for global ECal segments. (P7 only)
+
+Adds public accessor for RooTrackerVertexEntry (input file index). Facilitates
+adding this information to a micro tree for use with xsTool.
+
+
+fill GParentID variable
+of AnaTrueParticleB
+ 
+ highlandIO.parameters.dat 
+parameter to control whether to fill fgd hit info for AnaFgdTimeBin
+off by default
+highlandIO.oaAnalysis.FillFgdSingleHitsInfo 
+
+do not fill FGD single hit info for FgdTimeBins for prod5
+
+Adds global ECal vertex time fix which takes the average time of the global
+vertex constituents as the vertex time because of a bug in the ECal vertexing
+code in TGlobalVertex. Checks the vertex algorithm name before applying.
+
+  DataClassesIO.cxx DataClassesIO.hxx 
+added DSECal_FGD* ToF vars
+
+added GParentID for AnaTrueParticleB
+
+reflected the migration of some variables
+from AnaTrueParticle to AnaTrueParticleB
+
+  FlatTreeConverter.cxx FlatTreeConverter.hxx 
+reflect changes in RedoTreeConverter in what concerns
+filling of AnaTrueParticleB info
+
+some cleanup
+
+
+-highlandTools
+A patch to adress a bug with drawing DataSamples
+added
+
+addressing bug 1461
+
+
+-baseAnalysis
+Several changes
+        baseAnalysis.parameters.dat 
+use single param
+baseAnalysis.Weights.EnableFlux
+
+        baseAnalysis.cxx 
+use kFluxWeight controlled with single params, 
+instead of kFluxWeightNeutrino and kFluxWeightAntiNeutrino
+
+Initialize the neutrino parent position here 
+so to be available for all highland business: including systematics
+anaUtils::InitializeNeutrinoBeamLineParameters()
+
+the initialization takes place in InitializeBase() method
+
+
+
+
+
+
+
+*/

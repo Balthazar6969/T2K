@@ -1,0 +1,193 @@
+#!/bin/bash
+
+# this script will check out the HEAD of highland2 (reading the ./requirements file)
+# just execute the script, instructions will be prompted
+# author: enrico.scanta@cern.ch
+
+if [[ $_ != $0 ]] ; then
+   echo "This script has to be executed, not sourced."
+   return
+fi
+
+
+if [[ "$1$2$3" =~ "h" ]] ; then  H2ONLY="-h" ; fi
+if [[ "$1$2$3" =~ "b" ]] ; then  BASEONLY="-b" ; fi
+
+
+# get the path to this folder
+HERE=$(pwd)
+SHPATH=$(dirname $0)
+if [ -f /$0 ] ; then
+    CMTPATH=$SHPATH
+else
+    CMTPATH=$HERE/$SHPATH
+fi
+
+
+nd280PorH="nd280Highland2"
+
+
+# get the path to $nd280PorH
+if [[ "$CMTPATH" =~ "$nd280PorH" ]] ; then
+    MAINDIR=${CMTPATH%%"/$nd280PorH"*}
+    REQUIR=${CMTPATH##*"$nd280PorH/"}
+    REQUIR=$nd280PorH/$REQUIR/requirements
+else
+    echo "WHERE DID YOU PLACE THIS SCRIPT!?!?!?"
+    echo "THIS IS NOT GONNA WORK!"
+    exit
+fi
+
+
+# get this $nd280PorH version
+PorHVERSION=`head -2 $CMTPATH/requirements | tail -1`
+set -- $PorHVERSION
+PorHVERSION=$2
+
+
+echo
+echo "This script will create a script with which you can check out the HEAD of $nd280PorH"
+echo "(it will read the list of pacakges in $REQUIR)"
+if [ "$BASEONLY" != "-b" ] ; then
+    echo "To check out only the HEAD of some packages execute this script with argument '-b' (you will confirm each package after 'baseAnalysis')"
+fi
+if [ "$H2ONLY" != "-h" ] ; then
+    echo "To check out only highland2 HEAD (without psyche HEAD) execute this script with argument '-h'"
+fi
+echo "To check out the frozen version vXrY use instead 'cmt checkout -R $nd280PorH -r vXrY'"
+echo -n "Continue? "
+read DOIT
+if [ "$DOIT" != "y" ] && [ "$DOIT" != "yes" ]; then exit; fi
+
+
+# scripts names
+SHNAME=$(basename $0) # this script name
+CMTSCRIPT="$CMTPATH/${SHNAME}_$PorHVERSION"
+
+
+echo "#!/bin/bash" > $CMTSCRIPT
+echo >> $CMTSCRIPT
+echo "echo" >> $CMTSCRIPT
+echo "echo Working on $nd280PorH version $PorHVERSION" >> $CMTSCRIPT
+echo "echo Moving to $MAINDIR" >> $CMTSCRIPT
+echo "cd $MAINDIR" >> $CMTSCRIPT
+echo >> $CMTSCRIPT
+
+
+MAINDONE="false"
+while read LINE ; do
+#echo $LINE
+
+    LINE=${LINE/\*/"\*"}
+
+    set -- $LINE
+    SUBPACKAGE=$2
+    VERSION=$3
+    PACKAGE=$4
+#echo $SUBPACKAGE $PACKAGE
+
+    # this is for nd280Psyche in $nd280PorH requirements
+    if [ "$SUBPACKAGE" = "nd280Psyche" ] ; then
+
+        if [ "$H2ONLY" = "-h" ] ; then continue; fi
+
+#        echo "cmt checkout nd280Psyche"
+        echo "(nd280Psyche/[HEAD]/$SHNAME will be executed as well)"
+        echo
+
+        echo "cmt co nd280Psyche" >> $CMTSCRIPT
+        echo "# change ./requirements replacing the version number with the one just checked out" >> $CMTSCRIPT
+        echo 'HEADVERSION=$(ls -t nd280Psyche/ | head -1)' >> $CMTSCRIPT
+        echo "echo replacing \'$VERSION\' with \'"'$HEADVERSION'"\' for nd280Psyche in $REQUIR" >> $CMTSCRIPT
+        echo "sed -i -e s/\"$LINE\"/\"use nd280Psyche "'$HEADVERSION'"\"/g $CMTPATH/requirements" >> $CMTSCRIPT
+        echo "# checkout all psyche packages" >> $CMTSCRIPT
+        echo 'nd280Psyche/$HEADVERSION/cmt/'$SHNAME '-s' >> $CMTSCRIPT
+        echo 'nd280Psyche/$HEADVERSION/cmt/'$SHNAME'_$HEADVERSION' >> $CMTSCRIPT
+        echo "echo" >> $CMTSCRIPT
+        echo "echo Back to $nd280PorH version $PorHVERSION" >> $CMTSCRIPT
+        echo >> $CMTSCRIPT
+
+        continue
+    fi
+
+    # break if argument -b (only main packages)
+    if [ "$BASEONLY" = "-b" ] && [ "$MAINDONE" = "true" ] ; then
+        echo -n "Check out also $SUBPACKAGE package (y/n/b for break) ? "
+        read -u 3 CHOICE
+        if [ "$CHOICE" != "y" ] && [ "$CHOICE" != "yes" ] && [ "$CHOICE" != "Y" ] && [ "$CHOICE" != "YES" ] ; then
+            if [ "$CHOICE" == "break" ] || [ "$CHOICE" == "b" ] || [ "$CHOICE" == "BREAK" ] || [ "$CHOICE" == "B" ] ; then
+                break
+            else
+                continue
+            fi
+        fi
+    fi
+
+    echo "cmt co $PACKAGE/$SUBPACKAGE" >> $CMTSCRIPT
+    echo "# change ./requirements replacing the version number with the one just checked out" >> $CMTSCRIPT
+    echo 'HEADVERSION=$(ls -t '$PACKAGE/$SUBPACKAGE/' | head -1)' >> $CMTSCRIPT
+    echo "echo replacing \'$VERSION\' with \'"'$HEADVERSION'"\' for $SUBPACKAGE in $REQUIR" >> $CMTSCRIPT
+    echo "sed -i -e s/\"$LINE\"/\"use $SUBPACKAGE "'$HEADVERSION'" $PACKAGE\"/g $CMTPATH/requirements" >> $CMTSCRIPT
+    echo >> $CMTSCRIPT
+
+    if [ "$SUBPACKAGE" = "baseAnalysis" ] ; then
+        MAINDONE="true"
+    fi
+
+done 3<&0 <<< "$(grep ^use $CMTPATH/requirements)"
+
+
+chmod +x $CMTSCRIPT
+
+
+echo "echo" >> $CMTSCRIPT
+echo "echo All done!" >> $CMTSCRIPT
+echo "echo To work with different versions in the same folder you would better execute also './fix_requirements':" >> $CMTSCRIPT
+echo "echo it will replace all the wildcards with the correct package verions" >> $CMTSCRIPT
+echo "echo in all requirements files of all pacakges listed in ./requirements" >> $CMTSCRIPT
+echo "echo" >> $CMTSCRIPT
+#cat $CMTSCRIPT
+
+
+echo
+echo "A new script has been created. Now execute it (after sourcing CMT):"
+echo "  ./${SHNAME}_$PorHVERSION"
+echo
+
+echo "Do you want some tips & tricks?"
+read dummy
+echo
+echo "cmt br = cmt broadcast; cmt co = cmt checkout; cvs ci = cvs commit;"
+echo
+echo "If you rename/move folders, use 'cmt broadcast cmt config' to re-set the paths for all packages"
+echo "  (and 'cmt show use' to have a look at them)"
+echo
+echo "To compile run 'cmt broadcast make', after sourcing the proper setup.sh"
+echo "   - from the package you use: it will compile all the HEAD packages it needs"
+echo "   - from $nd280PorH: it will compile every package HEAD, since this script has modified"
+echo "     cmt/requirements of nd280Higland2 replacing the version of each package with a wildcards"
+echo "     (this also means that you cannot compile anymore a frozen version with this nd280Higland2)"
+echo
+echo "To update everything just do 'cvs update -d highland2/*/*/', and same for the psyche folder"
+echo "  (option -d is for dowloading files and folder added to the repository after your checkout)"
+echo "  (Mind that if you update an old HEAD version (even number), anyway you will get the very HEAD,"
+echo "  and you can keep working and commit to the very HEAD from there)"
+echo
+echo "Alternatives to this script to get the HEAD:"
+echo "   - if you already have an old HEAD, just update it: no matter the folder number, you will work with and commit to the very HEAD"
+echo "     cvs update -d highland2/*/*/"
+echo "     cvs update -d psyche/*/*/"
+echo "   - with the following you will have in each package both a frozen and a HEAD version"
+echo "     cmt checkout -R $nd280PorH -r vXrY   (check out recursively the frozen version vXrY)"
+echo "     find psyche/* -maxdepth 0 -exec cmt checkout {} \;"
+echo "     find highland2/* -maxdepth 0 -exec cmt checkout {} \;"
+echo "   - with the following you will have in each package a folder with a frozen number, but usable as a HEAD"
+echo "     cmt checkout -R $nd280PorH -r vXrY   (check out recursively the frozen version vXrY)"
+echo "     cvs update -A -d highland2/*/*/"
+echo "     cvs update -A -d psyche/*/*/"
+echo "     (with option -A you get the HEAD not matter the version you are"
+echo
+
+
+echo "Now (source CMT and) run ./${SHNAME}_$PorHVERSION"
+echo

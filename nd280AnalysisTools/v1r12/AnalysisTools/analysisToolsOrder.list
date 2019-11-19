@@ -1,0 +1,34 @@
+TSpectrumWeighting.cxx
+
+TTruthUtils.cxx
+
+TMatrixWeighting.cxx
+
+TVNeutrinoGeneratorAnalysisUtils.cxx
+TNEUTAnalysisUtils.cxx
+TNUANCEAnalysisUtils.cxx
+TGENIEAnalysisUtils.cxx
+
+TGRooTrackerUtils.cxx
+
+P0DNuMuUtils.cxx
+TMiscAnalysisUtils.cxx
+TCheatingAnalysisUtils.cxx
+TTrackerAnalysisUtils.cxx
+TGlobalAnalysisUtils.cxx
+
+TMVA_ECal_Vertices_Trainer_Likelihood_Shower.class.cxx
+TMVA_ECal_Vertices_Trainer_Likelihood_Track.class.cxx
+TECALEMEnergyCorrection.cxx
+TECALPidDefs.cxx
+TECALPidLikelihoodHypothesisTest.cxx
+TECALPidLikelihood.cxx
+
+# This requires RunOAAnalysis to have been run with:
+#  '-O TTrackerECALReconModule=SaveHoff -O TTrackerECALReconModule=RunVertexing'
+# TTrackerECALReconModuleTools.cxx
+
+Stage2GasSelection.cxx
+TPCPOTCalculator.cxx
+
+TECALActiveBBFromGeom.cxx

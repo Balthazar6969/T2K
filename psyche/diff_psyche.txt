@@ -1,0 +1,146 @@
+Index: src/BaseDataClasses.cxx
+===================================================================
+RCS file: /home/cfrancois/T2K2/psyche/psycheEventModel/v3r21/src/BaseDataClasses.cxx,v
+retrieving revision 1.22
+diff -r1.22 BaseDataClasses.cxx
+379a380
+>     Time              = track.Time;
+Index: src/BaseDataClasses.hxx
+===================================================================
+RCS file: /home/cfrancois/T2K2/psyche/psycheEventModel/v3r21/src/BaseDataClasses.hxx,v
+retrieving revision 1.23
+diff -r1.23 BaseDataClasses.hxx
+279a280,320
+> //Timing information
+> class AnaTime{
+> 
+> public :
+> 
+>   AnaTime(){
+>     FGD1   = -999.0;
+>     FGD2   = -999.0;
+>     P0D    = -999.0;
+>     ECal   = -999.0;
+>     DSECal = -999.0;
+>   };
+> 
+>   AnaTime& operator=(const AnaTime& B){
+>     this->FGD1             = B.FGD1;
+>     this->Flag_FGD1        = B.Flag_FGD1;
+>     this->FGD2             = B.FGD2;
+>     this->Flag_FGD2        = B.Flag_FGD2;
+>     this->P0D              = B.P0D;
+>     this->Flag_P0D         = B.Flag_P0D;
+>     this->ECal             = B.ECal;
+>     this->Flag_ECal        = B.Flag_ECal;
+>     this->DSECal           = B.DSECal;
+>     this->Flag_DSECal      = B.Flag_DSECal;
+> 
+>     return *this;
+>   }
+> 
+>   Float_t FGD1;
+>   bool    Flag_FGD1;
+>   Float_t FGD2;
+>   bool    Flag_FGD2;
+>   Float_t P0D;
+>   bool    Flag_P0D;
+>   Float_t ECal;
+>   bool    Flag_ECal;
+>   Float_t DSECal;
+>   bool    Flag_DSECal;
+> };
+> 
+> 
+676a718,720
+> 
+>   /// Mean times of detectors
+>   AnaTime Time;
+Index: cmt/requirements
+===================================================================
+RCS file: /home/cfrancois/T2K2/psyche/psycheND280Utils/v3r23/cmt/requirements,v
+retrieving revision 1.26
+diff -r1.26 requirements
+9a10
+> use psycheEventModel * psyche
+Index: src/ToFSenseCorrector.cxx
+===================================================================
+RCS file: /home/cfrancois/T2K2/psyche/psycheND280Utils/v3r23/src/ToFSenseCorrector.cxx,v
+retrieving revision 1.6
+diff -r1.6 ToFSenseCorrector.cxx
+184c184,185
+<   if (anaUtils::InDetVolume(SubDetId::kFGD1, pos_upstream)) {
+---
+>   //if (anaUtils::InDetVolume(SubDetId::kFGD1, pos_upstream)) {
+>     if (pos_upstream) {
+205c206,207
+<   else if (anaUtils::InDetVolume(SubDetId::kFGD1, pos_downstream)) {
+---
+>   //else if (anaUtils::InDetVolume(SubDetId::kFGD1, pos_downstream)) {
+>     else if (pos_downstream) {
+Index: src/antiNumuCCSelection.cxx
+===================================================================
+RCS file: /home/cfrancois/T2K2/psyche/psycheSelections/v3r25/src/antiNumuCCSelection.cxx,v
+retrieving revision 1.57
+diff -r1.57 antiNumuCCSelection.cxx
+20c20
+<   systTuning::Initialize();
+---
+>   //systTuning::Initialize();
+Index: src/ToFResolSystematics.cxx
+===================================================================
+RCS file: /home/cfrancois/T2K2/psyche/psycheSystematics/v3r23/src/ToFResolSystematics.cxx,v
+retrieving revision 1.14
+diff -r1.14 ToFResolSystematics.cxx
+4a5,6
+> #include "ND280AnalysisUtils.hxx"
+> 
+31c33,35
+<  
+---
+> 
+> //---------------------------------------------------------------------------
+> /*
+34a39,48
+> */
+> 
+>   AnaTrackB* Tracks[100];
+>   Int_t ntracks = anaUtils::GetAllTracksUsingDet(*static_cast<AnaEventB*>(&event), SubDetId::kFGD1, Tracks);
+> 
+>   for (Int_t itrk=0;itrk<ntracks;itrk++){
+> 
+>     AnaTrackB* track = static_cast<AnaTrackB*>(Tracks[itrk]);
+> 
+> //---------------------------------------------------------------------------
+38c52,53
+<      if(topo == ToFSenseCorrector::kToFTopo_FGD1FGD2)
+---
+>     //if(topo == ToFSenseCorrector::kToFTopo_FGD1FGD2) std::cout << "before: " << track->ToF.FGD1_FGD2 << std::endl;
+>     if(topo == ToFSenseCorrector::kToFTopo_FGD1FGD2)
+39a55
+>     //if(topo == ToFSenseCorrector::kToFTopo_FGD1FGD2) std::cout << "after: " << track->ToF.FGD1_FGD2 << std::endl;
+71c87,90
+<   for (int i = 0; i < box->nRelevantRecObjects; i++){
+---
+> //---------------------------------------------------------------------------
+> /*
+>   // Loop though the tracks and apply the smearing
+>   for (int i = 0; i<box->nRelevantRecObjects; i++){
+72a92,102
+> */
+> 
+>   AnaTrackB* Tracks[100];
+>   Int_t ntracks = anaUtils::GetAllTracksUsingDet(*static_cast<AnaEventB*>(&event), SubDetId::kFGD1, Tracks);
+> 
+>   for (Int_t itrk=0;itrk<ntracks;itrk++){
+> 
+>     AnaTrackB* track = static_cast<AnaTrackB*>(Tracks[itrk]);
+> 
+> //---------------------------------------------------------------------------
+> 
+
+
+
+
+
+

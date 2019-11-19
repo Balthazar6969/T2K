@@ -1,0 +1,14 @@
+--- Cut levels: Use 10 if veto cuts are applied, 6 if they are not --------
+ < gammaAnalysis.MinAccumLevelToSave = 10 >
+
+ --- Analysis sample (1 for FGD1, 2 for FGD2, 3 for both) --------
+ < gammaAnalysis.Analysis.FV.FGD = 1 > 
+
+--- Save all the secondary FGD-TPC tracks in the event ------------
+ < gammaAnalysis.Analysis.SaveSecondaries = 0 >	
+
+--- Save additional toy vars at microtree --------
+ < gammaAnalysis.MicroTrees.AdditionalToyVars = 0 >
+
+--- Save the gamma initiator - slow  --------
+ < gammaAnalysis.Analysis.SaveGammaInitiator = 0 >

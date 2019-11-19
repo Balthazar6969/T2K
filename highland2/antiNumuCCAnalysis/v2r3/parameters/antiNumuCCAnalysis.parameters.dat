@@ -1,0 +1,14 @@
+--- Cut levels --------
+
+ < antiNumuCCAnalysis.MinAccumLevelToSave = 2 >   // minimum accum level to save the event
+
+------ Selections ------------------------
+
+Analysis sample (1 for FGD1, 2 for FGD2, 3 for both)
+
+ < antiNumuCCAnalysis.Selections.whichFGD = 1 >
+
+Next, specify the selection criteria for the anti-nu beam mode analysis. 
+If the following flag is set to 1 you will have only the CCInc sample, while if the flag is set to 0 you will have both the CCQE/CCnQE samples
+
+ < antiNumuCCAnalysis.Selections.CCInc = 0 >

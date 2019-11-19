@@ -1,0 +1,39 @@
+------- Flux Weighting -------
+
+ < psycheND280Utils.FluxWeighting.Folder      = $(PSYCHEND280UTILSROOT)/data/tuned13av1.1_july2016 >
+ < psycheND280Utils.FluxWeighting.Version     = tuned13av1.1_13anom >
+ < psycheND280Utils.FluxWeighting.Tuning      = tuned13a >
+ < psycheND280Utils.FluxWeighting.FineBinning = 0 > 
+
+------- Proton SI -------
+ 
+--- Specify the step length for propagation
+ < psycheND280Utils.SI.StepSize = 0.1 > //mm
+ 
+--- Specify the value of momentum change that will lead to save the step
+ < psycheND280Utils.SI.StepMom = 10 > //MeV
+ 
+ --- Specify the value of the cross-section relative uncertainty
+ < psycheND280Utils.ProtonSI.XSec.Uncertainty = 0.1 > 
+
+------- Geometry -------
+
+--- Use the default geometry file even if the input file contains geometry
+ < psycheND280Utils.Geometry.UseDefaultGeometry = 1 >
+
+--- Use the ROOT geometry to overrride the harcoded values in detectorDefinition (DetDef namespace)
+ < psycheND280Utils.Geometry.DetectorDefinitionFromROOTGeometry = 0 >
+ < psycheND280Utils.Geometry.DetectorDefinitionFromROOTGeometry.FillFGDInfo = 0 > //fill FGD info: bar centers etc 
+ 
+ 
+ ToF parameters
+ < psycheND280Utils.ToF.FGD1FGD2                   = 2. >
+ < psycheND280Utils.ToF.FGD1P0D_Track              = 1. >
+ < psycheND280Utils.ToF.FGD1ECAL_LAStartFgd_Track  = 0. >
+ < psycheND280Utils.ToF.FGD1ECAL_LAStartFgd_Shower = 0. >
+ < psycheND280Utils.ToF.FGD1ECAL_LAEndFgd_Track    = 1. >
+ < psycheND280Utils.ToF.FGD1ECAL_LAEndFgd_Shower   = 2. >
+ < psycheND280Utils.ToF.FGD1ECAL_HAStartFgd_Track  = 0. >
+ < psycheND280Utils.ToF.FGD1ECAL_HAStartFgd_Shower = 1. >
+ < psycheND280Utils.ToF.FGD1ECAL_HAEndFgd_Track    = 1. >
+ < psycheND280Utils.ToF.FGD1ECAL_HAEndFgd_Shower   = 2. >

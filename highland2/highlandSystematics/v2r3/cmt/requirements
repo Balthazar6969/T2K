@@ -1,0 +1,37 @@
+package highland2/highlandSystematics
+version v2r3
+
+manager Alexander Izmaylov <izmaylov@inr.ru>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc
+
+use highlandUtils                     v2r19   highland2
+use psycheSystematics v3r23   psyche
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro highlandSystematics_cppflags " -DHIGHLANDSYSTEMATICS_USED"
+macro highlandSystematics_linkopts " -L$(HIGHLANDSYSTEMATICSROOT)/$(highlandSystematics_tag) -lhighlandSystematics "
+macro highlandSystematics_stamps " $(HIGHLANDSYSTEMATICSROOT)/$(highlandSystematics_tag)/highlandSystematics.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(HIGHLANDSYSTEMATICSROOT)"
+path_prepend PATH "$(HIGHLANDSYSTEMATICSROOT)/$(highlandSystematics_tag)"
+path_remove LD_LIBRARY_PATH "$(HIGHLANDSYSTEMATICSROOT)"
+path_prepend LD_LIBRARY_PATH "$(HIGHLANDSYSTEMATICSROOT)/$(highlandSystematics_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(HIGHLANDSYSTEMATICSROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(HIGHLANDSYSTEMATICSROOT)/$(highlandSystematics_tag)"
+
+
+# The library to build
+library highlandSystematics *.cxx ../dict/*.cxx
+
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+

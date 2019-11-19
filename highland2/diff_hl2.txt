@@ -1,0 +1,64 @@
+Index: parameters/highlandIO.parameters.dat
+===================================================================
+RCS file: /home/trt2kmgr/ND280Repository/highland2/highlandIO/parameters/highlandIO.parameters.dat,v
+retrieving revision 1.33
+diff -r1.33 highlandIO.parameters.dat
+79c79
+<  < highlandIO.FlatTree.UseReconDirTrackerECal = 0 >
+---
+>  < highlandIO.FlatTree.UseReconDirTrackerECal = 1 >
+cvs diff: Diffing src
+Index: src/oaAnalysisTreeConverter.cxx
+===================================================================
+RCS file: /home/trt2kmgr/ND280Repository/highland2/highlandIO/src/oaAnalysisTreeConverter.cxx,v
+retrieving revision 1.228
+diff -r1.228 oaAnalysisTreeConverter.cxx
+2017a2018,2023
+>   track->Time.Flag_FGD1       = false;
+>   track->Time.Flag_FGD2       = false;
+>   track->Time.Flag_P0D        = false;
+>   track->Time.Flag_ECal       = false;
+>   track->Time.Flag_DSECal     = false;
+> 
+2073c2079
+<     track->ToF.DSECal_FGD1 = dsecal - tfgd1;
+---
+>     track->ToF.DSECal_FGD1 = tdsecal - tfgd1;
+2095a2102,2137
+> 
+>   if (fgd1) {
+>     track->Time.Flag_FGD1 = true;
+>     track->Time.FGD1 = tfgd1;
+>   } else {
+>     track->Time.Flag_FGD1 = false;
+>   }
+> 
+>   if (fgd2) {
+>     track->Time.Flag_FGD2 = true;
+>     track->Time.FGD2 = tfgd2;
+>   } else {
+>     track->Time.Flag_FGD2 = false;
+>   }
+> 
+>   if (p0d) {
+>     track->Time.Flag_P0D = true;
+>     track->Time.P0D = tp0d;
+>   } else {
+>     track->Time.Flag_P0D = false;
+>   }
+> 
+>   if (ecal) {
+>     track->Time.Flag_ECal = true;
+>     track->Time.ECal = tecal;
+>   } else {
+>     track->Time.Flag_ECal = false;
+>   }
+> 
+>   if (dsecal) {
+>     track->Time.Flag_DSECal = true;
+>     track->Time.DSECal = tdsecal;
+>   } else {
+>     track->Time.Flag_DSECal = false;
+>   }
+> 
+

@@ -1,0 +1,301 @@
+/*! \page highland2/p0dNumuCCAnalysisHistory History for the highland2/p0dNumuCCAnalysis Package 
+
+\section p0dNumuCCAnalysis_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Wed Jan  7 19:17:29 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+Freeze of p0dNumuCCAnalysis for highland2.
+Added target info to be saved
+NumuCC selection implemented 
+Added initial systematics (P0D momentum resol) have been added.
+Simple pileup correction added
+
+
+\section p0dNumuCCAnalysis_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Tue Jan 27 18:06:15 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- remove unnecessary methods since the 
+  work is now done in AnalysisAlgorithm
+- Fixed double free corruption error due 
+  to incorrectly copying variables into P0DSystBox.  
+- Add package versioning info
+- added truemu_truepos and truemu_truedir to default microtree
+
+
+
+\section p0dNumuCCAnalysis_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Wed Feb  4 15:26:13 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for new highland2 release.
+- Removed unused setting in parameters file
+- Updated P0DSystBox to work with modified version of SystBoxB
+- Changed how packages are used.  Now updated to reflect changes to ease using other packages.
+
+\section p0dNumuCCAnalysis_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Tue Apr  7 16:02:08 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze in preparation of major update for latest release of highland2.
+This version should work with nd280Highland2 v0r21.
+Added transverse angle info
+- Added utility functions for calculating true transverse angle (delta_phi)
+- Added utility functions for calculating true transverse momenta
+Use this version in conjuction with p0dNumuCCQEAnalysis v0r7 and nd280Highland2 v0r21
+
+\section p0dNumuCCAnalysis_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 13:22:33 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Restructured to work with new highland2 implementation.
+- Much of code has been reorganized into a number of new files
+- Implemented EventBoxP0D for storing p0d track groups
+- Added n primary particles counters and dphi variables to microtrees
+- New functions in p0dAnaUtils for processing kinematic variables etc
+- P0D systematics have been commented out for now as they have not been tested within the new framework
+
+\section p0dNumuCCAnalysis_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 11:36:06 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze of highland2/p0dNumuCCAnalysis for latest highland2 freeze.
+
+- Removed deprecated CheckFillRootrackerVtx method as now everything relies on CheckFillTruth
+- Added option in parameters file to save oofv events on Pb for transverse variable checks
+
+\section p0dNumuCCAnalysis_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Tue Jun 30 11:07:25 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming nd280Highland2 release.
+
+- Shifted to inheriting from baseTrackerAnalysis package as a result of the separation of baseAnalysis into baseTracker and baseP0D
+
+- Updated and reimplemented P0DMass and P0DMomResol systematics to work with updated highland2 framework
+
+- Modified tracker momscale and momresol systematics added
+
+\section p0dNumuCCAnalysis_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Jul 31 10:11:50 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Preparation for upcoming nd280Highland2 freeze.
+
+- Many structural changes to highland2 and psyche core pacakges since last freeze
+- Within this package there have been some minor updates to ensure that everything works with new updates
+- No major additions
+
+\section p0dNumuCCAnalysis_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 11:25:19 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming nd280Highland2 freeze
+
+- Updated to new variable naming convention
+- Added P0D local recon michel tagger info
+- Removed dependency on baseTracker systematics. now all systematics are entirely self contained
+- Added modifed version of the ChargeIDEffSystematic for P0D analysis
+- Updated code to fix bugs 1183/1149/1169
+
+\section p0dNumuCCAnalysis_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Thu Jan  7 13:52:26 2016
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming highland2 freeze.
+- Includes additional Tracker systematics modified for p0d-tracker analysis (TPC track and cluster effs, B-field distortion, and TPC PID)
+- Better handling of P0D-clusters for Michel-tagging
+- Additional changes to the handling of GetRelevantTrackGroups and other updates for compatability with base class changes
+
+\section p0dNumuCCAnalysis_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:36:49 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+increase version number (v2) for development version
+
+- setting default p0d-fv in psycheUtils. Remove override here. 
+- Highland2 class now uses geometry to determine material.
+- Also decoupled water throws from non-water as advised by Clark
+- Changed data files to split things into:
+
+Water
+Brass+"Dead Material"
+P0Dule+WT cover
+Lead
+
+The xsTool file will treat this as:
+Water=Oxygen
+Brass+Dead Material=Cu/Zn
+Lead
+P0Dule+WT = C/H
+
+
+\section p0dNumuCCAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 08:42:12 2016
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for latest highland2 update
+
+- Added zero_var configuration.
+
+- Reinstated dependency on baseAnalysis::DefineConfigurations. This
+allows for all_syst, zero_var and other base configurations to be
+defined and also prevents conflicts with p0dNumuCCQEAnalysis which
+inherits the indices from baseAnalysis.
+
+- Many changes to adapt to the newly reorganized highland2/psyche
+  framework
+
+- Note: as of this freeze, the selection for p0dNumuCCAnalysis relies
+  on FindLeadingTracksOld, which currently doesn't work since the
+  tracks are no longer sorted by momentum. This means the HM tracks
+  may be incorrect, so use this with caution. Will update to
+  FindLeadingTracks when ready.
+
+\section p0dNumuCCAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 11:35:28 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+- BinnedData --> BinnesParams to avoid confusion (Data vs MC)
+- adopted to the changes in base classes: i.e. EventVariation/WeightBase use p0dAnaDataClasses
+- SystematicWeightBase    --> EventWeightBase, SystematicVariationBase --> EventVariationBase
+- since now the weights are more general than the systematics (they can be corrections only)
+  and the variation as well (they can be used for detector optimization).
+- use the new EventWeight and EventVariation Managers
+  Rename parameters using the same convention as in baseAnalysis and baseTrackerAnalysis
+- p0dDataClasses->p0dAnaDataClasses so not to coincide with highlandEventModel/P0DDataClasses on certain systems
+
+
+
+\section p0dNumuCCAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:22:37 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- TrackerMomResolSystematics: make it compile: i.e. use the newly introduced ApplyVariationTPCBased() func with a very good approximation this is what P0D people 
+  have been using here (to be further verified)
+- move truelepton TruthTree variables from p0dNumuCCAnalysis to baseAnalysis after changing name from truemu to truelepton
+- truemu --> truelepton
+
+
+
+\section p0dNumuCCAnalysis_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Aug 10 11:26:20 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!
+
+- Added line to ensure that the energy loss is sensible.
+- Class for systematics related to veto track veto cut based on TN-080.
+- Migrating OOFV class from p0dNumuCCQEAnalysis to p0dNumuCCAnalysis. Leaving the CCQE version in place for now.
+- Added various utilities for selecting various types of veto/sand tracks
+- Added OOFV and veto systematics, veto cut, and associated parameters.
+  This will increment the accum_level of tracks both here and in p0dNumuCCQAnalysis, so the selection now passes cut3 in CC and cut4 in CCQE.
+- Slight modifications to clean up code, fixed a few typos. Cuts should work properly now.
+
+
+
+
+\section p0dNumuCCAnalysis_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:49:35 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Most stuff moved to psyche:
+
+- Removed parameters that are now in baseAnalysis, baseTrackerAnalysis, or psyche
+- P0D systematics and selections moved to psyche
+- DataClasses and converters deprecated by making small changes to existing classes.
+
+
+
+\section p0dNumuCCAnalysis_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 10:06:04 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- p0dNumuCCAnalysis: remove zero_var configuration since we now apply all weights also in the default tree
+
+
+
+\section p0dNumuCCAnalysis_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 16:41:47 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+p0dNumuCCAnalysis:
+- Fixed typo preventing systematics from being initialized
+
+
+*/

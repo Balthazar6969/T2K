@@ -1,0 +1,63 @@
+package psyche/psycheSteering
+version v3r17
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src app parameters
+
+use psycheSystematics v3r23   psyche
+use psycheSelections  v3r25   psyche
+use psycheIO          v3r17   psyche
+use psycheND280Utils  v3r23   psyche
+use psycheEventModel  v3r21   psyche
+use psycheCore        v3r21   psyche
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+#document rootcint dictionary *_LinkDef.h
+
+
+
+# Build information used by packages that use this one.
+macro psycheSteering_cppflags "-DPSYCHESTEERING_USED -fPIC"
+
+# To turn on multi-threading uncomment this line and comment out the line above
+# -lgomp is needed for multi-threading on some systems (SL6 we think)
+# -lprofiler is the google perftools cpu profiler
+#macro psycheSteering_cppflags "-DPSYCHESTEERING_USED -fPIC -fopenmp -lgomp"  #-lprofiler"
+
+macro psycheSteering_linkopts "-L$(PSYCHESTEERINGROOT)/$(psycheSteering_tag) -lpsycheSteering -lCore"
+
+# To turn on multi-threading uncomment this line and comment out the line above
+# -lgomp is needed for multi-threading on some systems (SL6 we think)
+# -lprofiler is the google perftools cpu profiler
+#macro psycheSteering_linkopts "-L$(PSYCHESTEERINGROOT)/$(psycheSteering_tag) -lpsycheSteering  -lCore -lgomp"# -lprofiler"
+
+macro psycheSteering_stamps " $(PSYCHESTEERINGROOT)/$(psycheSteering_tag)/psycheSteering.stamp"
+macro cpplinkflags "" \
+      Linux "-Wl,--no-as-needed"
+
+# The paths to find this library.
+path_remove PATH "$(PSYCHESTEERINGROOT)"
+path_prepend PATH "$(PSYCHESTEERINGROOT)/$(psycheSteering_tag)"
+path_remove LD_LIBRARY_PATH "$(PSYCHESTEERINGROOT)"
+path_prepend LD_LIBRARY_PATH "$(PSYCHESTEERINGROOT)/$(psycheSteering_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(PSYCHESTEERINGROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(PSYCHESTEERINGROOT)/$(psycheSteering_tag)"
+
+# The library to build
+library psycheSteering *.cxx  ../dict/*.cxx highland2Classes/highland2ClassesProjectSource*.cxx
+
+application RunSyst ../app/RunSyst*.cxx
+application RunExample ../app/RunExample*.cxx
+application RunPreloadExample ../app/RunPreloadExample*.cxx 
+application RunExpPreloadExample ../app/RunExpPreloadExample*.cxx 
+application MakeBANFFEventHistograms ../app/MakeBANFFEventHistograms*.cxx
+
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+

@@ -1,0 +1,274 @@
+/*! \page highland2/p0dNumuCCQEAnalysisHistory History for the highland2/p0dNumuCCQEAnalysis Package 
+
+\section p0dNumuCCQEAnalysis_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Wed Jan  7 19:27:20 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+Freeze of p0dNumuCCQEAnalysis for highland2.
+Uses p0dNumuCCAnalysis package
+NumuCCQE selection implemented 
+Added initial systematics (P0D momentum resol) have been added.
+Simple pileup correction added
+All selections and systematics are implemented here for now.  Can move to psyche when stablized.
+
+\section p0dNumuCCQEAnalysis_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Tue Jan 27 18:07:42 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- remove unnecessary methods sinve the work is now done in AnalysisAlgorithm
+- use UseAnalysis functionality
+- Changed selection to use CopySteps as previous issues seem to be fixed.  
+- Add the package versioning
+
+
+
+\section p0dNumuCCQEAnalysis_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Wed Feb  4 15:33:19 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for highland2 release
+- Changes are mostly in p0dNumuCCAnalysis package which this package uses.
+- Includes new variable np0d for counting number of p0d reconstructed tracks in Global.  THis will be used for sideband selection.
+- Other changes in p0dNumuCC are in that package's history file
+
+\section p0dNumuCCQEAnalysis_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Mon Feb 16 15:05:28 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming highland2 freeze.
+
+Only major change since last freeze is the addition of updated numbers for PileUpP0DCCQECorrection.dat.
+
+Now the values are updated to reflect the sand-muon pileup, which affects our selection primarily because of the single-PID cut.
+
+Also pileup weights sorted run-by-run.
+
+\section p0dNumuCCQEAnalysis_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 13:27:19 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Restructured to work with new highland2 implementation.                                                              
+                                                                                                                     
+- Much of code has been reorganized into a number of new files                                                       
+- Implemented EventBoxP0D for storing p0d track groups                                                               
+- Added n primary particles counters and dphi variables to microtrees                                                
+- New functions in p0dAnaUtils for processing kinematic variables etc                                                
+- P0D systematics have been commented out for now as they have not been tested within the new framework 
+
+\section p0dNumuCCQEAnalysis_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 12:05:34 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze of highland2/p0dNumuCCQEAnalysis for latest highland2 freeze.
+
+- Removed deprecated CheckFillRootrackerVtx method as now everything relies on CheckFillTruth
+- Added option in parameters file to save oofv events on Pb for transverse variable checks
+
+\section p0dNumuCCQEAnalysis_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Tue Jun 30 11:14:39 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming nd280Highland2 release.
+
+- Shifted to inheriting from baseTrackerAnalysis package as a result of the separation of baseAnalysis into baseTracker and baseP0D
+
+- (In p0dNumuCCAnalysis) Updated and reimplemented P0DMass and P0DMomResol systematics to work with updated highland2 framework
+
+- (In p0dNumuCCAnalysis) Modified tracker momscale and momresol systematics added
+
+- Currently systematics are not propagating to p0dNumuCCQEAnalysis properly. Looking to fix this soon.
+
+\section p0dNumuCCQEAnalysis_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Jul 31 10:17:16 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Preparation for upcoming nd280Highland2 freeze.
+
+- Many structural changes to highland2 and psyche core pacakges since last freeze
+- Within this package there have been some minor updates to ensure that everything works with new updates
+- No major additions
+
+\section p0dNumuCCQEAnalysis_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 11:31:08 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming nd280Highland2 freeze
+
+Since v1r7
+- Includes all changes in p0dNumuCCAnalysis
+
+- p0dNUmuCCQESelection split into 2 branches, one for single P0D track and one for multiple P0D track samples. This is done so that weight systematics are applied to both the selection and sideband samples
+
+\section p0dNumuCCQEAnalysis_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Thu Jan  7 14:01:05 2016
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for upcoming highland2 freeze.
+- Includes changes to the handling of GetRelevantTrackGroups and other updates for compatability with base class changes
+
+Inherited from p0dNumuCCAnalysis
+- Includes additional Tracker systematics modified for p0d-tracker analysis (TPC track and cluster effs, B-field distortion, and TPC PID)
+- Better handling of P0D-clusters for Michel-tagging
+
+\section p0dNumuCCQEAnalysis_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:39:54 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+increase version number (v2) for development version
+
+- Initial version of data files for OOFV systematic
+- Added new OOFV class. Varies non-P0D detectors using rate values from FGD OOFV class. Includes possible reco systematics for: P0D USECal, P0D CECal, P0D WT.
+
+
+
+\section p0dNumuCCQEAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 08:45:46 2016
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze for latest highland2 update
+
+- Added zero_var configuration.
+
+- Reinstated dependency on baseAnalysis::DefineConfigurations. This
+allows for all_syst, zero_var and other base configurations to be
+defined and also prevents conflicts with p0dNumuCCQEAnalysis which
+inherits the indices from baseAnalysis.
+
+- Many changes to adapt to the newly reorganized highland2/psyche
+  framework
+
+- Note: as of this freeze, the selection for p0dNumuCCAnalysis relies
+  on FindLeadingTracksOld, which currently doesn't work since the
+  tracks are no longer sorted by momentum. This means the HM tracks
+  may be incorrect, so use this with caution. Will update to
+  FindLeadingTracks when ready.
+
+\section p0dNumuCCQEAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 11:34:58 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+- BinnedData --> BinnesParams to avoid confusion (Data vs MC)
+- adopted to changes in base classes: EventWeightBase
+- SystematicWeightBase    --> EventWeightBase, SystematicVariationBase --> EventVariationBase
+- The return type of the EventWeightBase::Apply is now Weight_h which is used as typedef in WeightType
+
+
+
+\section p0dNumuCCQEAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:50:23 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Updated to work with migration of p0dNumuCCAnalysis to psyche. 
+Updated systematics parameter names to match the current naming scheme in highland2.
+
+
+\section p0dNumuCCQEAnalysis_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 10:07:52 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- p0dNumuCCQEAnalysis: remove zero_var configuration since we now apply all weights also in the default tree
+
+
+
+\section p0dNumuCCQEAnalysis_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:37:19 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+p0dNumuCCQESelection: use EventBox instead of GetAllTracks... methods
+
+
+\section p0dNumuCCQEAnalysis_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 16:41:20 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+p0dNumuCCQESelection:
+- GetSampleId() should return SampleId_h
+- Use the proper method to be overloaded from the SelectionBase
+  to retrieve the SampleId:
+  SampleId_h GetSampleId() instead of SampleId::SampleEnum GetSampleEnum()
+
+
+
+\section p0dNumuCCQEAnalysis_v2r11p1_history Version v2r11p1
+
+Freeze information:
+   - Freeze Date: Thu Mar  2 10:34:48 2017
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+Implement mandatory FillEventSummary method for p0dNumuCCQESelection
+
+
+*/

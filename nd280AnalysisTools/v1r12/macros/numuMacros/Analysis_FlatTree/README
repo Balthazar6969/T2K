@@ -1,0 +1,6 @@
+This directory contains:
+
+Tools     : Collection of tools useful to analyse the flat tree
+
+GlbAna10a : Collection of macros to produce the results of the Global
+            Analysis 10 a, using the NumuFlatTree. (not complete yet)

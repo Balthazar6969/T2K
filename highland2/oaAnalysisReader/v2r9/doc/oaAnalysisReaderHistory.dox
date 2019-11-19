@@ -1,0 +1,70 @@
+/*! \page highland2/oaAnalysisReaderHistory History for the highland2/oaAnalysisReader Package 
+
+\section oaAnalysisReader_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 16:59:56 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+This package does part of what nd280AnalysisTools used to do for highland
+In particular it provide oaAnalysis classes through MakeProject. 
+This root commant is not run on the fly but instead the classes for different relevant productions are 
+provided in different folders: prod5D, prod5F, prod6B and prod6TREx. 
+By default prod6B is used in the requirements file. 
+
+Also a script createProd.py is provided to automatically create a production folder, provided the folder name and a root file
+
+
+\section oaAnalysisReader_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Mon Jan  9 16:06:43 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- added prod6E and prod6G
+- Install the ND__*.h headers in to the binary folder (?)
+- in requirements file add table with correspondence between a given production, the oaAnalysis version used for that production
+  and the oaAnalysisReader subfolder to be used
+
+
+\section oaAnalysisReader_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 23:34:44 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+
+\section oaAnalysisReader_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 17:00:59 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+add reader for production 7: Prod7_RC1
+
+
+\section oaAnalysisReader_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 18:02:11 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An freeze to add ECal vertexing info for prod7 candidate
+highland2/oaAnalysisReader/src/prod7_RC1
+oaAnalysisReaderLinkDef.h oaAnalysisReaderProjectHeaders.h0 
+        oaAnalysisReaderProjectSource.cxx 
+Added Files:
+        ND__TTrackerECALReconModule__TECALReconVertexCandidate.h 
+        ND__TTrackerECALReconModule__TECALReconVertexTrack.h 
+Adds ECal-local vertexing headers to Prod7_RC1
+
+
+*/

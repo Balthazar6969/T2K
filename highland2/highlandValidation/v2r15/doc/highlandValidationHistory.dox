@@ -1,0 +1,249 @@
+/*! \page highland2/highlandValidationHistory History for the highland2/highlandValidation Package 
+
+\section highlandValidation_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Mon May 11 15:32:03 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Freeze of highland2/highlandValidation package.
+Incrementing major version number to reflect those of other highland2 packages.
+
+Please read the doc/README.md for complete usage instructions!
+
+This package provides a means for ensuring that highland2 outputs are correct. Comparisons between files processed with HEAD or tagged versions of highland2 analyses (executables) are performed.
+
+The entire package is python-based and resides in the validator/ directory.
+
+Two main steps: first process a set of oaAnalysis files, second validate those to nominal outputs. Tests have been implemented for CreateFlatTree, numuCCAnalysis, p0dNUmuCCAnalysis, and p0dNumuCCQEAnalysis. Other analyses should be able to add tests following the format shown in tests.py.
+
+Currently being used as part of highland2 continuous integration system at advance.colorado.edu/jenkins
+
+\section highlandValidation_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Fri Jul 31 10:33:06 2015
+   - Freeze User: tianlu
+   - Freeze Host: sl5anl02.colorado.edu
+
+
+
+Many updates since last freeze.
+- Now designed to test minitree and flattree processed analyses in addition to previous version comparisons
+- Added parameters file that can be passed as optional parameter for turning systs on or off
+- Can now specify multiple input-files. This allows for testing both MCP and RDP processing or any input-file combo
+- Many additional branches have been added to the tests for comparison including systematics branches
+- Can specify frozen version used by Jenkins in config.py
+
+\section highlandValidation_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Thu Sep 24 10:14:44 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+Version use to validate nd280Highland2 v1r11 release. 
+There are currently 24 expected failures in highland-version-validation, both for p5 and p6. 
+FlatTree and MiniTree validation are OK. 
+From those 24 failures:
+ - 20 correspond to RooVtxEntry. This problem affects packages with lower accum level set than the analyses they use, due to the 
+   problem with the propagation of the accum level to the used analyses, which was not happening: 8 for numuBkg, 8 for antiNumuCC
+   (one for each of the trees, including syst), 2 for p0dNumuCC and 2 for p0dNumuCCQE (we don't run syst)
+   The bug has been corrected. 
+ - 1 to sTrueVertexNReconVertices in flattree (very small difference) dues to some changes in the DeleteBadObject method. To be confirmed !!!! 
+ - 3 to accum_level for p0dnumuCCQEAnalysis in default and truth tree for MC, and default tree for data, because 
+   the selection has been split in two branches
+
+Main changes:
+- Updated reference nd280Highland2 version to v1r9
+- add few more variables to the FlatTree version validation, mainly to test true-reco association
+- Updated cut level for p0dnumuccqe tests as now we have two branches and need to specify the branch
+- Added check_roovtxlinks tests function which is run for all highland2 output files with an NRooTrackerVtx tree. 
+
+
+
+\section highlandValidation_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 17:42:41 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- Updated nominals to latest frozen versions in nd280Highland2 v1r11
+- Basic tests for minitree version validation
+- basic tests using drawingtools
+- added additional tests specific to p0d analyses (e.g. nmichel, np0d)
+- added parameters directory and included systematics.paramters and p0danalyses.parameters
+- remove sand type checks, since they don't exist now
+
+
+
+\section highlandValidation_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:51:47 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- increase version number (v2) for development version
+- Update nominal versions for nd280Highland2 v1r13
+
+
+\section highlandValidation_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 11:41:18 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+major reorganization with new packages and  changes in event model class names
+
+no changes with respect to previous version.
+Just increase version number (v2) for frozen version
+
+
+
+\section highlandValidation_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 22:08:15 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+adapt to new variable names as explained in https://bugzilla.nd280.org/show_bug.cgi?id=1144
+Some variables to be removed after freeze once new reference version is changed
+
+
+\section highlandValidation_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sun Jun 12 18:48:10 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+tests.py 
+- now truemu variables are called truelepton both for truth tree and micro-trees
+- remove truelepton_pdg from truth tree validation and add particle both for truth and default trees
+- add one more plot for systematic weights to cover all enabled ones. Put the right ranges
+
+systematics.parameters.dat 
+- disable antinu flux and sandmu systematics. Keep flux nu enabled for new version but disabled for all version
+
+
+
+\section highlandValidation_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 12:54:04 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- add tests for nue, for the moment without systematics
+- add tests for psycheSteeering: comparison of events passing selection for each branch and performance comparison 
+- add tests for RooTrackerVtx
+- Add jenkins automation scripts: highland-build.sh highland-validation.sh nd280-build.sh process-nominal.sh 
+
+process-nominal.sh
+- don't put the ouput directory inside data
+- put code for nominal in a different folder (NOMINAL)
+
+highland-build.sh 
+- Change highland-build.sh to perform cmt br make only over psyche/highland2 packages (for some reason nd280AnalysisTools was getting stuck)
+
+process.py:
+- simplify get_to_process and further improvements for psyche validation
+
+validation_utils.py 
+- add _syst_ to the output file name only for p0danalyses and systematics parameters files
+
+config.py 
+- with flattree.parameters.dat for flat tree creation since the tracker ecal module is needed 
+
+requirements 
+- add all packages in nd280Highland2 such that at least we validate the compilation
+
+systematics.parameters.dat 
+- the multipi selection needs the tracker ecal module
+
+flattree.parameters.dat 
+- switch on the dir tracker ecal parameter
+
+
+
+\section highlandValidation_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 23:33:24 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+- Fix problems with production5 validation
+- Changes related to nd280AnalysisTools removal
+
+config.py
+- set  v2r11p1 as nominal
+- temporarily use the flatree parameters file for numu such that  < highlandIO.FlatTree.UseReconDirTrackerECal = 0 >
+
+test.py
+- truemu_momt --> truelepton_momt
+
+pyutils.tar.gz 
+- add new method oaAnalysisReader_prod in tianlu/analysis/utils.py to get the production from the oaAnalysisReader requirements file.
+
+requirements 
+- use oaAnalysisReader
+
+process-nominal.sh 
+- disable UseReconDirTrackerECal for prod5
+
+p0danalyses.parameters.dat 
+- temporarily put  < highlandIO.FlatTree.UseReconDirTrackerECal = 0 > until 
+  the package hierarchy overwride parameters is fixed
+
+
+
+\section highlandValidation_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:46:45 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+config.py: change nominal to v2r13
+process-nominal.sh: setup the python scripts
+
+
+
+\section highlandValidation_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Wed Feb  8 09:11:20 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+don't test "weight" variable, which has being removed from the trees. 
+Also truelepton_costheta since it is different for nue
+
+
+\section highlandValidation_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Thu Mar  2 10:53:57 2017
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+This is the version used for the validation of these release (nd280Highland2 v2r19)
+
+- config.py: change nominal to v2r17
+- flattree.parameters.dat: Swithch RooTracker filtering of to avoid mistmatching in NVtx between MiniTree/FlatTree and oaAnalysis
+
+
+*/

@@ -1,0 +1,38 @@
+package highland2/numuCCAnalysis
+version v2r13
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app 
+
+use baseTrackerAnalysis               v2r11 highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro numuCCAnalysis_cppflags " -DNUMUCCANALYSIS_USED"
+macro numuCCAnalysis_linkopts " -L$(NUMUCCANALYSISROOT)/$(numuCCAnalysis_tag) -lnumuCCAnalysis "
+macro numuCCAnalysis_stamps " $(NUMUCCANALYSISROOT)/$(numuCCAnalysis_tag)/numuCCAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(NUMUCCANALYSISROOT)"
+path_prepend PATH "$(NUMUCCANALYSISROOT)/$(numuCCAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(NUMUCCANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(NUMUCCANALYSISROOT)/$(numuCCAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(NUMUCCANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(NUMUCCANALYSISROOT)/$(numuCCAnalysis_tag)"
+
+
+# The library to build
+library numuCCAnalysis *.cxx  ../dict/*.cxx
+
+application RunNumuCCAnalysis ../app/RunNumuCCAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

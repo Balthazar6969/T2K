@@ -1,0 +1,284 @@
+/*! \page highland2/highlandCorrectionsHistory History for the highland2/highlandCorrections Package 
+
+\section highlandCorrections_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Thu Sep 18 10:19:30 2014
+   - Freeze User: acervera
+   - Freeze Host: neutrinos8.local
+
+First freeze of this package, which corresponds to a psyche release
+
+THIS IS A NEW PACKAGE WITH RESPECT TO THE OLD HIGHLAND
+
+corrections that where previously in baseAnalysis/src/corrections 
+have now a separate package in highland2. 
+In this way the can be called also from highlandIO, which do not depend on 
+baseAnalysis
+
+
+
+\section highlandCorrections_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Tue Oct  7 22:57:24 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+
+adopt to the changes in psycheCore BaseDataClasses: AnaSpillB has now a pointer to AnaEventInfoB
+
+
+
+\section highlandCorrections_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Sat Oct 11 00:39:22 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+Add ability to use prod6 corrections
+
+- import prod6 dedx correction file for data from highland. 
+- add MC correction for prod6 
+- use the new versionUtils in psyche to chose between prod5 and prod6, now controled via parameters file
+  in baseAnalysus 
+
+
+\section highlandCorrections_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Mon Nov 17 17:34:34 2014
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Fully validated	version of FlatTree creation, Selection and Systematics.
+It will	be used	to create first	official FlatTrees.
+
+
+- Don't use the PileUp.dat systematics file for the corrections. Copy the mean value in a new file 
+  PileUpCorrection_p6B.dat and  PileUpCorrection_p5F.dat and in highlandCorrections/.../data
+- correct bug in production selection for the TPCdEdxDataCorrection
+- update of the dEdx corrections for data. This should fix the crash reported for some files from run4
+- Move IgnoreRightEcal correction data from baseAnalysis
+
+
+
+\section highlandCorrections_v0r9_history Version v0r9
+
+Freeze information:
+   - Freeze Date: Sun Nov 30 13:46:31 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+Release for the highland to highland2 migration tutorial on Dec 1st 2014.
+Selections give the same results for oaAnalysis and FlatTrees
+Systematics give slighly different results (Under investigation). Not crucial for tutorial
+
+
+- Use members in VersioninUtils to control independenty the production for 
+  corrections, systematics and bunching
+- add highlandUtils dependency in requirements file
+
+
+
+\section highlandCorrections_v0r11_history Version v0r11
+
+Freeze information:
+   - Freeze Date: Wed Dec 10 18:34:16 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+add new pileup correction tables 
+
+
+\section highlandCorrections_v0r13_history Version v0r13
+
+Freeze information:
+   - Freeze Date: Wed Feb 18 11:30:10 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Add default mainpage.dox so that package  can be referenced from another one in doxygen using \ref
+
+IgnoreRightECalRuns3and4Correction
+- when we remove the right ecal segment from the track also
+  make sure to modify the detector bit field appropriately
+- no need to apply the correction for production 6, 
+  it is already taken into account in MC
+
+MomResolMCCorrection:
+- first version of the momentum resolution correction (MC smearing);
+  this is to split systematics and corrections,  i.e. to have a consistent way of smear
+  MC w/o the need to use systematics with zero var
+- Remove obsolete TPCMomResolMCCorrection
+
+
+\section highlandCorrections_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 18:55:03 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes in psyche 
+to allow selection depending systematics, and performance optimization
+
+Only change: 
+  Update of the file with new corrections for anti-nu mode. Run5 corrections estimated with rdp data, Run6 correction with fpp data. Corrections are given in a more clean format
+
+
+
+\section highlandCorrections_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 16:01:41 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- added a fix to account (for a problem related) to bug 1102,  do not use covUtils method
+  to set the sub-detector used bit (since the latter uses some hard-coded values to account for oaAnalysis numbering)
+
+
+
+\section highlandCorrections_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 19:12:27 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+TPCdEdxCorrection_p6B.dat:
+ - uploading corrections for Run6 data collected between January and March 2015. Corrections for other runs are unchanged
+ - if the run number is outside the current range just assume no correction (1.) so that the code wont crash (same commit already done by Sasha but removed)
+
+PileUpFGD1Correction_p6B.dat PileUpFGD2Correction_p6B.dat
+ - Updated PileUp correction numbers and new numbers for run5,6
+
+
+\section highlandCorrections_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 17:17:01 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- added ToF correction (smears MC to match data) and also there is an option to actually flip/reverse tracks if needed
+based on ToF info. the correction may be useful for various analysis so should be kept in a general package (similar one exists in numuCCBwdAnalysis)
+
+
+
+\section highlandCorrections_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 13:09:31 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+
+- dEdx corrections for data for run6 (April to June2015) are now available. Corrections for run 6 are all the same for all subset of runs (semi-rdp, pc1_Jan-to-April and pc1_April-to-June) 
+
+ToFCorrection: 
+- random seed for ToF correction in parameters file
+- reflect the changes into ToFSenseCorrector flip a track if needed if a sense does not match ToF
+- special treatment for FGD-ECal ToF cases:
+  instead of isForward check split based on whether a track starts in/out of FGD, 
+  note,  this is optimized for tracker selection
+
+FlipKinematicsCorrection: 
+- new correction to recover reverse fit failures, needs highlandRecPack
+
+MomRangeCorrection: 
+- new momentum by range correction: use highlandRecPack to substitute prange values (since is easier to estimate the systematics this way)
+  only RangeMomentumMuon is affected
+
+
+
+\section highlandCorrections_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:22:54 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+MomRangeCorrection:
+- used kFGD volume as a default detector
+- use IsRelevantTrack() method: a track should
+  start/stop in a given det and fail TPC quality
+
+Move to version v2
+
+
+\section highlandCorrections_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Sun Mar  6 17:42:25 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+major reorganization with new packages and  changes in event model class names
+
+- MomResolMCCorrection: udapted to use new MomentumResolVariation utility class
+- TPCPIDPullMCCorrection: TPC PID correction based on data-mc differencies in  PID pulls
+
+
+\section highlandCorrections_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 10:13:44 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+ToFCorrection:
+- New smearing that takes into account the new HasValidToF method inherit from ToFSenseCorrector. It distingishes between different topologies.
+- Addition of sand muons correction. Rearregment of correction to work porperly.
+- ForceForward now apply in the HasValidToF method. Addition of remaining sand muons.
+
+FlipKinematicsCorrection: 
+- reflect re-naming for the TPC: BackMomentum->MomentumEnd (although not sure it makes sense to split between front and back momentum for a TPC)
+- HasValidToF in Apply method. It is needed because we have to force tracks to be forward going.
+
+CorrId.hxx:
+- correction enums
+
+TPCPIDPullMCCorrection:
+- cadopted to the changes in TPCPIDVariation (psycheND280Utils)
+
+
+
+\section highlandCorrections_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:18:22 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+MomResolMCCorrection: 
+- adopting to changes in psycheND280Utils
+- use methods with ToyExperiment input (so to be general between systematics and correction)
+- use a paramter (read from psycheSystematics) to contol whether to use new smearing based on TPC-local info propagated
+  to global
+
+
+
+\section highlandCorrections_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:28:50 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FlipKinematicsCorrection, ToFCorrection, ToFCorrection: 
+- updated to the changes done to the psycheND280Utils::ToFSenseCorrector, 
+  function names,  reutrn values etc
+- FlipKinemaitcs: moved the ToF validity checks into the IsRelevant... function, 
+  added a warning to highlight the correction is being run (compiled) with recpack enabled
+- for the correction, read the parameter on whether to apply the track flip based on ToF from 
+  the psyche systematics,  these two are fully related
+
+highlandCorrections.parameters.dat:
+- read parameter from pyscheSystematics
+
+
+*/

@@ -1,0 +1,40 @@
+/*! \page highland2/highlandSystematicsHistory History for the highland2/highlandSystematics Package 
+
+\section highlandSystematics_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 16:52:59 2016
+   - Freeze User: izmaylov
+   - Freeze Host: pizmaylov.ific.uv.es
+
+
+A new package dedicated to be a roof for various systematics
+developed inside highland but not subject to be migrated into psyche (i.e. oscillation 
+analysis fitters` usage):
+a good example are various systematics developed for cross-section analysis
+
+for the moment keep the systematics related to smearing due to an uknown position 
+of the parent decay (i.e. neutrino direction effectively), although the latter
+still lacks the proper inputs
+
+More to come
+
+
+
+\section highlandSystematics_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Sat Dec 24 20:23:34 2016
+   - Freeze User: izmaylov
+   - Freeze Host: Aleksandrs-MacBook-Pro.local
+
+and alos the data file with verices positions distributions  was added
+
+
+Freeze information:
+   - Freeze Date: Sat Dec 24 20:14:59 2016
+   - Freeze User: izmaylov
+   - Freeze Host: Aleksandrs-MacBook-Pro.local
+
+
+*/

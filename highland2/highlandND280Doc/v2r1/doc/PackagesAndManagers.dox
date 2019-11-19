@@ -1,0 +1,135 @@
+/*!
+\page managers List of highland2 packages and managers
+
+
+\htmlonly
+<table border="1" width="60%" style="border: 1px solid black; border-collapse:collapse">
+<thead>
+<tr>
+<th>Package<br /></th>
+<th>Manager<br /></th>
+<th>Email address<br /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>highlandTools<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr>
+<tr>
+<td>highlandUtils<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr>
+<tr>
+<td>highlandCorrections<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr>
+<td>highlandIO<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr>
+<tr>
+<td>highlandRecPack<br /></td>
+<td>Alexander Izmaylov<br /></td>
+<td>izmaylov@inr.ru<br /></td>
+</tr>
+<tr>
+<td>baseAnalysis<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr>
+<tr>
+<td>baseTrackerAnalysis<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr><tr>
+<td>baseP0DAnalysis<br /></td>
+<td>Damon Hansen<br /></td>
+<td>dgh9@pitt.edu<br /></td>
+</tr>
+<tr>
+<td>numuCCAnalysis<br /></td>
+<td>Anselmo Cervera<br /></td>
+<td>anselmo.cervera@cern.ch<br /></td>
+</tr>
+<tr>
+<td>numuCCMultiPiAnalysis<br /></td>
+<td>Melody Ravonel<br /></td>
+<td>melody.ravonel@gmail.com<br /></td>
+</tr>
+<tr>
+<td>numuCCQEAnalysis<br /></td>
+<td>Alexander Izmaylov<br /></td>
+<td>izmaylov@inr.ru<br /></td>
+</tr>
+<tr>
+<td>numuCCQExsecAnalysis<br /></td>
+<td>Alexander Izmaylov<br /></td>
+<td>izmaylov@inr.ru<br /></td>
+</tr>
+<tr>
+<td>numuCCOuterDetAnalysis<br /></td>
+<td>Alexander Izmaylov<br /></td>
+<td>izmaylov@inr.ru<br /></td>
+</tr>
+<tr>
+<td>numuCCZeroPiAnalysis<br /></td>
+<td>Alexander Izmaylov<br /></td>
+<td>izmaylov@inr.ru<br /></td>
+</tr>
+<tr>
+<td>nueCCAnalysis<br /></td>
+<td>Iain Lamont<br /></td>
+<td>i.lamont@lancaster.ac.uk<br /></td>
+</tr>
+<tr>
+<td>numuCCMultiTargetAnalysis<br /></td>
+<td>Enrico Scantanburlo<br /></td>
+<td>enrico.scanta@cern.ch<br /></td>
+</tr>
+<tr>
+<td>antiNumuCCAnalysis<br /></td>
+<td>Lorenzo Magaletti<br /></td>
+<td>Lorenzo.Magaletti@cern.ch<br /></td>
+</tr>
+<tr>
+<td>numuBkgInAntiNuModeAnalysis<br /></td>
+<td>Ciro Riccio<br /></td>
+<td>riccioc@na.infn.it<br /></td>
+</tr>
+<tr>
+<td>antiNumuCCPiZeroAnalysis<br /></td>
+<td>Alexander Izmaylov<br /></td>
+<td>izmaylov@inr.ru<br /></td>
+</tr>
+<tr>
+<td>gammaAnalysis<br /></td>
+<td>Pierre Jean Joseph Lasorak <br /></td>
+<td>p.j.j.lasorak@qmul.ac.uk<br /></td>
+</tr>
+<tr>
+<td>p0dNumuCCAnalysis<br /></td>
+<td>Tianlu Yuan<br /></td>
+<td>tianlu.yuan@colorado.edu<br /></td>
+</tr>
+<tr>
+<td>p0dNumuCCQEAnalysis<br /></td>
+<td>Tianlu Yuan<br /></td>
+<td>tianlu.yuan@colorado.edu<br /></td>
+</tr>
+</tbody>
+</table>
+\endhtmlonly
+
+
+*/
+
+
+	 	 	 	 
+
+
+
+

@@ -1,0 +1,62 @@
+/*! \page EvenDisplay Using the 3D Event Display
+
+\brief A guide to the 3D Event Display program for oaAnalysis format files, EventDisplay.exe
+
+@section introduction Introduction
+
+The nd280AnalysisTools package contains a program that will display the contents 
+of oaAnalysis files. It is started by the command
+EventDisplay.exe and it expects as an argument either the name of a ROOT file 
+containing oaAnalysis output, or a text file containing the pathnames of a series 
+of oaAnalysis ROOT files. One may optionally provide the name
+of a ROOT file to provide a geometry definition. The command line would then be: 
+\verbatim
+EventDisplay.exe  -g <geometryFilename> <oaAnalysisFilename>
+\endverbatim
+If this is not provided then a default geometry
+which is hard coded into the program is used.
+
+Like the event display program used for displaying oaEvent or MIDAS format files 
+(EveDisplay.exe), the program
+is based on the ROOT package called Eve. It currently has none of the "bells and 
+whistles" of EveDisplay.exe, but
+these could be added in time if requested.
+
+When it starts you will see something like the image below
+
+\image html EventDisplay1.png
+
+The tab labelled Viewer 1 is  a 3D display of the nd280 detector with the first 
+event shown. The window can
+be rotated, zoomed, panned etc. When parts of the event are clicked on 
+information will be printed on the
+terminal.
+On the left side are two tabs labelled ND280 Event Control and Eve. Under the 
+ND280 Event Control are controls to go forward and backwards
+through the events or go to a specific event.
+
+The Eve tab is in two parts. The top half shows a directory type structure 
+showing what objects 
+are known to Eve. You will find listed under "Event" a number of items such as 
+Global Tracks, Truth Tracks, Tracker Tracks etc. Each of these 
+correspond to an oaAnalysis module. 
+By default only Global , and Truth objects are turned on. By clicking on the 
+appropriate check box it is
+possible to turn on or off other items, and by clicking on the "+" signs the 
+hierarchy can be expanded to
+explore the information in the event. It is important to emphasize that the 
+quality of the display is
+limited by the ammount of information stored. For example some tracks store 
+only their position and momentum, so it is not possible to 
+draw them accurately. In this case an arbitarily long line will be drawn. 
+In other cases it is only possible to draw a
+straight line between the start and end point of an object.
+
+This second image shows the same event as before but with a different selection 
+of objects displayed.
+
+\image html EventDisplay2.png
+
+Comments or requests should be forwarded to the author of the program
+A.Finch@lancaster.ac.uk.
+*/

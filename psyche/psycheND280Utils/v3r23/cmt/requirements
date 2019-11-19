@@ -1,0 +1,39 @@
+package psyche/psycheND280Utils
+version v3r23
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc
+
+use psycheUtils       v3r21   psyche 
+use psycheEventModel * psyche
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+document rootcint dictionary *_LinkDef.h
+
+# Build information used by packages that use this one.
+macro psycheND280Utils_cppflags " -DPSYCHEND280UTILS_USED"
+macro psycheND280Utils_linkopts " -L$(PSYCHEND280UTILSROOT)/$(psycheND280Utils_tag) -lpsycheND280Utils "
+macro psycheND280Utils_stamps " $(PSYCHEND280UTILSROOT)/$(psycheND280Utils_tag)/psycheND280Utils.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(PSYCHEND280UTILSROOT)"
+path_prepend PATH "$(PSYCHEND280UTILSROOT)/$(psycheND280Utils_tag)"
+path_remove LD_LIBRARY_PATH "$(PSYCHEND280UTILSROOT)"
+path_prepend LD_LIBRARY_PATH "$(PSYCHEND280UTILSROOT)/$(psycheND280Utils_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(PSYCHEND280UTILSROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(PSYCHEND280UTILSROOT)/$(psycheND280Utils_tag)"
+
+
+# The library to build
+library psycheND280Utils *.cxx  ../dict/*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+setup_script rootmap_setup
+

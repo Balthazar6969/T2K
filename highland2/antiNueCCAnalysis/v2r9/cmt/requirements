@@ -1,0 +1,44 @@
+package highland2/antiNueCCAnalysis
+version v2r9
+
+manager Georgios Christodoulou <georgios@hep.ph.liv.ac.uk>
+author nd280-software@mailman.t2k.org
+ 
+branches cmt src doc app dict
+
+use baseTrackerAnalysis               v2r11   highland2 
+use nueCCAnalysis                     v2r17   highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+document rootcint dictionary *_LinkDef.h
+
+# Build information used by packages that use this one.
+macro antiNueCCAnalysis_cppflags " -DANTINUECCANALYSIS_USED"
+macro antiNueCCAnalysis_linkopts " -L$(ANTINUECCANALYSISROOT)/$(antiNueCCAnalysis_tag) -lantiNueCCAnalysis"
+macro antiNueCCAnalysis_stamps " $(ANTINUECCANALYSISROOT)/$(antiNueCCAnalysis_tag)/antiNueCCAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(ANTINUECCANALYSISROOT)"
+path_prepend PATH "$(ANTINUECCANALYSISROOT)/$(antiNueCCAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(ANTINUECCANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(ANTINUECCANALYSISROOT)/$(antiNueCCAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(ANTINUECCANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(ANTINUECCANALYSISROOT)/$(antiNueCCAnalysis_tag)"
+
+# The library to build
+library antiNueCCAnalysis *.cxx ../dict/*.cxx
+
+# A separate library for the custom drawing tools
+#library DrawingToolsAntiNueCC DrawingToolsAntiNueCC.cxx ../dict/*.cxx
+
+# Applications
+application RunAntiNueCCAnalysis ../app/RunAntiNueCCAnalysis.cxx
+
+# Documentation
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+# Setup the ROOT magic that means we can use the DrawingTools etc. without having to load any libraries.
+setup_script rootm_setup 

@@ -1,0 +1,93 @@
+/*!
+\page committing Committing your analysis package to the repository
+
+\section importYourPackage How to import your package to the repository
+
+It is a good idea to add your analysis code to the repository at the earliest
+possibility. The benefits of using the respository include:
+ - Your code is backed up somewhere safe
+ - Any changes you make are documented and can be rolled back
+ - Other people can look at your code and contribute
+ - Other people can run your analysis
+
+The source code for all official analyses MUST be available to the rest of
+the collaboration.
+
+To commit your package to the repository, follow these steps
+ - Ensure that \c CVSROOT is set to your own account, not \c anoncvs. <a href="http://www.t2k.org/nd280/daq/software/cvs_access_account_signup">Click this link for details of how to request a CVS account if you do not already have one.</a>
+ - Make sure your package is sitting in the \c highland2 directory.
+ - <your_package_name> has to contain only the folder v0r0
+ - v0r0 has to contain only the following folders: src/ cmt/ doc/ (and eventually parameters/ macros/ app/ data/)
+ - if v0r0/doc/ is missing, create it (empty)
+ - if present remove other folders (as CVS/, dict/, Linux/, amd/, x86_64/, etc)
+ - <b>Make sure only the files you want to commit are present</b>: delete Makefile, ~file, #file, binaries, root files, etc. You can use "ls -a" to check.
+ - <b>Go inside the v0r0 directory</b>. Being in any other directory will cause huge amounts of pain for you to clean up.
+ - Issue the following command, making the appropriate substitutions. Note that YourName MUST NOT have any spaces in it.
+\code
+cvs import highland2/yourAnalysisPackage YourName v0r0
+\endcode
+
+
+\n
+\section freezeYourPackage How to freeze your package
+- note that it can only be done from a HEAD version (last number is even)
+- make sure it compiles
+- make sure everything is committed
+- if the folder doc/ was not present when the package was imported, add it first:
+\verbatim
+  cd <package>/v#r#/
+  mkdir doc
+  cvs add doc
+\endverbatim
+
+- now freeze
+\verbatim
+  cd <package>/v#r#/cmt
+  source setup.sh
+  nd280-freeze
+  (here you will be ask to write a message; if not long enough it will complain)
+  nd280-freeze --apply
+\endverbatim
+
+
+\subsection freezeSpecific How to freeze with a specific version number
+
+For a patched version:
+\verbatim
+  cd <package>/v#r#/cmt
+  source setup.sh
+  nd280-freeze --patch-release
+  (here you will be ask to write a message; if not long enough it will complain)
+  nd280-freeze --patch-release --apply
+\endverbatim
+\n
+For freezing with tag v1r1 (or v2r1 etc):
+\verbatim
+  cd <package>/v#r#/cmt
+  source setup.sh
+  nd280-freeze --devel=v1r2 --stable=v1r1
+  (here you will be ask to write a message; if not long enough it will complain)
+  nd280-freeze --devel=v1r2 --stable=v1r1 --apply
+\endverbatim
+
+
+\n
+\section workingPatched Committing a patched versions
+
+The HEAD version is always the 'v#r#p0' (no matter if e.g. 'v#r#p5' was frozen).
+To commit you have to put 'Branch: v#r#p0' at the beginning of the commit message.
+To freeze:
+\verbatim
+  cd <package>/v#r#/cmt
+  source setup.sh
+  nd280-freeze --patch-release
+  (here you will be ask to write a message; if not long enough it will complain)
+  nd280-freeze --patch-release --apply
+\endverbatim
+
+
+\n
+\section tipstricks Tips & Tricks with CMT and CVS
+\ref tipstricks
+
+*/

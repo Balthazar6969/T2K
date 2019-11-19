@@ -1,0 +1,96 @@
+Set the range of MAIN RING run numbers to apply the CT4POTCorrection to (inclusive).
+ < highlandCorrections.CT4POTCorrection.MRrunLower = 440194 >
+ < highlandCorrections.CT4POTCorrection.MRrunUpper = 440235 >
+
+Set the range of times to apply the DataQualityCorrection for. The parameters
+come in triplets. The NewValue sets whether the DQ flag should be good (1) or bad (0).
+The Time.Lower and Time.Upper values set the UNIX timestamps that the NewValue should
+be applied in. You can add more periods by following the pattern.
+ < highlandCorrections.DataQuality.NewValue.1 = 0 >
+ < highlandCorrections.DataQuality.Time.Lower.1 = 1269258741 > # 2010/03/22 20:52:21
+ < highlandCorrections.DataQuality.Time.Upper.1 = 1269319996 > # 2010/03/23 13:53:16
+ < highlandCorrections.DataQuality.NewValue.2 = 0 >
+ < highlandCorrections.DataQuality.Time.Lower.2 = 1271398406 > # 2010/04/16 15:13:26
+ < highlandCorrections.DataQuality.Time.Upper.2 = 1271405782 > # 2010/04/16 17:16:22
+ < highlandCorrections.DataQuality.NewValue.3 = 0 >
+ < highlandCorrections.DataQuality.Time.Lower.3 = 1274856072 > # 2010/05/26 15:41:12
+ < highlandCorrections.DataQuality.Time.Upper.3 = 1277910000 > # 2010/07/01 00:00:00
+
+Set the run periods for which the IgnoreRightECalRuns3and4Correction should be applied.
+Extra periods can be defined by following the pattern. You need to specify both Lower
+and Upper runs for the period (inclusive). 
+
+ < highlandCorrections.IgnoreRightECal.Runs.MC.Lower.1 = 90300000 >
+ < highlandCorrections.IgnoreRightECal.Runs.MC.Upper.1 = 90300075 >
+ < highlandCorrections.IgnoreRightECal.Runs.MC.Lower.2 = 90410000 >
+ < highlandCorrections.IgnoreRightECal.Runs.MC.Upper.2 = 90410049 >
+ < highlandCorrections.IgnoreRightECal.Runs.Data.Lower.1 = 8000 >
+ < highlandCorrections.IgnoreRightECal.Runs.Data.Upper.1 = 12000 >
+ 
+ 
+ ToF parameters
+ < highlandCorrections.ToF.P0D_FGD1_MC_TrueFwd_Track_Mean   = -1.052 >
+ < highlandCorrections.ToF.P0D_FGD1_MC_TrueFwd_Track_Sigma  =  0.382 >
+ < highlandCorrections.ToF.P0D_FGD1_MC_TrueBwd_Track_Mean   = -0.972 >
+ < highlandCorrections.ToF.P0D_FGD1_MC_TrueBwd_Track_Sigma  =  2.508 >
+ < highlandCorrections.ToF.P0D_FGD1_Sand_Track_Mean         = -0.091 >
+ < highlandCorrections.ToF.P0D_FGD1_Sand_Track_Sigma        =  1.876 >
+
+ < highlandCorrections.ToF.FGD1_FGD2_MC_TrueFwd_Mean  =  0.172 >
+ < highlandCorrections.ToF.FGD1_FGD2_MC_TrueFwd_Sigma =  0.679 >
+ < highlandCorrections.ToF.FGD1_FGD2_MC_TrueBwd_Mean  = -0.046 >
+ < highlandCorrections.ToF.FGD1_FGD2_MC_TrueBwd_Sigma =  1.986 >
+ < highlandCorrections.ToF.FGD1_FGD2_Sand_Mean        = -0.247 >
+ < highlandCorrections.ToF.FGD1_FGD2_Sand_Sigma       =  1.286 >
+
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueFwd_Shower_Mean  =   0.717 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueFwd_Shower_Sigma =   1.568 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueBwd_Shower_Mean  =   2.007 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueBwd_Shower_Sigma =   1.891 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueFwd_Track_Mean   =   0.194 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueFwd_Track_Sigma  =   1.941 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueBwd_Track_Mean   =   0.099 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAStartFgd_TrueBwd_Track_Sigma  =   1.992 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_LAStartFgd_Shower_Mean        =   0.837 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_LAStartFgd_Shower_Sigma       =   1.529 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_LAStartFgd_Track_Mean         =   0.107 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_LAStartFgd_Track_Sigma        =   1.572 >
+
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueFwd_Shower_Mean  =   0.639 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueFwd_Shower_Sigma =   4.621 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueBwd_Shower_Mean  =  -0.310 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueBwd_Shower_Sigma =   6.464 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueFwd_Track_Mean   =  -1.017 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueFwd_Track_Sigma  =   3.311 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueBwd_Track_Mean   =  -0.836 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_LAEndFgd_TrueBwd_Track_Sigma  =   1.867 >
+
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueFwd_Shower_Mean  =   1.352 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueFwd_Shower_Sigma =   2.027 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueBwd_Shower_Mean  =   1.956 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueBwd_Shower_Sigma =   1.667 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueFwd_Track_Mean   =   0.864 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueFwd_Track_Sigma  =   2.414 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueBwd_Track_Mean   =   0.273 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAStartFgd_TrueBwd_Track_Sigma  =   0.864 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAStartFgd_Shower_Mean        =   1.272 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAStartFgd_Shower_Sigma       =   3.502 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAStartFgd_Track_Mean         =   0.579 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAStartFgd_Track_Sigma        =   2.399 >
+
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueFwd_Shower_Mean  =   1.571 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueFwd_Shower_Sigma =   3.872 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueBwd_Shower_Mean  =  -0.162 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueBwd_Shower_Sigma =   2.624 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueFwd_Track_Mean   =   0.069 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueFwd_Track_Sigma  =   2.873 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueBwd_Track_Mean   =   0.363 >
+ < highlandCorrections.ToF.ECal_FGD1_MC_HAEndFgd_TrueBwd_Track_Sigma  =   1.146 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAEndFgd_Shower_Mean        =   2.102 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAEndFgd_Shower_Sigma       =   3.830 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAEndFgd_Track_Mean         =  -0.187 >
+ < highlandCorrections.ToF.ECal_FGD1_Sand_HAEndFgd_Track_Sigma        =   4.235 >
+ 
+ < highlandCorrections.ToF.RandomSeed = 2267671 >
+
+

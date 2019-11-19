@@ -1,0 +1,143 @@
+/*! \page writingAndPerformingAnalyses Writing and Performing a Physics Analysis
+
+\brief A more detailed guide on the best way to use the nd280AnalysisTools package to perform user analyses.
+
+@section introduction Introduction
+
+This document should provide all the information necessary to use the nd280AnalysisTools package to perform user analyses.  If these notes are unclear please contact the package manager so that they can be improved.
+
+This guide will cover:
+
+	- Performing an analysis using Python
+	- Performing an analysis in C++
+
+To find out how to create new analysis tools and executables, please look at \ref creatingAnalysisTools and \ref analysisExecutables respectively.
+
+@section performingPythonAnalyses Performing a Python Analysis
+
+In order to run python analyses you must be using a version of ROOT that has had python enabled when it was compiled.
+
+To perform a user analysis using a python analysis script, the following commands should be used:
+@code
+cd /path/to/nd280AnalysisTools/vXrY/AnalysisTools;
+
+./runAnalysis.py -a path/to/python/analysis/code /path/to/anal/files/oa_*anal*.root
+@endcode
+You must make sure the '.py' extension of the analysis code is left off the path/to/python/analysis/code.
+
+@subsection writingPythonAnalyses Writing a Python Analysis
+
+To write an analysis in Python it is best to use <tt>exampleAnalysisScript.py</tt> as a template.  This demonstrate how to loop over an oaAnalysis output file and access the TClonesArrays of analysis objects stored in the various output trees. It also shows how to call an analysis tool from the AnalysisTools directory and how to use this tool.
+
+This code imports the userAnalysisBase module, which is explained in more detail below.
+
+@subsection userAnalysisBaseClass The userAnalysisBase Class
+
+The file <tt>macros/userAnalysisBase.py</tt> file contains \ref userAnalysisBase, a base class from which a user analysis can be derived.  This contains necessary methods for performing python analyses and should be imported to all user analysis code.
+
+It should be noted that class inheritance in python works differently to C++ -- all class members are effectively public and virtual, and there are no constructors or destructors, although <tt>__init__</tt> is very much like a constructor. The variable <tt>self</tt> is carried around a lot to access class members (a bit like an enforced version of the "fXXX" convention for class members in ROOT)
+
+The file is heavily documented using python's in-built doc strings.
+
+The following may help understand the features of the class:
+
+@subsubsection eventChain The Event Chain
+
+<tt>self.eventChain</tt> is a ROOT chain to which all the trees of interest are <tt>AddFriend</tt>ed.
+
+<tt>self.basicHeader</tt>, which is the tree saved by <tt>TBasicHeaderModule</tt> is the base for the event chain.
+
+@subsubsection listOfAnalysisSteps The List of Analysis Steps
+
+<tt>self.listOfAnalysisSteps</tt> is initiated with just a single entry "No Cuts", which should be added to in the derived function <tt>BookHistogramsAndAnalysisSteps</tt>:
+@code
+self.listOfAnalysisSteps.extend( # "No Cuts" is already defined
+                        ["Vertex", "Negative TPC Track", "FGD Pion"])
+@endcode
+
+@subsubsection listOfHistosAndOtherObjects List of Histos and Other Objects
+
+Histograms and other items which need to be saved in the output file are registed in <tt>BookHistogramsAndAnalysisSteps</tt> once they have been defined:
+@code
+        self.listOfHistosAndOtherObjects = [self.hNeutrinoEnergy,
+                self.hNeutrinoCCQEEnergy,
+                self.hCCQEEffVNeutrinoEnergy,
+                self.hMuonCCQEAngle,
+                self.hCCQEEffVsMuonAngle]
+@endcode
+
+@subsubsection cutCounters Cut Counters
+
+In many analyses, it is useful to have counters which keep track of the number of events which meet selection criteria or satisfy other conditions.
+
+<tt>userAnalysisBase</tt> has a registry of cut counters, where the counters are refered to by their names. Again, these are booked in <tt>BookHistogramsAndAnalysisSteps</tt>:
+@code
+        # Declare cut counters, which are accessed using their names
+        self.RegisterCutCounter("All Events")
+        self.RegisterCutCounter("True CCQE Events in Fiducial")
+@endcode
+
+@section performingCAnalyses Performing a C++ Analysis
+
+C++ analyses can be created, using the macros/exampleAnalysisScript.C as a template, and analysis tools included to provide access to the methods they contain.
+
+If you are using any analysis tools be sure to include the lines:
+@code
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include "path/to/analysis/tool/header.hxx"
+#endif
+@endcode
+
+Once the code is written it can be run in two ways:
+
+1) It can be run in CINT interpreter mode from a root session either by using environment variable expansion
+
+[root].x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C
+
+[root].L exampleAnalysisScript.C
+
+[root]exampleAnalysisScript("path/to/analysisfile.root", nevents);
+
+Where ${VARNAME} is using ROOT's environment variable expansion. This naming convention was included to facilitate multi-arch installs.
+
+You could avoid having to run .x oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C each time if running in CINT mode by adding the line:
+@code
+gROOT->ProcessLine(".x oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C;");
+@endcode
+at the beginning of this analysis script - if you do this you need to ensure it is not run when using ACLiC. See commented out code at beginning of the exampleAnalysisScript.C as example.
+
+2) Or as compiled code (using ACLiC) by appending a '+' sign to the .L command:
+
+[root].x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C
+
+[root].L exampleAnalysisScript.C+
+
+[root]exampleAnalysisScript("path/2/analysisfile.root", nevents);
+
+For a rapid development cycle you can stay in the same root session and do not have to repeat the first step when recompiling the analysis script to reflect any changes you have made. This works for CINT or ACLiC:
+
+[root].x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C
+
+[root].L exampleAnalysisScript.C+
+
+[root]exampleAnalysisScript("path/2/analysisfile.root", nevents);
+
+... make any changes to exampleAnalysisScript.C ...
+
+[root].L exampleAnalysisScript.C+;
+
+[root]exampleAnalysisScript("path/2/analysisfile.root", nevents);
+
+It is important to perform this command:
+
+[root].x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C
+
+so that the C++ code can access the oaAnalysis data correctly.
+
+It is important to remember, if you declare your TChain as a global object in the analysis code then it will not be deleted until you exit ROOT.  If you are running the same script multiple times from within ROOT then you may be adding the same TTrees repeatedly to the TChain.
+
+@section creatingAndCompiling Creating new analysis tools and compiling executables
+
+Details on creating new analysis tools or to compiling analysis executables can be found at \ref creatingAnalysisTools and \ref compilingAnalysisExecutables.
+
+*/

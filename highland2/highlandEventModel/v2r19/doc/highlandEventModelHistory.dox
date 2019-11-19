@@ -1,0 +1,212 @@
+/*! \page highland2/highlandEventModelHistory History for the highland2/highlandEventModel Package 
+
+\section highlandEventModel_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Sun Mar  6 17:36:19 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+major reorganization with new packages and  changes in event model class names
+
+- new package to contain extended event model. It depends only on psycheEventModel and nd280AnalysisTools
+- Versioning: version manager stuff moved to VersionManager in highlandCore
+- MomentumEnd (previously BackMomentum in tpc object) and PIDEmHip moved to BaseDataClasses, becouse they are needed for nue (to be checked)
+- AnaP0DParticle inherits from AnaParticleMomE as well
+
+
+
+\section highlandEventModel_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Wed May  4 19:15:25 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- for AnaECALParticle moved Length var into BaseDataClasses,  hence no need to depend on AnaSubTrack, 
+- only fill/copy the variables not present in BaseDataClasses
+- added Length variable for AnaTrack, needed for some tests
+- temporary use dynamic_cast to discriminate between AnaTrack and AnaParticle
+- SMRD EDeposit added
+- add new classes to P0DDataClasses_LinkDef.h, needed for MiniTree creation
+
+
+\section highlandEventModel_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:17:09 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+DataClasses:
+- DirectionStartFlip var moved here from the base class
+- DirectionStartFlip of AnaParticleE: moved out of conditional compilation
+  for the moment to work for prod-5
+- Add bools IsTruePrimaryPi0DecayPhoton and
+  IsTruePrimaryPi0DecayPhotonChild to AnaTrueParticle class, since
+  determining these properties after the fact is laborious.
+- Also, since categories must be derived from AnaTrueVertex information,
+  encoding this info here is more efficient.
+- N.B. the bools are currently only set true for pi0s created at
+  vertices in the FGDs or the P0D, this restriction may be removed.
+- The code to add the associated branches to the flattree will come in a
+  future commit.
+
+
+rootmap_setup.csh: add rootmap file for .csh. 
+
+
+\section highlandEventModel_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Aug 10 11:49:23 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!!
+
+- P0DDataClasses: AnaP0DBunch::P0DWaterStatus, AnaP0DParticle::Type, AnaP0DCluster::Moments
+- DataClasses: add RooVtxEntry and InputFileNameIndex to AnaSpill. Those variables and manily used for RooTrackerVtx links.
+  don't save InputFileIndex and RooVtxEntry spill members in the MiniTree for the moment since they produce a seg fault
+
+
+
+
+\section highlandEventModel_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:24:47 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- P0DDataClasses: Length now in AnaP0DParticleB, so I removed the inheritance from AnaSubTrack, which is just a container for length.
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+
+\section highlandEventModel_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 17:03:44 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+requirements 
+- use highland2/oaAnalysisReader instead of nd280AnalysisTools
+
+Versioning: 
+- use EQUALS_... instead BEAFORE_... when possible. Add info about each production from t2k.org
+- #include "AnalysisTools/libReadoaAnalysis/libReadoaAnalysisProjectHeaders.h"
+   -->  #include "oaAnalysisReaderProjectHeaders.h"
+- add PROD5D
+- added new special case:  VERSION_PROD6HI for prod6 TREx based iteration
+- nd280AnalysisTools --> oaAnalysisReader
+- remove ANATOOLS_FILE_VERSION and ANATOOLS_FILE_PROD5. 
+  The version will be always defined
+- added new stuff to treat the obsolete vars removed/changed from oaAnalysis
+ related to ECal lhood pid calculations and ttruthutils
+
+P0DDataClasses:
+- added OriginalP0D for momentum from range systematic
+
+
+
+\section highlandEventModel_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:29:17 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+DataClasses*:
+  - Adds P7Dev global ECal segment variables. Protected by preprocessor.
+
+*_LinkDef.h:
+  - Adds ROOT recommended pre-amble to stop over-dictionary generation.
+
+Versioning: 
+- Improve documentation about versions.
+- Define a new variable VERSION_HAS_NUMBER_OF_FITTED_CLUSTERS such that
+  we don't use VERSION_PROD... preprocessor variables outside Versionin.hxx.
+
+
+
+\section highlandEventModel_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 21:20:47 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+
+\section highlandEventModel_v2r17_history Version v2r17
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 16:04:56 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+DataClasses: 
+- AnaTrueVertex: changed the description of Proton and Pion kinematic vars
+  since the most energetic one is actually used
+- AnaTrigger: added a function to check whether a certain bit is set for CTM trigger pattern
+- added variables related to trigger and TripT CTM trigger info. Not saved into the MiniTree for the moment since it gives problems
+
+P0DDataClasses: 
+- Adding Cycle variable to AnaP0DCluster class
+
+
+
+\section highlandEventModel_v2r19_history Version v2r19
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 16:24:06 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+A new freeze
+Several cahnges
+
+DataClasses.hxx
+DataClasses.cxx
+Added a new class AnaHit that stores basic info
+added a possibility to have links for the corresponding true and reco objects
+has utils for storing/reading from mini-tree
+
+Add FgdHits array for AnaFgdTimeBin, 
+it owns the hits,  added utils for storing/reading hits from mini-tree
+
+Added CopyArrays(Vectors)IntoVectors(Arrays) for AnaSpill
+to call the proper methods for AnaFgdTimeBins
+
+Funcionality tested for mini-tree and it seems to work
+
+Adds PIDMipHip_VACut data member to global ECal track segments.
+
+
+
+Variables
+Int_t PrimaryID;
+bool IsTruePrimaryPi0DecayPhoton;
+bool IsTruePrimaryPi0DecayPhotonChild;
+moved to AnaTrueParticleB
+
+
+DataClasses_LinkDef.h 
+AnaHit class
+
+Versioning.hxx 
+/// P6 iteration with Vector to store the ID of the Trajectory that created the
+//hit in FGD1
+#define VERSION_HAS_FGD_HIT_TRUE_TRAJ_ID (!BEFORE_ANATOOLS_FILE(11, 31, 3))
+
+/// P6 files have or to store information for single hits in FgdTimeBin
+#define VERSION_HAS_FGD_HIT_INFO (!BEFORE_ANATOOLS_FILE(11, 17, 0))))
+
+
+
+
+
+*/

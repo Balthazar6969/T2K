@@ -1,0 +1,27 @@
+Sam Short (s.short@qmul.ac.uk)
+
+Some notes if you're wanting to use the macros in this directory.
+
+MAKECLASS:
+* You will need to make a MakeClass for the files you're using (as I suspect they will be difference in some way to the ones I used).
+* Replace instances of NumuCCFGD2BackwardVertexMigrationMakeClass with the name of your class.
+
+FLUX TUNING:
+* If you want to apply flux tuning, you will need to download the most up to date version from t2k.org
+* In the file FluxTuning.C you will need to:
+  - Update the std::string location with the location of the flux tuning you just downloaded
+  - Specify the run period. I just used run2, but you might need to add some more options and point to the relevant histograms
+
+FIT MACRO:
+* You will need to change the std::string path variable to point to the location of your highland2 output files
+* There are multiple fit options (to compare different runs/files) - you will need to implement your own and change the file name
+* You will need to update the MakeClass name
+
+RUNNING THE MACRO:
+* The macro creates or appends to a fit_results.txt file, you might want to delete this before performing a new fit
+* To run in a root session, do:
+  > root -b
+  root [0] .L NumuCCFGD2BackwardVertexMigrationMakeClass.C
+  root [1] .L FluxTuning.C 
+  root [2] .L fit_vertex_backward_migrations.C
+  root [3] fit(option_number) // option_number corresponds to the files you want to use to perform the fit

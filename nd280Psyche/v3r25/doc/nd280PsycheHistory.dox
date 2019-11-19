@@ -1,0 +1,802 @@
+/*! \page nd280PsycheHistory History for the nd280Psyche Package 
+
+\section nd280Psyche_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Wed Sep 17 11:59:13 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze nd280Psyche so that it points to the frozen versions of the psyche packages
+
+This is the first stable freeze of the psyche software
+
+\section nd280Psyche_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Fri Sep 26 15:44:26 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of nd280Psyche to address bugfixes and improvements to the psyche packages
+
+\section nd280Psyche_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Sat Oct  4 16:58:33 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche to incorporate the recent bug fixes and improvements
+
+A few speed improvements - adding flags for things that don't need to be calculated multiple times, and more efficient algorithm for checking the TPC multiplicity
+Fixed bugs in event selection and systematics code
+Highland2 and psyche now use the same flat tree converter code
+
+\section nd280Psyche_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Nov  7 01:32:26 2014
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+This version of psyche is giving good results with respect to what is obtained in highland and the old BANFFinterface for systematics
+Few changes have been done in respect.
+
+- Correct a number of classes in psycheUtils, so that proper systematic propagation can be done
+- Correct psycheIO against some little bugs
+- Modify way events are deleted
+
+
+
+\section nd280Psyche_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Mon Nov 17 12:46:53 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Near final freeze of the psyche interface.  This freeze	captures the psyche systematics and selections,	whose results have been validated.
+
+Many bug corrections for event systematics - highland, highland2 and psyche are now giving the same results for all systematics when applying the numu multi-pion selection.
+
+There is still an issue with the anti-neutrino systematics, but that will be fixed in the next freeze along with the move to variable sized arrays.
+
+\section nd280Psyche_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Fri Nov 28 18:37:25 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+
+Freeze of nd280Psyche in order to produce 'first-pass' production 6 inputs for the BANFF fitters.
+
+nd280Psyche is now using:
+
+psycheCore         v1r11
+psycheUtils        v1r11
+psycheIO           v1r9
+psycheSelections   v1r11
+psycheSystematics  v1r11
+psycheSteering     v1r13p1
+
+\section nd280Psyche_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Tue Dec  9 20:14:56 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Final freeze of the psyche framework for the winter oscillation analysis.  Psyche now contains validated selections, variation systematics and weight systematics for the production 6 FGD1 neutrino mode (forward horn current) and anti-neutrino mode (reverse horn current) selections.
+
+Big changes since the last freeze: 
+
+    - Many, many bug fixes 
+    - Run by run flux weighting, for the 11b and 13a flux tuning
+    - Addition of selection validity ranges, so we don't apply anti-neutrino 
+      selections to neutrino data and MC.  Controlled by a comma separated 
+      string in the psycheSteering parameter file
+    - OSX/Darwin headers
+    - Nominal bunch timing for run 5
+    - Memory leak fixes
+    - Information for pion SI systematic not computed if systematic is 
+      disabled - events preload 30 times faster without pion SI
+    - Updated systematics tables
+    - Ability to run production 5 style selection and systematics as well as 
+      production 6 - flags in the parameter files
+
+\section nd280Psyche_v1r15_history Version v1r15
+
+Freeze information:
+   - Freeze Date: Tue Dec 23 00:09:16 2014
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+Correct few memory leaks,
+Correct important bug with consequence on SIPION systematics, PositonEnd and ParendID were not filled for the AnaTrueTrackB
+
+
+
+\section nd280Psyche_v1r17_history Version v1r17
+
+Freeze information:
+   - Freeze Date: Wed Jan  7 14:48:54 2015
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Update nd280Psyche to capture the new frozen version of psycheSteering.
+
+This will be the final version of psyche used for the winter oscillation analysis.
+
+\section nd280Psyche_v1r19_history Version v1r19
+
+Freeze information:
+   - Freeze Date: Thu Jan  8 17:37:35 2015
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+
+
+\section nd280Psyche_v1r21_history Version v1r21
+
+Freeze information:
+   - Freeze Date: Mon Jan 26 09:39:23 2015
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+Freeze of psyche in order to be compatible with highland2 changes. Needed for the collaboration meeting to allow highland2 to work with more analyses than just FGD NuMu, but not fully tested with respect to the oscillation input samples.  Everything appears OK, but this freeze should not used for near detector fitting.
+
+\section nd280Psyche_v1r23_history Version v1r23
+
+Freeze information:
+   - Freeze Date: Wed Feb 18 10:23:13 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+
+Some changes in psycheSystematics:
+- MomentumResol, ChargeID, TPCFGDMatch, TPCPID
+psycheSelections:
+ - numuCCQE: Correct bug related with the usage of IgnoreRightECAL correction
+ - nueCCSelection: Substantial change everywhere!! Almost fully validated 
+ - fgd2CCSelection: add and use a NewExternalVetoCut in order to avoid events passing both FGD1 and FGD2 selections
+psycheUtils:
+- store the p6-era data detector definitions for tracker ecal they differ from the MC ones up-to ~3-4 cm. 
+  Take them into account in the GeometryManager
+
+
+\section nd280Psyche_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 19:42:26 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes 
+to allow selection depending systematics, and performance optimization. 
+
+This includes: 
+ - New methods in Selections to tune the systematics
+ - A new definition of boxes to make the code faster and allow selection dependent systematics
+    ToyBoxB: Previously called AnaBox, with more variables. It is toy dependent
+    EventBoxB: allows saving objects that are valid for all toys in the same event
+    SystBoxB: To save the relevant tracks and true tracks for each systematic, depending on the selection
+ - Preselection cuts t make the code faster
+ - Option to not redo the selection, when variations do not change the relevant cuts behaviour.
+ - A better way of treating selections in different detectors (FGD1, FGD2, etc)
+ - Add all relevant selections for FGD2
+
+All selections and systematics give the exact same results for FGD1 and FGD2 as in the patched version (v0r21p1 and v1r23p1) except:
+ - MomentumResoluton and BField which are slightly different due to a bug now corrected
+ - antiNumu gives different systematic results for FGD2. To be understood, but notice that this selection was not in psyche previously 
+
+
+\section nd280Psyche_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 17:36:33 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Correct many bugs, specially related with FlatTree-oaAnalysis and improve EventBox functionality
+
+- temporary solution to make SIPion work with event preloading. Make Initialize and FinalizeEvent methods virtual
+- correct important memory leak introduced in previous release. Must delete the arrays created within the steps
+- proper treatment of indices for variation systematics. Worked for the default systematics but not for the ones added by the user
+- deal with -250 KA current for antinu
+- the task of creating the EventBox is given to each Selection. This does not mean that there will be an EventBox per selection, 
+  but there could be several boxes. They are created and filled in the InitializeEvent method of the selection
+  Add another level of abstraction in the EventBox. The base class EventBox contains only TracksInGroup and TrueTracksInGroup. 
+  The user should inherit from it. The AnaEventB has now an array of EventBoxes, which are added by index
+- make nomenclature constistent for antinu selection, now all the files are called MultiPi for antinu, 
+- FGD2 selection modified to be exclusive with respect to the anti-nu selection in FGD1
+- move numuCC backward selection to psyche
+- Properly deal with the EventBox, which must be created now in the InitializeEvnet method of the selections
+- Reuse more methods from other selections
+- Set the preselection accum level to 2 for all selections. That means that only one toy will be run when the 
+  quality_fiducial cut is not passed
+- now that systematics and selections are validated we can start using IsRelevantSystematic to avoid 
+ switching them off manualy in the parameters file
+- OOFVFGD2_p5F.dat  was missing
+- MomResol, BField, TPCClusterEff, TPCTrackEff, TPCFGDMatch and ChargeID where giving different results in oaAnalysis and FlatTrees because 
+  they were using explicitely TPCSegments and FGDSegments with a particular index, assuming ordering is the same in FlatTrees and oaAnalysis. 
+  Also we have to deal with the problem of several segments in the same detector 
+
+
+
+\section nd280Psyche_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 20:48:13 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Many changes, most of them related with new functionality:
+ - MiniTree
+ - Systematics tunning
+ - Automatic geometry
+ - PerSpill POT
+ - etc
+
+psychePolicy: 
+- new package able to provide compiler rules generally for psyche/highland2,
+
+psycheCore: infraestructure for new functionality
+
+psycheUtils: main changes
+- put other method for weight syst where we take directly the data/MC differences into accout
+- Automatic geomtry loading from input file. Switched off y default
+
+psycheIO: 
+  - Add New MiniTreeConverter, the same for highland2 and psyche
+
+psycheSelections:
+ - Use new systematic tunning functionality, specially the one that allows tunning in a per toy bases  
+   (IsRelevant...TrackForSystematicInToy). Add syetamtic tunning for SIProton, SIPion, TPCTrackEff and Charge ID, 
+   all of them switched off by default. 
+
+psycheSystematics: All systematics OK againt patch except TPCTrackEff which needs some modifications and ChargeID, who gives slighly different results
+- first version of momentum by range (muon) resolution systematics: is applied for FGD1(2)nonTPC objects
+- first verion of Proton SI
+- Import from the patch psycheSystematics v1r23p7 the new way for eff-like systematics (useNewWeights)
+- Systematic tunning for TPCTrackEffm SIPion and ChargeIDEff, disabled by default
+
+psycheSteering: not yet working with multithreading
+- adapt for MiniTreeReading
+
+
+\section nd280Psyche_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 15:44:23 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- Solve several problems related to the MiniTree (bug 1124) including memory leaks and linking between objects
+- Make it work with event preloading
+- Update OOFVSystematics and  TPCTrackEffSystematics to new methods used in the patched version. 
+  Results are now identical
+- Flux tuning: correctly handle Run 6 flux tunings. update to new files from http://www.t2k.org/beam/NuFlux/FluxRelease/13arelease/tunedflux13av1.1_june
+
+GeometryManager, DetectorDefinition:
+- TPC volumes for the moment are overall envelopes,  not only the drift ones,  this is to be "consistent" with the assumptions 
+  made for the current OOFV studies,  although the overall concept should be reviewed (however the current TPC volumes differ slightly w.r.t. to the previous ones so 
+  not to intersect with the rest of the detectors)
+- new volume,  overall FGD/TPC tacker envelope, including there dead volumes
+  may be useful for OOFV checks
+
+
+\section nd280Psyche_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Sat Aug  1 14:28:05 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- Performace improvements with the new CheckRedoSelection method, enabled now by default for the first time.
+  It gives the same results but selections run much faster. 
+- Update systematic propagation to official patched version
+- Several bugs solved, including small memory leaks
+
+
+\section nd280Psyche_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 18:59:31 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+psycheCore: 
+- Many bugs corrected 1175, 1179, 1169, 1181, 1087  (1087 and 1075 waiting for confirmation)
+- Selection validation introduced
+
+psycheIO: 
+- solve bug 1167 releated with finding the right entry in the RooTrackerVtx tree
+
+psycheSelections:
+- adapt to new selection validation: two steps cannot have same title in the same branch
+
+psycheSystematics: 
+- added ToF resolution systematics,  
+
+psycheUtils:
+- split EventBoxB::GroupEnum into TrackGroupEnum and TrueTrackGroupEnum
+- Update run number -> run enumeration code to handle the full Run 6 MC file set
+
+psycheSteering:  
+- use in all applications  ND::params().SetReadParamOverrideFilePointPassed() such that it does not complain when reading parameters
+- a little README on how to use ApplyBANFFTuning 
+
+
+
+\section nd280Psyche_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 12:48:10 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+
+SUMMARY:
+- Many improvements in ECAL and P0D related systematics
+- ToFSenseCorrector: moved here from hihglandUtils. Many improvements
+- Variables for 4pi analysis added
+- Modifications in numuCCMultiPiSelection
+- New way of initializing selections. Still to be improved !!!!
+- Functionality to load all parameters files following the package hierarchy, 
+  such that the top level package is read first and its parameters are fixed
+
+psychePolicy: 
+- Improvements related with doxygen documentation treatment
+
+psycheCore: 
+- Selections: Add Initialize method which calls DefineSteps, DefineDetectorFV and Validate. 
+  This method is called by the SelectionManager when adding a selection and also by the CopySteps methods of the selection. 
+  In this way selections must not call anything in their constructor, which can be sometimes forgotten
+- Add method to read all parameters file from a list of packages
+  void LoadParametersFiles(const std::vector<std::string>& packageNames, bool fixed=false)
+- new vars for AnaTrackB relevant for 4pi analysis: MomentumFlip, DirectioEnd and DirectionStartFlip
+
+psycheSelections:
+- numuCCMultiPiSelection: Add the Ecal pi0 veto + change the CCOther branch. 
+  Remove the propagation of the track to avoid adding extra variables into psyche (only affects prod5)
+- All selections: Implement the new DefineDetectorFV mandatory method
+  don't call explicitelly the DefineSteps and DefineDetectorFV from the constructors. 
+- temporarily initialize the selections being used in the constructor. This is because those selections are using the other selections but not to copy steps
+ and therefore the selection being used is not initialised. WE NEED A BETTER WAY OF DOING THIS !!!
+
+psycheSystematics: 
+- GetRelevant...TrackGroups takes now a branch number as argument as well. Only for weight systematics. 
+- For variation systematics In the GetRelevantTrackGroups loop over all branches to account for posible different FV
+- use the "new" (well,  correct) way to get the systematics uncertainty, data-vs-mc difference is included into the systematics error as well
+- get rid of shallow copying of SystematicSource which was not actually implemented and the code was a potential subject of bugs
+- Many improvements in ECAL and P0D related systematics
+
+psycheUtils:
+- ToFSenseCorrector: moved here from hihglandUtils. Many improvements
+- add new method std::vector<std::string> anaUtils::GetPackageHierarchy()
+  which returns a vector of package names extracted from the PATH environment variable. 
+  Related to bug 1226
+- add GetNTargets (aka CalculateNumberOfTargets) and GetAreaFV and GetNucleonsPerNucleus, addressing bug 1188
+  (temporarily in psyche, will go in highland after reorganization)
+
+
+\section nd280Psyche_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 14:45:56 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Increase development version number to v3 before major reorganization
+
+psycheSelections:
+- numuCCFGD2Selection: to be consistent with FGD1 selection (in terms of how the systematics are applied)
+  added IsRelevant...InToy() methods (they call FGD1` ones at the moment)
+
+psycheSystematics: 
+- Changes in TPCECalMatchEff.dat, TPCClusterEffSystematics, TPCFGDMatchEffSystematics, ECalTrackEffSystematics, ECalPIDSystematics, 
+  TPCECalMatchEffSystematics, ECalPID.dat, TPCTrackEff_p6B.dat: 
+
+psycheUtils:
+- DetectorDefinition and FiducialVolumeDefinition: fix FGDs FV on layers border, as of bug 1244. Update default p0d fv to one in tn-73
+- EventBoxUtils: corrected a stupid typo so to fix bug 1260  
+- SecondaryInteractionSystematic: a new class to be the base one for various SI systematics:
+  for the moment proton and kaon SI will inherit from it. 
+
+
+
+\section nd280Psyche_v3r1_history Version v3r1
+
+Freeze information:
+   - Freeze Date: Tue Mar  8 11:10:40 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+Major reorganization 
+
+- Two new packages: psycheEventModel and psycheND280Utils
+  - psycheCore is split in psycheCore and psycheEventModel
+  - psycheUtils is split in psycheUtils and psycheNd280Utils
+
+- Changes in class names:
+  - AnaTrackB --> AnaParticleB
+  - AnaTrueTrackB --> AnaTrueParticleB
+- remove tracker specific stuff from the ToyBoxB
+- Add new level of inheritance AnaTrueObjectC and AnaRecObjectC such that 
+ systematic tunning can work with objects other than tracks (particles), as 
+ hits, vertices, clusters, etc.
+- Very simple CoreDataClasses (with suffix C, ie. AnaEventC), needed by the machinery are introduced. 
+ In this way the machinery can be independent of the event model. 
+- Id enums and BaseDataClasses moved to a new package psycheEventModel
+- Also substitute enums used for Ids (SystId, EventBoxId, SampleId, SubDetId) by a typedef (to an integer for the moment), 
+ with similar name (SystId_h, EventBocId_h, where h stands for highland) such that they can be easily extended.
+- The selection has now a member _eventBoxId that must be filled. Otherwise the selection validation fails
+- started removing corrections from the variation-like systematics, make them of .._NMEAN types, 
+ got rid of the usage of the mean value. MomentumResolSystematics pending
+- RedoTreeConverter prepared to allow FlatTreeConverter inheritance
+
+
+
+
+\section nd280Psyche_v3r3_history Version v3r3
+
+Freeze information:
+   - Freeze Date: Mon Apr 11 16:50:20 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Freeze for BANFF development
+
+Changes in psycheCore that affect implementation in most packages: 
+- Add new Apply methods taking a ToyExperiment as input and not a ToyVariation. The idea is that the systematic deals internally with the appropriate parameters 
+ from the ToyExperiment. The ToyExperiment is just a collection of parameters defining the experimental setup, organized in groups, a group for each systematic
+- Weights and Variations have been generalised such that the can be used not only for systematics. Then the relevant classes have been renamed: 
+ SystematicWeightBase    --> EventWeightBase
+ SystematicVariationBase --> EventVariationBase
+- The return type of the EventWeightBase::Apply is now Weight_h which is used as typedef in WeightType.
+ WeightType currently has a Systematic (mean + variation) and a Correction (mean only)
+- EventWeightBase: Apply --> ComputeWeight
+- Add separate managers for EventWeights and EventVariations since those objects are more general than systematics.
+- BinnedData --> BinnesParams to avoid confusion (data vs MC)
+
+New selections and systematics
+- Add nue, antinue and gamma selections and systematics. Also utility related methods
+
+Some changes in the systematics: 
+- TPCTrackEffSystematics: Added line to apply TPC track eff systematic to P0D selections. Will have no effect on FGD selections.
+- TPCTrackEff_p6B.dat:  use 0.009 as lower error for data eff in TPC3, as suggested in https://bugzilla.nd280.org/show_bug.cgi?id=1258
+- ToFResolSystematics: minor,  get rid of the possibility to apply a correction through the systemaic
+
+
+
+\section nd280Psyche_v3r5_history Version v3r5
+
+Freeze information:
+   - Freeze Date: Thu May  5 16:31:49 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+
+MAINLY CORRECT BUGS IN MACHINERY. ALSO NEW FUNCTIONALITY IN SYSTEMATICS AND SELECTIONS
+
+psycheIO
+- change all static variables by data members (bug 1307)
+
+psycheCore
+- InputManager.cxx: clear the vector of converters after deleting them (bug 1306)
+- correct potential bug in WeightType constructor: give the correction as first argument and the systematic as second argument
+
+psycheEventModel: use dynamic_cast instead of static_cast in conversions from AnaParticleB to AnaTrackB since P0D objects are not AnaTracks. 
+    This affects only MiniTree reading
+
+psycheSelections: protonSI in numuCC and antiNumuCC
+psycheUtils: 
+- SystematicUtils: take as error the maximum between the lower and the upper error (bug 1257)
+- Utilities to calculate the reconstructed neutrino direction and the transeverse kinematics moved from highlandUtils (bug 1247) 
+
+psycheND280Utils:
+- ND280AnalysisUtils: Update GetRunPeriod which now takes an optional subrun argument (bug 1282)
+- nueCCUtils: Use Box utilities instead of GetAllTracks calls (bug 1224)
+
+psycheSteering: remove obsolete CCQE stuff, which was removed from psycheSelections
+
+psycheSystematics:
+- TPCP0DMatchEffSystematics FGD-ECal/SMRD matching : use fine-tuning (IsRelevant...)
+- TPCClusterEffSystematics, TPCFGDMatchEffSystematics: correct bug, correction should be given as first argument to Weight_h
+- ChargeIDEffSystematics: correct bug 1278
+- FluxWeightSystematics: Use ToyBoxND280, which is common for P0D and Tracker
+- TPCTrackEffSystematics:  correct bug 1262#c3
+
+
+\section nd280Psyche_v3r7_history Version v3r7
+
+Freeze information:
+   - Freeze Date: Sun Jun 12 23:34:17 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+Many bugs corrected: 1247, 1260, 1263, 1278, 1301, 1312, 1321, 1323, 1328
+Main chainges are: 
+- bug in SubRun reading from FlatTrees
+- bug in GetIsMC() that resulting in isMC=true for data
+- First version of the 4pi selection in psyche
+- many improvenments in nue, antiNue and gamma selections
+- renaming of numuBkg selections
+- BunchPosition.dat:  New temporary Bunch timing to include the first Run 7 data. 
+
+------------------------------------
+psycheIO: in RedoTreeConverter main changes: 
+- filled all the relevant vars of the AnaTrackB here: RangeMomentumMuon, MomentumFlip, NNodes, DirectionEnd
+- got rid of the hack to deal with a possible Double_t input 
+- the correct variable for Float_t FlatTrees is sSubRun and not sSubrun
+
+psycheCore: Solve few bugs, and other changes not affecting general machinery. Main changes are 
+- SelectionBase: don't do any thing related to event statistics  in MULTITHREAD mode. Proper initialization of event statistics
+- CoreDataClasses:  make Clone and GetIsMC methods pure visrtual in AnaEventC. 
+  GetIsMC was returning always true and the method was not virtual. This is why weights were applied to data files
+
+psycheEventModel:
+- BaseDataClasses: DirectionStartFlip var moved to highland2, implement GetEventInfoString
+- SampleId: added samples for multi-pi selection for anti-nu CC  and  numu CC bkg  in anti-nu mode
+           differentiate between antinumu/numuCCBkgInAntiNu multi-track and multi-pi samples
+
+psycheSelections: 
+- numuCC4piSelection: First version of the 4pi selection in psyche
+- nue, antiNue and gamma: Update the systematics implementation. Add temporary functions to save some extra variables to further check the veto cuts. Some further fine tuning of the systematics.
+- antiNumuCCSelection: IsRelevantSystematic() - fixed a typo so that systematics are actually applied
+ IsRelevantTrueObjectForSystematicInToy() -- consider separately TpcTrackEff (since anti-muon is needed) and 
+ ProtonSI (was already there),  for the rest use numuCCSelection
+- all basic selections: box.TrueVertex must be assigned, otherwise the FluxSystematic does not work. 
+- antiNumu, numuBkg: global re-naming: old 1/N-track selection are now named MiltiTrack, the proper MultiPi ones will be added later (dummy for the moment) 
+- numuCCSelection: in  IsRelevantSystematic all of them are (that actually are) relevant: fine-tuning for pion/proton SI comes later
+- re-naming: APPLY_MAINTRACK --> APPLY_SYST_FINE_TUNING (the action is in reality more general)
+- nueCCSelection: FillTPCVetoTrackAction::Apply() the proper size of nTracks array is 3
+
+psycheUtils: 
+- AnalysisUtils: Add missing unistd.h include, required for call to getcwd() (on OS X 10.11.4)
+- psycheUtils.parameters.dat: relevant params moved to psycheND280Utils
+- KinematicsUtils: add methods to get particle mass and compute Beta and BetaGamma
+
+psycheND280Utils:
+- PionCrossSections.cxx Implement fix for https://bugzilla.nd280.org/show_bug.cgi?id=1301 as suggested there. 
+- nueCCUtils: many changes
+- SecondaryInteractionSystematic: global re-view
+- psycheND280Utils.parameters.dat: store nd280-related params here
+- BunchPosition.dat:  New temporary Bunch timing to include the first Run 7 data. 
+- MomentumResolVariation: started adding an ability to do pure tpc based mom variation
+   various new methods to smear TPC local momentum and then propagate to global
+   propagate the smearing to the flip momentum as well!
+- ContituentsUtils methods methods related ith the mass component and the Fgd module type take now "bool IsMC" as argument, and not event, since event is not avaiable 
+   in FillTruthTree 
+
+psycheSteering: 
+- Added the 4pi Multipions selection
+- antiNumuCC and numuCCBkg: old 1/N-track selection are now named MiltiTrack
+ the proper MultiPi ones will be added later (dummy for the moment)))
+
+psycheSystematics: main changes
+- ECalEMEnergyScale.dat, TPCECalMatchEff.dat, ECalTrackEff.dat, TPCECalMatchEffSystematics.cxx: Update some of the ecal systematics based on the new numbers from TN-279
+- MomentumResolSystematics: Use general MomentumResolVariation class
+ able to switch between standard (ON) way of propagating the syst and
+ the new TPC based. systematics is applied to the momentum flip as well. 
+ Correction part is removed from the systematics (highlandCorrections takes care)
+
+
+
+\section nd280Psyche_v3r9_history Version v3r9
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 13:40:52 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+Summer release !!!!
+
+few Minor changes in most packages except in psycheSelections and psycheSystematics, where a lot of new funcytionality has been added.  
+See freeze messages of individual packages for details
+
+
+
+\section nd280Psyche_v3r11_history Version v3r11
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:57:57 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Minor changes in most packages except the ones related with the migration of tracker-based P0D analyses to psyche.
+See freeze messages for detailed description of changes in each package
+
+
+
+\section nd280Psyche_v3r13_history Version v3r13
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 12:28:15 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- correct memory leak in ResizeArray
+- started general cleanup/coding optimizaiton
+  template all the Copy/Resreve/Resize/CreateArray methods, 
+  keep only those that are type specific (e.g. provide some default as a parameter)
+- added ECAL variables in RedoTreeConverter
+- Improvements in many systematics
+- new systematic: MomBiasFromVertexMigration
+- Correct several bugs in numuCCMultiPiSelection, and changes in many other selections, specially nue related
+- add rootmap stuff in psycheND280Utils such that psycheND280Tools is visible from a root session
+
+
+Details in freeze message of specific packages
+
+
+\section nd280Psyche_v3r15_history Version v3r15
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 17:10:48 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+Minor changes in most packages
+
+- psycheND280AnalysisTools: fix number of targets for water modules
+- psycheSelections: accept events below 200 MeV in nue related selections
+- psycheSystematics: TPC PID should also include electrons with p < 200. For now, this is the same as the next bin (200-400).
+- psycheUtils: Add methods to deal directly with AnaParticleB without any casting. The methods with tracks should be removed at some point.
+  This tries to address bug 1397
+
+
+
+\section nd280Psyche_v3r17_history Version v3r17
+
+Freeze information:
+   - Freeze Date: Mon Jan  9 09:32:45 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Christmas freeze
+
+- psycheCore: some simplification/reorganization in SelectionBase and Step base to allow implementation of Delete, Replace and Insert Step methods
+- psycheEventModel: remove methods that were deprecated for a while
+- psycheUtils: Mainly try to address bug 1152, about indexing params in systematics
+- psycheND280AnalysisTools: first version of alternative true michel electron counter (bug 1273). Update runid for Run7 data. MC is not yet updated as there is no Run7 MC available.
+- psycheSelections: in trackerSelectionUtils mark FindLeadingTracksOld as deprecated 
+- psycheSystematics: address bug 1152 for many systematics. In TPCECalMatchEffSystematics replace track->Momentum with track->MomentumEnd (bug 1361)
+  In MichelElectronEffSystematics fix a typo to use proper indices when applying weights, the ones with offsets
+
+
+
+\section nd280Psyche_v3r19_history Version v3r19
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 23:30:02 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Main changes:
+
+- psycheSelections: changes only in nue/gamma selections, mainly simplifications. Also vetoes added to gamma selection
+- psycheND280Utils: many changes, including improvements in Flux weight treatment, that now is controled from there.
+                    Add latest flux files from july 2016, including run7, at tuned13av1.1_july2016
+- psycheSystematics: in FGDECalMatchEffSystematics, MomRangeResolSystematics Try to address bug 1197
+                     using the new groups kTracksWithFGD1AndTECALInFGD1FV and kTracksWithFGD2AndTECALInFGD2FV
+- psycheSteering: centralise the  Flux file parameters in psycheND280Utils
+
+
+
+\section nd280Psyche_v3r21_history Version v3r21
+
+Freeze information:
+   - Freeze Date: Thu Mar  2 10:47:28 2017
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+pyscheCore:
+ - SelectionBase: for the fitters related methods: FillEventSummary() and GetSampleId(),
+   make them "pure virtual" for the moment to force the selections aimed to be used by fitters to implement them
+   Although should be careful with the design since:
+   InitializeEvent(),  DefineDetectorFV(),
+   FillEventSummary() and GetSampleId() do not seem to be mandatory
+   to organize/develop a general selection (e.g. in highland)
+- many more changes (look at the package freeze message)
+
+psycheIO:
+- RedoTreeConverter: move dealing with AnaTrigger vars (FGD/TtipT cosmics trigger)
+  into highlandIO,  a proper cleanup to split psyche/highland2 vars is still
+  pending
+
+psycheUtils:
+- new method anaUtils::GetAllTracksUsingOnlyDetFromList()
+
+psycheND280Utils:
+- add latest flux files from july 2016, including run7
+- centralise the selection of Flux parameters here
+- unify multi-pi selections by putting the cuts in CutUtils
+- many more changes (look at the package freeze message)
+
+psycheSelections:
+- All selections: Use the proper method to be overloaded from the SelectionBase
+  to retrieve the SampleId:
+  SampleId_h GetSampleId() instead of SampleId::SampleEnum GetSampleEnum()
+- All MultiPi Selections: multi-pi unification with the usage of general cuts from CutUtils
+- many more changes (look at the package freeze message)
+
+psycheSystematics
+- centralise the  Flux file parameters in psycheND280Utils
+- ECalPID.dat, ECal_EMHIPPID.dat; Fix typos in the Ecal PID systematics.
+- ToFResolution.dat: Errors obtained comparing ToF between NEUT-6B and RDP-6K
+
+psycheSteering:
+- Now listen to the parameter file for systematics (bug 1437)
+- centralise the  Flux file parameters in psycheND280Utils
+
+
+
+\section nd280Psyche_v3r23_history Version v3r23
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 15:16:47 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An intermediate freeze of psyche with the main goal to test systematics tuning for NuMu
+> use psycheCore        v3r21   psyche
+> use psycheEventModel  v3r21   psyche
+> use psycheUtils       v3r21   psyche 
+> use psycheND280Utils  v3r23   psyche
+> use psycheIO          v3r17   psyche
+> use psycheSelections  v3r23   psyche
+> use psycheSystematics v3r23   psyche
+> use psycheSteering    v3r17   psyche
+
+
+\section nd280Psyche_v3r25_history Version v3r25
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 19:41:37 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+
+A bug was fixed in psycheSelections and hence the new release of the package was issued.
+
+So updated also the umbrella package,
+go with the full freeze since this will be a base version for systematics fine-tuning
+
+The list of packages is as follows
+use psychePolicy      v3r1    psyche
+use psycheCore        v3r21   psyche
+use psycheEventModel  v3r21   psyche
+use psycheUtils       v3r21   psyche 
+use psycheND280Utils  v3r23   psyche
+use psycheIO          v3r17   psyche
+use psycheSelections  v3r25   psyche
+use psycheSystematics v3r23   psyche
+use psycheSteering    v3r17   psyche
+
+
+
+*/

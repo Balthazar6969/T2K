@@ -1,0 +1,847 @@
+/*! \page psyche/psycheSystematicsHistory History for the psyche/psycheSystematics Package 
+
+\section psycheSystematics_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Fri May 30 18:38:20 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+Initial freeze. It includes most of the systematics for prod5 tracker analyses. 
+Latest changes in highland still need to be imported
+
+
+
+
+\section psycheSystematics_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Wed Jul  2 16:07:40 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+An interim freeze of the psyche framework after significant changes to boost
+performance, add necessary functionality and fix bugs.  The following list of
+changes in non-exhaustive and may have missed some changes:
+
+Increased functionality:
+
+    - Initial NuE CC selection added (not yet running or validated)
+    - Ability to apply flux weight systematics
+    - Ability to apply a single weight systematic
+    - 'Efficiency-like' weight systematics now use the new method from
+      highland
+    - A new SystematicSourceParams class to store the systematic source
+      parameters for a given event
+
+Performance enhancement:
+
+    - Each event now stores a systematics class, SystBoxB, to hold pointers to
+      objects used to calculate systematics.  The InitiliseEventSystematics()
+      method is now called automatically when reading the input file, so the
+      analyser does not need to do this anymore.  This allows the analyser to
+      loop over all the events then all the systematics, or over the
+      systematics then all the events with no impact on the code speed
+    - Psyche now uses arrays to store objects wherever possible, rather than
+      vectors, since arrays have less memory and processing overhead
+    - Unification of detector enumeration: All objects now use the same
+      detector enumeration
+    - DetectorUsed variable now stored as a bitfield, allowing us to use
+      bit-level operations to determine which detectors an object does or does
+      not use
+    - Rationalisation of the utility methods: 
+        - All methods require a detector enumeration as an argument rather than a string
+        - Logic of loops in methods improved to increase efficiency
+        - Use of switch/case statements instead of multiple if/else if 
+        - New, fast methods written for commonly required functions
+
+\section psycheSystematics_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Mon Jul  7 15:40:34 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+This freeze adds variables to the psyche AnaEventB class that are necessary for	the BANFF and MaCH3 analyses, and also fixes a bug in one of the selection cuts.  It also turns on the correct branches of the input tree to ensure that the necessary variables are read out correctly.  Finally, the true <-> reco vertex association is made more robust, since a bug in the code before allowed the reco vertices and their associated truth vertices to get out of step with one another.
+
+
+\section psycheSystematics_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Thu Aug 28 05:06:11 2014
+   - Freeze User: markscott
+   - Freeze Host: markscott-Lenovo-IdeaPad-Y510P
+
+
+
+Near final freeze of psyche, with almost all essential features present and working
+
+Major changes:
+
+Change all std::vectors to arrays - factor of 2 faster
+
+Correct systematics box initialisation - do it after creating the Event(the thing we vary) from the RawEvent(the original event that is not varied)
+
+Fix application of selections - remove memory leaks and increase speed
+
+Correct calculation of POT - calculate MC-Data POT ratio for all files in each sample
+
+Load all input files at start, rather than sequentially
+
+
+\section psycheSystematics_v0r9_history Version v0r9
+
+Freeze information:
+   - Freeze Date: Wed Sep  3 18:33:42 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche to address the bugs in the systematics code
+
+All systematics are now running and appear to produce reasonable weights
+
+These still need to be optimised for speed, but all appear to be thread safe
+
+This freeze should allow the fitters to use psyche successfully
+
+
+\section psycheSystematics_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Wed Sep 17 11:14:32 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+First stable, validated freeze of psyche - the interface between near detector event samples and the fitters.
+
+Changes since last freeze:
+
+        Validation of systematics - systematics for the	NuMu selections now return the approximately the same weights and variations as seen in highland, and all weights and variations are realistic.
+	Multithreaded event processing - the code now supports multithreaded event loops, see the RunPreloadExample application for an example.  You must uncomment the necessary compiler flags in the requirements file of psycheCore and psycheSteering.
+	Multiple selections - the event summary	  now contains information for each event selection applied, allowing multiple selections to be applied and the events reweighted.
+	Bug fixes and code cleanup.
+
+\section psycheSystematics_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Fri Sep 26 14:59:56 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche containing important bugfixes to allow data events to be processed and to allow multiple selections to be successfully applied
+
+Further speed improvements and minor bugfixes
+
+Time taken to load events reduced by 2/3rds, since we use arrays to calculate the secondary pion interaction probabilities rather than TGraph interpolation
+
+Addition of new anti-neutrino CCQE/CCnQE selection
+
+Ability to only preload MC events when using the Experiment class and then load data events at processing time.  By default, both data and MC will be preloaded.  Only preloading MC is not validated fully - the RunExpPreloadExample executable produces the same results with or without preloading the data sample (it takes roughly 4 times longer without preloading to process the data once), but if you do things in a different order you may have issues.  We really need to re-write the event looping methods to have a single method that checks internally whether events are preloaded, whether we're using the Experiment class etc., and then determines how to access the correct event. Something to discuss in Toyama.
+
+\section psycheSystematics_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Sat Oct  4 16:54:26 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche to incorporate the recent bug fixes and improvements
+
+A few speed improvements - adding flags for things that don't need to be calculated multiple times, and more efficient algorithm for checking the TPC multiplicity
+Fixed bugs in event selection and systematics code
+Highland2 and psyche now use the same flat tree converter code
+
+\section psycheSystematics_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Nov  7 01:10:33 2014
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+- Change hard coded value of 100 to NMAXTRUETRACKS
+- Correct minor bugs in ChargeConfusion systematics
+  + make look at all tpc tracks
+- Correct TPCPID to have the variation for the mean independant from the sigma
+  + add protection against creasy dedxSigma values
+- Modify the systematics uncertainties to take into account the new naming
+- BField: use all tracks in the tpc
+- TPC+FGDTrack use proper arrays of tracks 
+
+
+
+\section psycheSystematics_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Mon Nov 17 12:10:37 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Near final freeze of the psyche interface.  This freeze	captures the psyche systematics and selections,	whose results have been validated.
+
+Many bug corrections for event systematics - highland, highland2 and psyche are now giving the same results for all systematics when applying the numu multi-pion selection.
+
+There is still an issue with the anti-neutrino systematics, but that will be fixed in the next freeze along with the move to variable sized arrays.
+
+
+\section psycheSystematics_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Fri Nov 28 18:15:16 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche in order to produce first-pass	production 6 inputs for the BANFF fitters
+
+Selections currently validated, including systematics, in Psyche:
+
+       Forward horn current FGD1 NuMu CC MultiPi
+
+       Reverse horn current FGD1 Anti-NuMu CC QE/nQE
+
+       Forward horn current FGD1 NuMu (wrong-sign) CC QE/nQE
+
+
+\section psycheSystematics_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Sun Nov 30 10:03:45 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Add in fix for OOFV systematic
+
+\section psycheSystematics_v1r15_history Version v1r15
+
+Freeze information:
+   - Freeze Date: Tue Dec  9 20:00:21 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Final freeze of the psyche framework for the winter oscillation analysis.  Psyche now contains validated selections, variation systematics and weight systematics for the production 6 FGD1 neutrino mode (forward horn current) and anti-neutrino mode (reverse horn current) selections.
+
+Big changes since the last freeze: 
+
+    - Many, many bug fixes 
+    - Run by run flux weighting, for the 11b and 13a flux tuning
+    - Addition of selection validity ranges, so we don't apply anti-neutrino 
+      selections to neutrino data and MC.  Controlled by a comma separated 
+      string in the psycheSteering parameter file
+    - OSX/Darwin headers
+    - Nominal bunch timing for run 5
+    - Memory leak fixes
+    - Information for pion SI systematic not computed if systematic is 
+      disabled - events preload 30 times faster without pion SI
+    - Updated systematics tables
+    - Ability to run production 5 style selection and systematics as well as 
+      production 6 - flags in the parameter files
+
+\section psycheSystematics_v1r17_history Version v1r17
+
+Freeze information:
+   - Freeze Date: Mon Dec 22 23:57:05 2014
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+- modify SIPION to use debug version
+- modify pile-up to allow other pileup to be put as parameters
+- clean fgdmass code
+- correct bug for prod5 only in charge id eff. Specify correctly the number of parameters for prod5, which are not the same as for prod6
+
+
+\section psycheSystematics_v1r19_history Version v1r19
+
+Freeze information:
+   - Freeze Date: Thu Jan  8 17:00:56 2015
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+update table of the fgd mass to account for the latest knowledge of the measured mass of the scintillators 
+
+
+\section psycheSystematics_v1r21_history Version v1r21
+
+Freeze information:
+   - Freeze Date: Mon Jan 26 09:22:58 2015
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche in order to be compatible with highland2 changes. Needed for the collaboration meeting to allow highland2 to work with more analyses than just FGD NuMu, but not fully tested with respect to the o
+scillation input samples.  Everything appears OK, but this freeze should not used for near detector fitting.
+
+\section psycheSystematics_v1r23_history Version v1r23
+
+Freeze information:
+   - Freeze Date: Wed Feb 18 10:07:34 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+- Update data files with new TPC PID systematics
+- MomentumResol: modify the error on the momentum so that the charge systematics uses the modified one
+- ChargeID: now use directly the tracks that start in the FGDFV as saved in the box to not do again the 
+  seleciton of the one satarting in FV inside the systematic
+- TPCFGDMatch: add propagation for the last layer systematic error, now the old propagation for 
+  production6 is disabled since it's negligible in comparison.
+  Put the numbers for the fgd hit efficiency of the last layer, the previous systematic 
+  error table is discarded since it was negligible for prod6
+
+
+
+\section psycheSystematics_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 19:21:02 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes 
+to allow selection depending systematics, and performance optimization
+
+
+\section psycheSystematics_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 15:44:15 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Mainly correct few bugs, specially the ones releated with oaAnalysis, FlatTree comparison. 
+Notice however that FlatTrees give essentially the same results as before . The problem was more when running over oaAnalysis directly
+
+- temporary solution to make SIPion work with event preloading.
+- OOFVFGD2_p5F.dat  was missing
+- Use EventBoxTracker namespace and casting
+- GetTracksGroupIDs --> GetRelevantTrackGroups, GetTrueTracksGroupIDs --> GetRelevantTrueTrackGroups
+- MomResol, BField, TPCClusterEff, TPCTrackEff, TPCFGDMatch and ChargeID where giving different results in oaAnalysis and FlatTrees because 
+  they were using explicitely TPCSegments and FGDSegments with a particular index, assuming ordering is the same in FlatTrees and oaAnalysis. 
+  Also we have to deal with the problem of several segments in the same detector 
+  
+
+
+
+
+\section psycheSystematics_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Fri Jun 19 18:46:44 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+All systematics OK againt patch except TPCTrackEff which needs some modifications and ChargeID, who gives slighly different results
+
+- ChargeIDEffSystematics: Add protection for track MomentumError values being 0 - copied from patch head v1r23p0
+- add new OOFV uncertainty data files
+- FGDMassSystematics: use the NoFV option to get module type since it is possible to use different fv selection, and like that we only reweight what is inside the FV
+- TpcTrackEff change table because of some mis-understanding, now takes properly into account data eff and MC eff and respective errors
+- first version of momentum by range (muon) resolution systematics: is applied for FGD1(2)nonTPC objects
+- first verion of Proton SI
+- Import from the patch psycheSystematics v1r23p7 the new way for eff-like systematics (useNewWeights)
+
+In TPCTrackEffm SIPion and ChargeIDEff systematics: 
+- use new Apply method taking a selection as input and call the new method 
+  IsRelevantTrueTrackForSystematicInToy from inside the trueTrack loop. 
+  This is an example on how to use this method. Will have no efect by default for 
+  validation purposes
+
+
+
+\section psycheSystematics_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 12:10:10 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+Update OOFVSystematics and  TPCTrackEffSystematics to new methods used in the patched version. 
+Results are now identical
+
+
+\section psycheSystematics_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Jul 31 12:38:14 2015
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+PileUp: 
+ Update uncertainties for Pileup systematic following bug fix to the code
+ that evaluates them. 
+
+New systematics: 
+- FGDECalMatchEffSystematics
+- ECalEMEnergyScaleSystematics
+- ECalEMEnergyResolSystematics
+- MomRangeResolSystematics
+- TPC(1)-P0D matching efficiency systematics (needed at leas for BWD selection)
+
+BFieldDistortionSystematics: 
+ no need to consider as relevant track group "all tracks in the TPC". Results are the same when we consider only the tracks in FV, and the 
+ performance inproves considerably (30% better for variation systematics application)
+
+
+ChargeID:
+ remove small memory leak. Delete the SystBox::RelevantTrack array before creating a new one. The memory leaks appeared only
+ in no MULTITHREADING mode because the box is the same for all events
+
+OOFV and TPCPID:
+ propagate bug fix in patch to head: Fixed bug which incorrectly matched systematic variations to bins.
+ This addresses bug 1152
+
+
+\section psycheSystematics_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 17:12:27 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- FGDECalSMRDMatchEffSystematics: fixed a typo,  needs public inheritence
+- added ToF resolution systematics,  four independent params: FGD1/FGD2-P0D/ECal (no FGD2-P0D),  to smear
+  corresponding ToF measurements,  applied for all TPCorFGD (both groups 1 and 2) tracks available
+
+
+
+\section psycheSystematics_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 12:18:39 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- TPCECalMatchEffSystematics: use muon numbers for mu+/- cases,  otherwise use electron numbers
+- ECalTrackEffSystematics: use true tracks in ECal for input,  more specific stuff should come from selections. Some very preliminary numbers from Paul
+- TPCP0DMatchEff: preliminary numbers
+- ECalPIDSystematics: first version
+- ToFResolSystematics:  updated so it also reverses the tracks if needed
+- ECalPIDSystematics, ECalTrackEffSystematics, TPCP0DMatchEffSystematics, FGDECalMatchEffSystematics: split between FGD1 and FGD2
+
+
+All systematics: 
+- GetRelevant...TrackGroups takes now a branch number as argument as well. Only for weight systematics. 
+  The branch number is used for now by the method SelectionBase::GetDetectorFV(branch) used inside
+- For variation systematics In the GetRelevantTrackGroups loop over all branches to account for posible different FV
+- use the "new" (well,  correct) way to get the systematics uncertainty, 
+  data-vs-mc difference is included into the systematics error as well
+- get rid of shallow copying of SystematicSource which was not actually implemented and the code was a potential subject of bugs
+
+
+\section psycheSystematics_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:13:54 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+TPCECalMatchEff.dat 
+- fixed the format,  so that the uncertainties are properly read 
+  (and not doubling the eff for sigma_low),  
+  this is preliminary wells,  symmetric at the moment (although asymm syst)
+  provided by Ian Lamont
+
+TPCClusterEffSystematics, TPCFGDMatchEffSystematics:
+- enable an ability to check (given the selection and toy) whether a track is
+  relevant for the systeamtic
+
+ECalTrackEffSystematics:
+- use a new way of calculating the weight (taking into account data-mc differences)
+- added the ability to do toy-based selection of relevant tracks
+
+ECalPIDSystematics:
+- changed the logic, dont deal with true tracks` groups but just use reco tracks 
+  with the associated true tracks,  this sipmlifies the treatment
+- be explicit in the equirement that a reco track has only one
+  TECal (DsECal) sub-module crossed
+- added an ability to do apply a toy-based seletion of the relevant tracks
+- Small changes to take the new ECal PID numbers into account.
+
+TPCECalMatchEffSystematics: 
+- added an ability to do the fine-tuning of relevant tracks via the selection (toy-based) 
+
+SIProtonSystematics:
+- adopted to the new version of proton SI
+
+SIPionSystematics:
+- reflect the changes done into PionInteractionSystematic:
+- combined all selection/detector dependent methods into a simple class so that one can easily
+  extend the code 
+
+ECalPID.dat: 
+- New ECal PID systematic numbers (including protons) from David Hadley.
+
+TPCTrackEff_p6B.dat: 
+- low-up errors were echanged in some cases, as described in bug 1258. Put the numbers 
+  as they are in tn-212
+
+
+
+\section psycheSystematics_v3r1_history Version v3r1
+
+Freeze information:
+   - Freeze Date: Sun Mar  6 17:16:19 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+major reorganization with new packages and  changes in event model class names
+
+- adapt to changes in base packages 
+- add dependency on psycheSelections since the ToyBoxTracker is needed
+- pass the file extension to the SystematicSource constructor using versionUtils::Extension() method
+- TPCPIDEleSigRatio_p6B.dat TPCPIDEleMeanDiff_p6B.dat: update of the electron PID systematics. New binning to better control the lack of statistics at high energy. 
+  Binning optimisation presented at the nue meeting the 16 Feb 2016 
+- started removing corrections from the variation-like systematics, make them of .._NMEAN types, 
+  got rid of the usage of the mean value. MomentumResolSystematics pending
+
+
+\section psycheSystematics_v3r3_history Version v3r3
+
+Freeze information:
+   - Freeze Date: Mon Apr 11 16:33:13 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Freeze for BANFF development
+
+- BinnedData --> BinnesParams to avoid confusion (data vs MC)
+- EventWeightBase: Apply-->ComputeWeight
+- SystematicWeightBase    --> EventWeightBase
+- SystematicVariationBase --> EventVariationBase
+- use ToyExperiment as an input parameters instead of ToyVariations
+- split systematic and correction in all weights
+- The return type of the EventWeightBase::Apply is now Weight_h which is used as typedef in WeightType. Fill Both members in WeightType class. 
+- FluxWeightSystematics: We are in the process of converting this systematic into a weight correction + systematic such the FluxWeighting is taken into account as any other systematic weight. 
+  To do that we get the mean value of the correction from the FluxWeighting class (using the histograms) and not from the .dat file
+- TPCTrackEffSystematics: Added line to apply TPC track eff systematic to P0D selections. Will have no effect on FGD selections.
+- TPCTrackEff_p6B.dat:  use 0.009 as lower error for data eff in TPC3, as suggested in https://bugzilla.nd280.org/show_bug.cgi?id=1258
+- Add nue specific systematics.
+- ToFResolSystematics: minor,  get rid of the possibility to apply a correction through the systemaic
+
+
+
+
+\section psycheSystematics_v3r5_history Version v3r5
+
+Freeze information:
+   - Freeze Date: Thu May  5 12:07:05 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+- TPCP0DMatchEffSystematics: use IsRelevantTrueObjectForSystematicInToy() for fine-tuning 
+- FGD-ECal/SMRD matching: properly retrieve true and reco objects 
+  (somehow a behavior was changed when migrating to the new BaseDataClasses (commits from Feb5))
+  added fine-tuning through IsRelevantTrueObjectForSystematicInToy()
+- TPCClusterEffSystematics, TPCFGDMatchEffSystematics: correct bug, correction should be given as first argument to Weight_h
+- ChargeIDEffSystematics: separated !=0 checks for correction and systematic part of Weight_h, otherwise the correction 
+  may differ from toy to toy for the same candidate
+  as of bug 1278, use new parameters values for local and global charge misID (from the new version 3 of TN 229),
+  changing the code such that the values in the .dat reflect the tables in the TN
+- FluxWeightSystematics: Use ToyBoxND280, which is common for P0D and Tracker
+- TPCTrackEffSystematics:  correct bug as suggested in https://bugzilla.nd280.org/show_bug.cgi?id=1262#c3
+
+
+\section psycheSystematics_v3r7_history Version v3r7
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:09:07 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- SIProtonSystematics: adopted to changes in secondary interaction classes
+- TPCPIDEleSigRatio_p6B.dat: Binning the same as the electrn pull mean.
+- ECalEMEnergyScale.dat, TPCECalMatchEff.dat, ECalTrackEff.dat, TPCECalMatchEffSystematics.cxx: Update some of the ecal systematics based on the new numbers from TN-279
+- MomentumResolSystematics: use parameter which enables 100% correlations between FGDs and TPCs systematics,
+  as described in TN212 and in bugzilla 1271:
+  psycheSystematics.Tracker.FullCorrelations (off by default)
+- MomentumResolSystematics: Use general MomentumResolVariation class
+  able to switch between standard (ON) way of propagating the syst and
+  the new TPC based. systematics is applied to the momentum flip as well. 
+  Correction part is removed from the systematics (highlandCorrections takes care)
+- FGDMassSystematics: call anaUtils::GetFgdModuleTypeNoFV with event.GetIsMC() as argument
+
+
+
+\section psycheSystematics_v3r9_history Version v3r9
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 12:33:40 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+Summer release !!!!!
+
+- MomRangeResolSystematics: adopted to work with both FGDs, 2D->3D with the corresponding bins. in UndoSystematic is RangeMomentumMuon the variable that has to be reset
+- OOFV: New implementation of OOFV systematic compatible with 4pi selection.
+  - Addition of sense concept via IsRelevantRecObjectForSystematicInToy.
+  - Proper definition of lastmodule for FGD1.
+- ECalPIDSystematics: proper differntiate between eff and 1-eff cases and added some comments about that
+- ECalEMEnergyScaleSystematics: when failed to find the proper bin do not proceed further
+- ECalTrackEffSystematics: Increase the array to avoid crash.
+- MomRangeResol.dat: updated the systematics with some preliminary p6 numbers, 
+  FGD1/2-ECal-(SMRD) topologies updated,  iso FGD is pending  but not relevant for the current numu interation
+- MomentumResolSystematics: correct bug introduce recently (june 2 2016) preventing the systematic to be undone. 
+- SIPionSystematics: the correction is available so do not allow it to be modified by the quality of the systematic, 
+  also do not treat in a special way weight=0 zero,  let the downstream code take care (only account for inf/nan case)
+- SandMuonsSystematics: Correct bug 1360. Correction weight was not computed
+- ECalEmHipPIDSystematics: Generalise the usage of the ECalEmHipPIDSystematics to be applied for tracks as well, not only for showers (similar to the ECalPID).
+- ECal_EMHIPPID.dat: Should cover all momentum region.
+- PileUpFGD1_p6B.dat PileUpFGD2_p6B.dat : Added the number for the rest of run6 (all are the same, waiting for evaluation)
+- FGD2Shower.dat: Update data-mc efficiencies for the nue FGD2Shower systematic.
+
+
+\section psycheSystematics_v3r11_history Version v3r11
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:11:58 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- BFieldDistortionSystematics,  ChargeIDEffSystematics, TPCClusterEffSystematics, TPCPIDSystematics: Added P0DFV+TPC tracks to relevant track groups.
+- MomentumResolSystematics: Added new parameter to always use the TPC-based smearing if the P0D FV is being used.
+- MomentumScaleSystematics: Added new parameter to use a slightly different smearing if the P0D FV is being used: use the global momentum with the P0D energy loss removed.
+  In general, it might be better for all tracks to apply the smearing to the TPC recon momentum from the nearest TPC (analogous to the MomentumResolSystematics TPC-based smearing).
+- P0DVetoSystematics: P0D+TPC1 veto/pileup/sand muon/cosmic systematic. Data calculated for prod. 6B runs 1-4. Runs 5-7 not done yet.
+  This acts as a weight correction/systematic for the P0D veto cut in p0dNumuCCSelection.
+- P0DELossResolSystematics, P0DELossScaleSystematics: P0D energy/momentum loss scale and resolution. Energy loss is defined in data converters as the difference
+  between the global front momentum and the momentum at the detector crossing into TPC1.
+  Data calculated from Run 4 data and particle gun MC for P0D-stopping FGD cosmics. Currently, use the same throws for water and air and use only one bin in
+  P0D segment length, but this could be improved.
+- ToFResolSystematics: adopted to the changes implemented for ToFSenseCorrector, 
+  use a parameter to check whether to flip a track (tmp and the moment! since needs special treatment throughout the downstream code of 
+  oveall psyche)
+- nueOOFVSystematics: Update reco categories to match the numu oofv. Remove unused variables. Event weight is defined as Weight_h and is splitted in Systematic and Correction.
+
+- psycheSystematics.parameters.dat: Added new parameter to be read by momentum systematics to run the correct smearing to P0D FV tracks.
+  Added new parameter to control whether the ToF should do any track flipping (will be read by highland as well)
+  OFF by default,   since things to discuss and have settled  
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+
+
+\section psycheSystematics_v3r13_history Version v3r13
+
+Freeze information:
+   - Freeze Date: Tue Oct 18 18:04:11 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- MomentumResolSystematics, PileUpSystematics: improvements in doxygen documentation
+- MomBiasFromVertexMigrationSystematics: systematic to account for momentum bias due to vertex migration:is supposed to be binned in mom and angle (costheta) bins
+- MomentumScaleSystematics: propagate the systematic for the flipped momentum as well
+- ECalPIDSystematics, ECalEmHipPIDSystematics, ECalEMEnergyResolSystematics, ECalEMEnergyScaleSystematics: Do not evaluate systematic if the ecal variables have unphysical values (for example negative energy), see bug 1390.
+- TPCECalMatchEff.dat: Update TPCECalMatchEff systematic. New numbers with update binning and update event selection. Numbers provided by Andy Chappell.
+- BFieldDistortionSystematics: propagate the systematics to the momentum flipped as well (use TPC with most nodes closest to the track end point). generalize the methods + some clean-up
+- TPCPIDSystematics: Fix typo for P0D. 
+- ECalEMEnergyResol.dat: Update ECalEMEnergyResol based on TN-279.
+- ChargeIDEffSystematics: use new ResizeArray() method
+
+
+
+\section psycheSystematics_v3r15_history Version v3r15
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 16:16:16 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+TPCPIDEleMeanDiff_p6B.dat TPCPIDEleSigRatio_p6B.dat 
+- TPC PID should also include electrons with p < 200. For now, this is the same as the next bin (200-400).
+
+
+\section psycheSystematics_v3r17_history Version v3r17
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:20:54 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+- many systematics: addressing bug 1152, now register each BinnedParams used with its proper offset
+  so that there are no "effective" correlations hidden from the user 
+  (between FGDs in most of the cases)
+- TPCECalMatchEffSystematics: Replace track->Momentum with track->MomentumEnd (bug 1361)
+- MichelElectronEffSystematics: fix a typo to use proper indices when applying weights, 
+  the ones with offsets
+
+
+\section psycheSystematics_v3r19_history Version v3r19
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 20:40:55 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- FGDECalMatchEffSystematics, MomRangeResolSystematics: Try to address bug 1197. 
+  use the new groups kTracksWithFGD1AndTECALInFGD1FV and kTracksWithFGD2AndTECALInFGD2FV
+- FluxWeightSystematics: centralise the  Flux file parameters in psycheND280Utils
+- SIPionSystematics: improve debugging output
+
+
+\section psycheSystematics_v3r21_history Version v3r21
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 15:40:46 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FluxWeightSystematics: 
+- Use constructor of FluxWeighting with no arguments. The parameters are read in the constructor from psycheND280Utils.parameters.dat
+- centralise the  Flux file parameters in psycheND280Utils
+
+SIPionSystematics, SIProtonSystematics: 
+- use InitializeSystBoxes method to create syst boxes
+- improve debugging output
+
+nueOOFVSystematics:
+- Minor to avoid compilation warning.
+- remove (void)event in ComputeWeight since event is actually being used
+
+ECalPID.dat, ECal_EMHIPPID.dat
+- Fix typos in the Ecal PID systematics.
+
+ToFResolution.dat
+- Errors obtained comparing ToF between NEUT-6B and RDP-6K
+
+psycheSystematics.parameters.dat
+- centralise the  Flux file parameters in psycheND280Utils
+
+
+
+\section psycheSystematics_v3r23_history Version v3r23
+
+Freeze information:
+   - Freeze Date: Fri Apr 21 21:07:06 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An intermediate freeze of psyche in order to test systematics tuning for NuMu.
+FluxWeightSystematics.cxx FluxWeightSystematics.hxx 
+FluxWeight is now 3D_SYMMETRIC_NOMEAN systematic
+no need to use Neutrino and Antineutirno as separate systematics
+
+combine data in one file FluxWeight.dat, 
+for the moment first bin is dummy (0,  1e6) since nu and antinu files seem to be
+the same
+
+FluxWeight.dat 
+combined nu and antinu systematics in one file, 
+for the moment firt bin is dummy (0,  1e6) since nu and antinu data seem to be
+the same
+
+MomBiasFromVertexMigrationSystematics.cxx 
+for the moment smear the momentum-by-range (muon) as well
+
+
+BFieldDistortionSystematics.cxx 
+        BFieldDistortionSystematics.hxx ChargeIDEffSystematics.cxx 
+        ChargeIDEffSystematics.hxx ECalEMEnergySystematicsBase.cxx 
+        ECalEMEnergySystematicsBase.hxx ECalEmHipPIDSystematics.cxx 
+        ECalEmHipPIDSystematics.hxx ECalPIDSystematics.cxx 
+        ECalPIDSystematics.hxx ECalTrackEffSystematics.cxx 
+        ECalTrackEffSystematics.hxx FGD2ShowerSystematics.cxx 
+        FGD2ShowerSystematics.hxx FGDECalMatchEffSystematics.cxx 
+        FGDECalMatchEffSystematics.hxx 
+        FGDHybridTrackEffSystematics.cxx 
+        FGDHybridTrackEffSystematics.hxx FGDPIDSystematics.cxx 
+        FGDPIDSystematics.hxx FGDTrackEffSystematics.cxx 
+        FGDTrackEffSystematics.hxx 
+        MomBiasFromVertexMigrationSystematics.cxx 
+        MomBiasFromVertexMigrationSystematics.hxx 
+        MomRangeResolSystematics.cxx MomRangeResolSystematics.hxx 
+        MomentumResolSystematics.cxx MomentumResolSystematics.hxx 
+        MomentumScaleSystematics.cxx MomentumScaleSystematics.hxx 
+        P0DELossResolSystematics.cxx P0DELossResolSystematics.hxx 
+        P0DELossScaleSystematics.cxx P0DELossScaleSystematics.hxx 
+        TPCClusterEffSystematics.cxx TPCClusterEffSystematics.hxx 
+        TPCECalMatchEffSystematics.cxx TPCECalMatchEffSystematics.hxx 
+        TPCFGDMatchEffSystematics.cxx TPCFGDMatchEffSystematics.hxx 
+        TPCP0DMatchEffSystematics.cxx TPCP0DMatchEffSystematics.hxx 
+        TPCPIDSystematics.cxx TPCPIDSystematics.hxx 
+        TPCTrackEffSystematics.cxx TPCTrackEffSystematics.hxx 
+        ToFResolSystematics.cxx ToFResolSystematics.hxx 
+
+
+Important structural change: 
+the retrieval of relevant true and reco object groups is removed from the
+systematics and added to selections,  
+this is a selection now that controls which objects to provide to each
+systematic,   in this way we achieve:
+- flexibility and optimisation: get rid of hard-coded groups in systematic which
+  lead to a need to inherit from a systematic if one wants to use it for his own
+    group; no need to use wider groups to cover several selections
+- better user control on systematics,  less things hidden in "black box"
+    
+The change was motivated by the integration of 4pi samples which need wider groups
+due to the usage of ToF.
+
+Removed GetRelevantRec(True)ObjectGroups() methods, 
+this is now the business of each selection
+
+ToFResolSystematics.cxx ToFResolSystematics.hxx 
+removed a parameter to control applying the ToF based flip in ToF
+correction/systematic,  the latter will just do the smearing
+
+
+SIProtonSystematics.cxx SIProtonSystematics.hxx 
+simplify things:
+use general   si_syst::ParticleSIManager _pInfoManager; manager
+
+and set the proper propagator
+
+// Set the proper propagator 
+_pInfoManager.SetPropagator(new proton_si::ProtonSIPropagator());
+   
+
+properly set the initial status of _initialized to false! (causing crashes)
+
+no need _initialized parameter
+since Initialize method is called only ones when the systematics gets its id
+index
+
+ nueFGD1_P0D_PileUp.dat nueFGD1_TPC_PileUp.dat 
+        nueFGD1_upECal_PileUp.dat nueFGD2_P0D_PileUp.dat 
+        nueFGD2_TPC_PileUp.dat nueFGD2_upECal_PileUp.dat
+
+Updated pile up numbers
+Uses prod6M for data and prod6B for MC
+
+run2water and run2air - Right BrECal tracks ignored in data, MC, sand for consistency
+(because the sand as some dead channels in Right BrECal simulated)
+
+Includes runs up to the end of run6
+
+run6air code 13 and code 14 both estimated with run4air
+
+P0DECal FV reintroduced as requested
+
+
+
+ 
+
+
+
+
+*/

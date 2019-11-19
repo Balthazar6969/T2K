@@ -1,0 +1,50 @@
+// Mainpage for doxygen
+
+/*! @mainpage nd280AnalysisTools
+  
+@anchor nd280AnalysisTools
+
+@author Mark Scott (with major contributions from James Dobson and Yoshi Uchida)
+  
+@section description Description
+
+The nd280AnalysisTools package is a set of analysis tools to read oaAnalysis output files and perform physics analyses on them.  This includes an expanding library of commonly-used analysis utilities and a number of executables that are compiled against these.
+
+@section introduction Introduction
+
+This package contains all the common analysis tools and executables used to perform analyses on oaAnalysis files.  These tools are stored in the <tt>AnalysisTools/</tt> directory, with any analysis macros residing in the <tt>macros/</tt> directory.
+
+This will provide a library of commonly-used analysis tools and executables which can be shared and reused by different physics analyses.
+
+The library itself is written in ROOT C++, which can be called from high-level steering routines written in python or C++, and provides methods to access the data stored in oaAnalysis files.
+
+@section readingAnalysisOutputFiles Reading Analysis Output Files
+
+Many users will only use nd280AnalysisTools to read and process analysis files.
+
+No other library is needed to do this, you only need the macros in nd280AnalysisTools/vNrN/macros and a version of ROOT, and there is no need to compile the rest of the nd280 software.
+
+Instructions on setting up nd280AnalysisTools and using them to read the oaAnalysis files can be found at \ref settingUpnd280AnalysisTools.
+
+
+@section usingnd280AnalysisTools Using nd280AnalysisTools 
+
+Using this package, users can perform analyses, create their own analysis tools and then compile executables to perform analyses that use these tools.
+
+Instructions on doing these things can be found at \ref writingAndPerformingAnalyses, \ref creatingAnalysisTools and \ref compilingAnalysisExecutables respectively.
+
+@section eventDisplay Using the oaAnalysis Event Display program.
+
+Information about usind the 3D event display program can be found in \ref EvenDisplay .
+@section versions Versions of nd280AnalysisTools and the files they should compile with
+
+There has been a change in the oaAnalysis output file format whilst nd280AnalysisTools were being developed.  This means that, to use the nd280AnalysisTools to process production 4D and 4C analysis files, you must use the frozen version v0r1.
+
+For productions 4E and 4F use v0r5 of nd280AnalysisTools.
+
+For production 5 analysis files, use v0r7p1 of nd280AnalysisTools.
+
+For earlier productions use the AnalysisTools and macros directory as they were in oaAnalysis.
+
+*/
+

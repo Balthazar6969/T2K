@@ -1,0 +1,36 @@
+package highland2/p0dNumuCCQEAnalysis
+version v2r11p1
+
+manager Tianlu Yuan <tianlu.yuan@colorado.edu>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app 
+
+use p0dNumuCCAnalysis                 v2r13   highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro p0dNumuCCQEAnalysis_cppflags " -DP0DNUMUCCQEANALYSIS_USED"
+macro p0dNumuCCQEAnalysis_linkopts " -L$(P0DNUMUCCQEANALYSISROOT)/$(p0dNumuCCQEAnalysis_tag) -lp0dNumuCCQEAnalysis "
+macro p0dNumuCCQEAnalysis_stamps " $(P0DNUMUCCQEANALYSISROOT)/$(p0dNumuCCQEAnalysis_tag)/p0dNumuCCQEAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(P0DNUMUCCQEANALYSISROOT)"
+path_prepend PATH "$(P0DNUMUCCQEANALYSISROOT)/$(p0dNumuCCQEAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(P0DNUMUCCQEANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(P0DNUMUCCQEANALYSISROOT)/$(p0dNumuCCQEAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(P0DNUMUCCQEANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(P0DNUMUCCQEANALYSISROOT)/$(p0dNumuCCQEAnalysis_tag)"
+
+
+# The library to build
+library p0dNumuCCQEAnalysis *.cxx  ../dict/*.cxx
+
+application RunP0DNumuCCQEAnalysis ../app/RunP0DNumuCCQEAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox

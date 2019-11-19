@@ -1,0 +1,15 @@
+--- Cut levels --------
+
+ < p0dNumuCCAnalysis.MinAccumLevelToSave = 3 >   // minimum accum level to save the event
+
+--- TruthTree Options ------------
+
+ < p0dNumuCCAnalysis.TruthTree.SaveNumuCCOnPb   = 0 >
+ 
+--- P0D-specific systematics --------
+ < p0dNumuCCAnalysis.Weights.EnableP0DMass             = 0 >
+ < p0dNumuCCAnalysis.Weights.EnableP0DOOFV             = 0 >
+
+Using P0D Central ECal rather than water target
+ < p0dNumuCCAnalysis.Systematics.UseP0DCentralECal         = 0 >
+

@@ -1,0 +1,1 @@
+RooTrackerVtxManager_cxx_dependencies =  ../src/RooTrackerVtxManager.cxx   /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/src/BasicTypes.hxx   ../src/RooTrackerVtxManager.hxx  $(bin)highlandUtils_deps/RooTrackerVtxManager_cxx.stamp

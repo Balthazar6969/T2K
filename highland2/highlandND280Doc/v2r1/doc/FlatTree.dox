@@ -1,0 +1,153 @@
+/*!
+\page flattree The Flat Tree: how to save time and space
+
+
+This page is a tutorial explains everything related with systematic errors in highland: 
+  
+ - \ref flat_intro
+ - \ref flat_param
+
+\section flat_intro Introduction
+
+
+The flat tree is an intermediate level of data reduction, which can be used as input for any highland2 executable. It has the following properties 
+
+<ul>
+ <li> All variables stored in the flat tree are floats, integers and arrays of them </li>
+ <li> All variables are in the same directory </li>
+ <li> There is one entry per bunch unlike the oaAnalysis tree which has one entry per spill. Then bunching has to be done before filling the flat tree </li>
+ <li> Usually a preselection will be done. The application that creates the flat tree (see below) currently save only events with at least a FGD1 or FGD2 track and events 
+    wich are true numuCC, nueCC, antinumuCC or NC interactions in FGD1 and FGD2 volumes. This is just an example, since the preselection can be changed depending on the analysis. 
+</ul>
+
+All this makes the flat tree much smaller (4 GB in a single file against 110 GB in many files) and faster (>20 times) than using the oaAnalysis files. 
+
+The flat tree blocks are defined and filled in the Define and Write methods of the data classes (see DataClassesIO.cxx under highlandIO). 
+The flat tree is ultimately created by the application RunCreateFlatTree under 
+highlandIO, in which the blocks to be written and the preselection is done. This application is run as any other application in the framework:
+
+\code
+RunCreateFlatTree.exe -o flattree.root oaAnalysis.list
+\endcode
+
+As mentioned above, the application applies a pre-selection based on the true and reconstructed information in a spill/bunch. You can specify the requirements by editing the highlandIO.params.dat file in the $HIGHLANDIOROOT/parameters directory. You should ensure that the flat tree you create contains information for all the true signal events (so the analysis efficiency can be calculated correctly) as well as any events that pass loose reconstruction cuts (say, have a track in a TPC, if you're doing a Tracker-based analysis).
+
+Once the flat tree is created, any analysis can be run using it as input:
+
+\code
+RunNumuCCAnalysis.exe -o microtree.root flattree.root
+\endcode
+
+<b> The way the flat tree is constructed ensures that results should be identical to those obtained with oaAnalysis files.</b>
+
+
+<b>Developers who extend the DataClasses:</b> In order to keep the Flat Tree up to date you should:
+
+<ul>
+  <li> propagate to the Define and Write methods (in DataClassesIO.cxx) any addition to the DataClasses members </li>
+  <li> convert back to the DataClasses any new variable in the Flat Tree. This should be done in the FlatTreeConverter under highlandIO </li>
+</ul>
+
+
+\section flat_param Parameters for FlatTree creation
+
+\code
+
+Whether to enable the CT4/CT5 POT correction, and the DQ
+corrections. These must be applied when creating the flat
+tree, so that POT counting is correct. Applying the same
+corrections in baseAnalysis when using FlatTree files as 
+input will have no effect. IT IS STRONGLY RECOMMENDED THAT
+YOU KEEP THESE CORRECTIONS ENABLED!
+
+ < highlandIO.FlatTree.EnableIgnoreRightECalCorrection = 1 >
+ < highlandIO.FlatTree.EnablePOTCorrection             = 1 >
+ < highlandIO.FlatTree.EnableDQCorrection              = 1 >
+ < highlandIO.FlatTree.EnableTPCdEdxDataCorrection     = 1 >
+ < highlandIO.FlatTree.EnableTPCdEdxMCCorrection       = 1 >
+ < highlandIO.FlatTree.EnableTPCExpecteddEdxCorrection = 1 >
+ < highlandIO.FlatTree.EnableTPCPIDPullMCCorrection    = 1 >
+ < highlandIO.FlatTree.EnablePileUpCorrection          = 1 >
+ < highlandIO.FlatTree.EnableMomResolMCCorrection      = 1 >
+ < highlandIO.FlatTree.EnableFlipKinematicsCorrection  = 0 >
+ < highlandIO.FlatTree.EnableToFCorrection             = 0 >
+ < highlandIO.FlatTree.EnableMomRangeCorrection        = 0 >
+ 
+
+Save only true tracks/vertices with recon association
+
+ < highlandIO.FlatTree.SaveTruthWithReconAssociation = 0 > 
+ 
+Save RooTracker information, which is needed for doing re-weighting
+with T2KReWeight
+
+ < highlandIO.FlatTree.SaveRooTracker = 1 > 
+
+Save only the RooTracker vertices with link in the MiniTree  (ONLY FOR MiniTree)
+ < highlandIO.FlatTree.FilterRooTracker = 1 > 
+
+Enable/disable filling subdetector variables
+
+ < highlandIO.FlatTree.SaveTPCInfo     = 1 >	
+ < highlandIO.FlatTree.SaveFGDInfo     = 1 >	
+ < highlandIO.FlatTree.SaveP0DInfo     = 1 >	
+ < highlandIO.FlatTree.SaveECALInfo    = 1 >	
+ < highlandIO.FlatTree.SaveSMRDInfo    = 1 >	
+ < highlandIO.FlatTree.SaveTrackerInfo = 1 >	
+
+Enable/disable the reading and flattening of different oaAnalysis folders
+
+ < highlandIO.FlatTree.UseReconDirTrackerECal = 0 >
+ < highlandIO.FlatTree.UseReconDirP0DECal     = 0 >
+ < highlandIO.FlatTree.UseReconDirP0D         = 0 >
+ < highlandIO.FlatTree.UseReconDirFGDOnly     = 0 >
+
+Preselection based on subdetector components 
+
+ < highlandIO.FlatTree.UseTPC1    = 0 >	
+ < highlandIO.FlatTree.UseTPC2    = 0 >	
+ < highlandIO.FlatTree.UseTPC3    = 0 >	
+ < highlandIO.FlatTree.UseFGD1    = 1 >	
+ < highlandIO.FlatTree.UseFGD2    = 1 >	
+ < highlandIO.FlatTree.UseP0D     = 0 >	
+ < highlandIO.FlatTree.UseDsECal  = 0 >	
+ < highlandIO.FlatTree.UseTrECal  = 0 >	
+ < highlandIO.FlatTree.UseP0DECal = 0 >	
+ < highlandIO.FlatTree.UseSMRD    = 0 >	
+
+ < highlandIO.FlatTree.UseTPC1outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseTPC2outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseTPC3outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseFGD1outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseFGD2outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseP0DoutOfBunch     = 0 >
+ < highlandIO.FlatTree.UseDsECaloutOfBunch  = 0 >
+ < highlandIO.FlatTree.UseTrECaloutOfBunch  = 0 >
+ < highlandIO.FlatTree.UseP0DECaloutOfBunch = 0 >
+ < highlandIO.FlatTree.UseSMRDoutOfBunch    = 0 >
+
+
+Preselection based on true interaction type
+
+ < highlandIO.FlatTree.TrueVertex.NuNC        = 1 >
+ < highlandIO.FlatTree.TrueVertex.AntiNuNC    = 1 >
+ < highlandIO.FlatTree.TrueVertex.NumuCC      = 1 >
+ < highlandIO.FlatTree.TrueVertex.AntiNumuCC  = 1 >
+ < highlandIO.FlatTree.TrueVertex.NueCC       = 1 >
+ < highlandIO.FlatTree.TrueVertex.AntiNueCC   = 1 >
+
+Preselection based on true interaction detector
+
+ < highlandIO.FlatTree.TrueVertex.TPC1    = 0 >	
+ < highlandIO.FlatTree.TrueVertex.TPC2    = 0 >	
+ < highlandIO.FlatTree.TrueVertex.TPC3    = 0 >	
+ < highlandIO.FlatTree.TrueVertex.FGD1    = 1 >	
+ < highlandIO.FlatTree.TrueVertex.FGD2    = 1 >	
+ < highlandIO.FlatTree.TrueVertex.P0D     = 0 >	
+ < highlandIO.FlatTree.TrueVertex.DsECal  = 0 >	
+ < highlandIO.FlatTree.TrueVertex.TrECal  = 0 >	
+ < highlandIO.FlatTree.TrueVertex.P0DECal = 0 >	
+ < highlandIO.FlatTree.TrueVertex.SMRD    = 0 >	
+\endcode
+
+*/

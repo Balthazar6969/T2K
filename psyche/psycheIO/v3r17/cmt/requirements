@@ -1,0 +1,38 @@
+package psyche/psycheIO
+version v3r17
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app
+
+use psycheCore        v3r21   psyche
+use psycheND280Utils  v3r23   psyche
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+document rootcint dictionary *_LinkDef.h
+
+# Build information used by packages that use this one.
+macro psycheIO_cppflags " -DPSYCHEIO_USED -fPIC"
+macro psycheIO_linkopts "-L$(PSYCHEIOROOT)/$(psycheIO_tag) -lpsycheIO "
+macro psycheIO_stamps " $(PSYCHEIOROOT)/$(psycheIO_tag)/psycheIO.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(PSYCHEIOROOT)"
+path_prepend PATH "$(PSYCHEIOROOT)/$(psycheIO_tag)"
+path_remove LD_LIBRARY_PATH "$(PSYCHEIOROOT)"
+path_prepend LD_LIBRARY_PATH "$(PSYCHEIOROOT)/$(psycheIO_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(PSYCHEIOROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(PSYCHEIOROOT)/$(psycheIO_tag)"
+
+
+# The library to build
+library psycheIO *.cxx ../dict/*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

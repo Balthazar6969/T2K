@@ -1,0 +1,39 @@
+package highland2/numuCCMultiTargetAnalysis
+version v2r11
+
+manager Enrico Scantamburlo <enrico.scanta@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches src cmt doc app
+
+use numuCCMultiPiAnalysis             v2r7    highland2
+use antiNumuCCAnalysis                v2r3    highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro numuCCMultiTargetAnalysis_cppflags " -DNUMUCCMULTITARGETANALYSIS_USED"
+macro numuCCMultiTargetAnalysis_linkopts " -L$(NUMUCCMULTITARGETANALYSISROOT)/$(numuCCMultiTargetAnalysis_tag) -lnumuCCMultiTargetAnalysis "
+macro numuCCMultiTargetAnalysis_stamps " $(NUMUCCMULTITARGETANALYSISROOT)/$(numuCCMultiTargetAnalysis_tag)/numuCCMultiTargetAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(NUMUCCMULTITARGETANALYSISROOT)"
+path_prepend PATH "$(NUMUCCMULTITARGETANALYSISROOT)/$(numuCCMultiTargetAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(NUMUCCMULTITARGETANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(NUMUCCMULTITARGETANALYSISROOT)/$(numuCCMultiTargetAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(NUMUCCMULTITARGETANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(NUMUCCMULTITARGETANALYSISROOT)/$(numuCCMultiTargetAnalysis_tag)"
+
+
+# The library to build
+library numuCCMultiTargetAnalysis *.cxx  ../dict/*.cxx
+
+application RunNumuCCMultiTargetAnalysis ../app/RunNumuCCMultiTargetAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

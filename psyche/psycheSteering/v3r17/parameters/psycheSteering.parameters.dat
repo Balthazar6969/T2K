@@ -1,0 +1,137 @@
+     0 --> A pure random seed is generated based on time
+ not 0 --> A fix random seed is used 
+ < psycheSteering.Systematics.RandomSeed = 1 >
+
+Whether to apply a zero variation or the random variation. Zero variation is normally used to apply systematic corrections but not systematic errors. 
+The number of toys should be one in that case
+
+ < psycheSteering.Systematics.ZeroVariation = 0 >
+
+
+-------------------------------------------------------------
+
+ 5 --> Production 5
+ 6 --> Production 6
+ < psycheSteering.POT.Production         = 6 >
+ < psycheSteering.Bunching.Production    = 6 >
+ < psycheSteering.Corrections.Production = 6 >
+ < psycheSteering.Systematics.Production = 6 >
+
+-------------------------------------------------------------
+Parameters to control Flux weigthing. Folder, Version and Tunning now in psycheND280Utils.parameters.dat
+
+ < psycheSteering.FluxWeighting.Enable  = 1 >
+
+-------------------------------------------------------------
+Parameters to control Selections
+
+FGD1
+ < psycheSteering.Selections.EnableTrackerNumuCC                       = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuCCMultiPi                = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuCC4pi                    = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuCC4piMultiPi             = 1 >
+ 
+ < psycheSteering.Selections.EnableTrackerAntiNumuCC                   = 0 >
+ < psycheSteering.Selections.EnableTrackerAntiNumuCCMultiTrack         = 0 >
+ < psycheSteering.Selections.EnableTrackerAntiNumuCCMultiPi            = 1 >
+ 
+ < psycheSteering.Selections.EnableTrackerNumuInAntiNuModeCC           = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuInAntiNuModeCCMultiTrack = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuInAntiNuModeCCMultiPi    = 1 >
+
+ < psycheSteering.Selections.EnableTrackerNuECC                        = 1 >
+ < psycheSteering.Selections.EnableTrackerAntiNuECC                    = 1 >
+ < psycheSteering.Selections.EnableTrackerGamma                        = 1 >
+ 
+FGD2
+ < psycheSteering.Selections.EnableTrackerNumuCCFGD2                       = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuCCMultiPiFGD2                = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuCC4piFGD2                    = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuCC4piMultiPiFGD2             = 1 >
+ 
+ < psycheSteering.Selections.EnableTrackerAntiNumuCCFGD2                   = 0 >
+ < psycheSteering.Selections.EnableTrackerAntiNumuCCMultiTrackFGD2         = 0 >
+ < psycheSteering.Selections.EnableTrackerAntiNumuCCMultiPiFGD2            = 1 >
+
+ < psycheSteering.Selections.EnableTrackerNumuInAntiNuModeCCFGD2           = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuInAntiNuModeCCMultiTrackFGD2 = 0 >
+ < psycheSteering.Selections.EnableTrackerNumuInAntiNuModeCCMultiPiFGD2    = 1 >
+
+ < psycheSteering.Selections.EnableTrackerNuECCFGD2                        = 1 >
+ < psycheSteering.Selections.EnableTrackerAntiNuECCFGD2                    = 1 >
+ < psycheSteering.Selections.EnableTrackerGammaFGD2                        = 1 >
+
+Parameter to control which run periods selectionsare valid for.  
+Look at AnalysisUtils.cxx to find run period numbering - Run period 8 = run 5 anti-neutrino data/MC
+List valid runs using a comma separated string
+
+ < psycheSteering.Selections.TrackerNumuCC.ValidRunPeriods           = 0,1,2,3,4,5,6,7 >
+ < psycheSteering.Selections.TrackerNumuCCMultiPi.ValidRunPeriods    = 0,1,2,3,4,5,6,7 >
+ < psycheSteering.Selections.TrackerNumuCC4pi.ValidRunPeriods        = 0,1,2,3,4,5,6,7 >
+ < psycheSteering.Selections.TrackerNumuCC4piMultiPi.ValidRunPeriods = 0,1,2,3,4,5,6,7 >
+ 
+ < psycheSteering.Selections.TrackerAntiNumuCC.ValidRunPeriods           = 8,9,10,11,12 >
+ < psycheSteering.Selections.TrackerAntiNumuCCMultiTrack.ValidRunPeriods = 8,9,10,11,12 >
+ < psycheSteering.Selections.TrackerAntiNumuCCMultiPi.ValidRunPeriods    = 8,9,10,11,12 >
+ 
+ < psycheSteering.Selections.TrackerNumuInAntiNuModeCC.ValidRunPeriods           = 8,9,10,11,12 >
+ < psycheSteering.Selections.TrackerNumuInAntiNuModeCCMultiTrack.ValidRunPeriods = 8,9,10,11,12 >
+ < psycheSteering.Selections.TrackerNumuInAntiNuModeCCMultiPi.ValidRunPeriods    = 8,9,10,11,12 >
+
+ < psycheSteering.Selections.TrackerNuECC.ValidRunPeriods     = 0,1,2,3,4,5,6,7,8,9,10,11,12 >
+ < psycheSteering.Selections.TrackerAntiNuECC.ValidRunPeriods = 0,1,2,3,4,5,6,7,8,9,10,11,12 >
+ < psycheSteering.Selections.TrackerGamma.ValidRunPeriods     = 0,1,2,3,4,5,6,7,8,9,10,11,12 >
+
+By default EventSummary class is created and filled when the selection is passed. But this might be necessary also for events not passing the selection
+The user can force the EventSummary to be filled always. 
+
+ < psycheSteering.Selections.ForceFillEventSummary = 0 >
+
+-------------------------------------------------------------
+Parameters to control Detector Variation Systematics
+
+ < psycheSteering.Systematics.ApplyVariationSystematics = 0 >
+
+ < psycheSteering.Variations.EnableBFieldDist     = 0 >
+ < psycheSteering.Variations.EnableMomResol       = 0 >
+ < psycheSteering.Variations.EnableMomScale       = 0 >
+ < psycheSteering.Variations.EnableTpcPid         = 0 >	
+ < psycheSteering.Variations.EnableFgdPid         = 0 >	
+ < psycheSteering.Variations.EnableToFResol       = 0 >
+ < psycheSteering.Variations.EnableECalMomScale   = 0 >
+ < psycheSteering.Variations.EnableECalMomResol   = 0 >
+
+-------------------------------------------------------------
+Parameters to control Detector Weight Systematics
+
+ < psycheSteering.Systematics.ApplyWeightSystematics = 0 >
+
+ < psycheSteering.Weights.EnableChargeConf         = 0 >
+ < psycheSteering.Weights.EnableMichelEleEff       = 0 >	
+ < psycheSteering.Weights.EnableTpcClusterEff      = 0 >	
+ < psycheSteering.Weights.EnableTpcTrackEff        = 0 >	
+ < psycheSteering.Weights.EnableFgdTrackEff        = 0 >	For production 5 analysis only
+ < psycheSteering.Weights.EnableFgdHybridTrackEff  = 0 >	For production 6 analysis only
+ < psycheSteering.Weights.EnableTpcFgdMatchEff     = 0 >	
+ < psycheSteering.Weights.EnablePileUp             = 0 >	
+ < psycheSteering.Weights.EnableFgdMass            = 0 >	
+ < psycheSteering.Weights.EnableOOFV               = 0 >	
+ < psycheSteering.Weights.EnableSIPion             = 0 >	
+ < psycheSteering.Weights.EnableSIProton           = 0 >	
+ < psycheSteering.Weights.EnableSandMuons          = 0 >
+ < psycheSteering.Weights.EnableECalPID            = 0 >
+ < psycheSteering.Weights.EnableTpcECalMatchEff    = 0 >
+
+ < psycheSteering.Weights.EnableECalEmHipPID       = 0 >
+ < psycheSteering.Weights.EnableFGD2Shower         = 0 >
+ < psycheSteering.Weights.EnableNuETPCPileUp       = 0 >
+ < psycheSteering.Weights.EnableNuEP0DPileUp       = 0 >
+ < psycheSteering.Weights.EnableNuEECalPileUp      = 0 >
+ < psycheSteering.Weights.EnableNuEOOFV      	   = 0 >
+
+-------------------------------------------------------------
+Parameters to control Other Systematics
+
+ < psycheSteering.Systematics.ApplyFluxWeightSystematic = 0 >
+
+ < psycheSteering.Weights.EnableFlux = 0 >	

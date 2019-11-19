@@ -1,0 +1,40 @@
+package highland2/p0dNumuCCAnalysis
+version v2r13
+
+manager Tianlu Yuan <tianlu.yuan@colorado.edu>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app 
+
+use highlandTools                     v2r17p1 highland2
+use baseTrackerAnalysis               v2r11   highland2 
+use numuCCAnalysis                    v2r13   highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro p0dNumuCCAnalysis_cppflags " -DP0DNUMUCCANALYSIS_USED"
+macro p0dNumuCCAnalysis_linkopts " -L$(P0DNUMUCCANALYSISROOT)/$(p0dNumuCCAnalysis_tag) -lp0dNumuCCAnalysis "
+macro p0dNumuCCAnalysis_stamps " $(P0DNUMUCCANALYSISROOT)/$(p0dNumuCCAnalysis_tag)/p0dNumuCCAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(P0DNUMUCCANALYSISROOT)"
+path_prepend PATH "$(P0DNUMUCCANALYSISROOT)/$(p0dNumuCCAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(P0DNUMUCCANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(P0DNUMUCCANALYSISROOT)/$(p0dNumuCCAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(P0DNUMUCCANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(P0DNUMUCCANALYSISROOT)/$(p0dNumuCCAnalysis_tag)"
+
+
+# The library to build
+library p0dNumuCCAnalysis *.cxx  ../dict/*.cxx
+
+application RunP0DNumuCCAnalysis ../app/RunP0DNumuCCAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

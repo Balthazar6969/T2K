@@ -1,0 +1,21 @@
+This directory contains the macros needed to reproduce the results of
+the Global Analysis 10 a.
+
+Still incomplete.
+
+F.Dufour (February 2011)
+
+--------------------------------------------------------------------------
+
+Useful files:
+
+datafiles_used.txt   :  List of data run/subruns that were used and number of POT associated to it
+NumuCutsDefinition.h :  Definitions of cuts apply to the analysis
+NumuGeomDefinition.h :  Definition of the geometry for the fiducial volume.
+NumuDataFiles.h      :  example of how to load the chained NumuFlatTree
+
+Macros:
+McEffPur.C           : Example of how to compute efficiency and purity
+		       (need some of the tools present Analysis_FlatTree/Tools)
+
+That's it for now, need to be completed, done correclty for Global Analysis 10b.

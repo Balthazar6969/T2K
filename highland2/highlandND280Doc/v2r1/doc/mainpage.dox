@@ -1,0 +1,6 @@
+/*! \mainpage The HighLAND analysis framework
+
+\includedoc mainpageGeneral.dox
+\includedoc mainpageND280.dox
+
+*/

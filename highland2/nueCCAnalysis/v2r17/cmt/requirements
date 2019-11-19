@@ -1,0 +1,46 @@
+package highland2/nueCCAnalysis
+version v2r17
+
+manager Sophie King <soph.e.king123@gmail.com>
+manager Georgios Christodoulou <georgios@hep.ph.liv.ac.uk>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app dict
+
+use baseTrackerAnalysis               v2r11   highland2 
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+document rootcint dictionary *_LinkDef.h
+
+# Build information used by packages that use this one.
+macro nueCCAnalysis_cppflags " -DNUECCANALYSIS_USED"
+macro nueCCAnalysis_linkopts " -L$(NUECCANALYSISROOT)/$(nueCCAnalysis_tag) -lnueCCAnalysis "
+macro nueCCAnalysis_stamps " $(NUECCANALYSISROOT)/$(nueCCAnalysis_tag)/nueCCAnalysis.stamp"
+
+
+# The paths to find this library.
+path_remove PATH "$(NUECCANALYSISROOT)"
+path_prepend PATH "$(NUECCANALYSISROOT)/$(nueCCAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(NUECCANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(NUECCANALYSISROOT)/$(nueCCAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(NUECCANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(NUECCANALYSISROOT)/$(nueCCAnalysis_tag)"
+
+
+# The library to build
+library nueCCAnalysis *.cxx  ../dict/*.cxx
+
+# A separate library for the custom DrawingTools
+library DrawingToolsNueCC DrawingToolsNueCC.cxx  ../dict/*.cxx
+
+# Applications
+application RunNueCCAnalysis ../app/RunNueCCAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+# Setup the ROOT magic that means we can use the DrawingTools etc. without having to load any libraries.
+setup_script rootm_setup

@@ -1,0 +1,149 @@
+The line below is needed for doxygen documentation
+//! [highlandIO.parameters.dat_flattree]
+
+
+Save the Geometry (TGeoManager)   (ONLY FOR MiniTree)
+ < highlandIO.FlatTree.SaveGeometry = 0 >
+
+Ignore true vertices that have all true tracks contained in a given subdetector
+ < highlandIO.oaAnalysis.IgnoreSMRDContainedTrueObjects      = 0 >
+ < highlandIO.oaAnalysis.IgnoreDsECalContainedTrueObjects    = 0 >
+ < highlandIO.oaAnalysis.IgnoreBrECalContainedTrueObjects    = 0 >
+ < highlandIO.oaAnalysis.IgnoreP0DECalContainedTrueObjects   = 0 >
+ < highlandIO.oaAnalysis.IgnoreINGRIDContainedTrueObjects    = 0 >
+
+Ignore true vertices with no true tracks
+ < highlandIO.oaAnalysis.RemoveTrueVerticesWithNoTrueParticles  = 0 >
+
+Shuts up the message and stops early exit if
+subsequent files have colliding run numbers.
+ < highlandIO.oaAnalysis.ForceIgnoreRunNumberClash = 0 >
+
+Controls whether to add FGD single hits into FGD time bins
+ < highlandIO.oaAnalysis.FillFgdSingleHitsInfo = 0 >
+
+Overrides all Truth and recon preselection switches. Will still remove recon
+bunches with absolutely nothing in them. ONLY FOR MINITREE
+ < highlandIO.MiniTree.ForceSaveAll = 0 >
+
+Fix global vertex time for ECal global vertices. This cannot be a
+correction as it has to happen before bunching.
+ < highlandIO.oaAnalysis.FixECalGlobalVerticesTime = 0 >
+
+Whether to enable the CT4/CT5 POT correction, and the DQ
+corrections. These must be applied when creating the flat
+tree, so that POT counting is correct. Applying the same
+corrections in baseAnalysis when using FlatTree files as
+input will have no effect. IT IS STRONGLY RECOMMENDED THAT
+YOU KEEP THESE CORRECTIONS ENABLED!
+
+ < highlandIO.FlatTree.EnableIgnoreRightECalCorrection = 1 >
+ < highlandIO.FlatTree.EnablePOTCorrection             = 1 >
+ < highlandIO.FlatTree.EnableDQCorrection              = 1 >
+ < highlandIO.FlatTree.EnableTPCdEdxDataCorrection     = 1 >
+ < highlandIO.FlatTree.EnableTPCdEdxMCCorrection       = 1 >
+ < highlandIO.FlatTree.EnableTPCExpecteddEdxCorrection = 1 >
+ < highlandIO.FlatTree.EnableTPCPIDPullMCCorrection    = 1 >
+ < highlandIO.FlatTree.EnablePileUpCorrection          = 1 >
+ < highlandIO.FlatTree.EnableMomResolMCCorrection      = 1 >
+ < highlandIO.FlatTree.EnableFlipKinematicsCorrection  = 1 >
+ < highlandIO.FlatTree.EnableToFCorrection             = 1 >
+ < highlandIO.FlatTree.EnableMomRangeCorrection        = 1 >
+
+
+
+
+Save only true tracks/vertices with recon association
+
+ < highlandIO.FlatTree.SaveTruthWithReconAssociation = 0 >
+
+Save RooTracker information, which is needed for doing re-weighting
+with T2KReWeight
+
+ < highlandIO.FlatTree.SaveRooTracker = 0 >
+
+Save only the RooTracker vertices with link in the MiniTree/FlatTree
+ < highlandIO.FlatTree.FilterRooTracker = 0 >
+
+Enable/disable filling subdetector variables
+
+ < highlandIO.FlatTree.SaveTPCInfo     = 1 >
+ < highlandIO.FlatTree.SaveFGDInfo     = 1 >
+ < highlandIO.FlatTree.SaveP0DInfo     = 1 >
+ < highlandIO.FlatTree.SaveECALInfo    = 1 >
+ < highlandIO.FlatTree.SaveSMRDInfo    = 1 >
+ < highlandIO.FlatTree.SaveTrackerInfo = 1 >
+
+Enable/disable the reading and flattening of different oaAnalysis folders
+
+ < highlandIO.FlatTree.UseReconDirTrackerECal = 1 >
+ < highlandIO.FlatTree.UseReconDirP0DECal     = 1 >
+ < highlandIO.FlatTree.UseReconDirP0D         = 1 >
+ < highlandIO.FlatTree.UseReconDirFGDOnly     = 1 >
+
+Fill the P0DDataClasses
+
+ < highlandIO.P0DDataClasses.UseReconDirP0DNew            = 0 >               Enable/disable reading the P0DRecon dir and filling the new P0DDataClasses
+ < highlandIO.P0DDataClasses.UseReconDirP0DAlgoResult     = p0dRecon >        Take P0D vertices from this algo result
+ < highlandIO.P0DDataClasses.AddGlobalTracksToP0DVertices = 1 >               Global tracks containing a P0D segments are added to the corresponnding P0D vertex
+
+Preselection based on subdetector components
+
+ < highlandIO.FlatTree.UseTPC1    = 1 >
+ < highlandIO.FlatTree.UseTPC2    = 1 >
+ < highlandIO.FlatTree.UseTPC3    = 1 >
+ < highlandIO.FlatTree.UseFGD1    = 1 >
+ < highlandIO.FlatTree.UseFGD2    = 1 >
+ < highlandIO.FlatTree.UseP0D     = 1 >
+ < highlandIO.FlatTree.UseDsECal  = 1 >
+ < highlandIO.FlatTree.UseTrECal  = 1 >
+ < highlandIO.FlatTree.UseP0DECal = 1 >
+ < highlandIO.FlatTree.UseSMRD    = 1 >
+
+ < highlandIO.FlatTree.UseTPC1outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseTPC2outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseTPC3outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseFGD1outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseFGD2outOfBunch    = 0 >
+ < highlandIO.FlatTree.UseP0DoutOfBunch     = 0 >
+ < highlandIO.FlatTree.UseDsECaloutOfBunch  = 0 >
+ < highlandIO.FlatTree.UseTrECaloutOfBunch  = 0 >
+ < highlandIO.FlatTree.UseP0DECaloutOfBunch = 0 >
+ < highlandIO.FlatTree.UseSMRDoutOfBunch    = 0 >
+
+
+Preselection based on true interaction type
+
+ < highlandIO.FlatTree.TrueVertex.NuNC        = 0 >
+ < highlandIO.FlatTree.TrueVertex.AntiNuNC    = 0 >
+ < highlandIO.FlatTree.TrueVertex.NumuCC      = 0 >
+ < highlandIO.FlatTree.TrueVertex.AntiNumuCC  = 0 >
+ < highlandIO.FlatTree.TrueVertex.NueCC       = 0 >
+ < highlandIO.FlatTree.TrueVertex.AntiNueCC   = 0 >
+
+Preselection based on true interaction detector
+
+ < highlandIO.FlatTree.TrueVertex.TPC1    = 0 >
+ < highlandIO.FlatTree.TrueVertex.TPC2    = 0 >
+ < highlandIO.FlatTree.TrueVertex.TPC3    = 0 >
+ < highlandIO.FlatTree.TrueVertex.FGD1    = 0 >
+ < highlandIO.FlatTree.TrueVertex.FGD2    = 0 >
+ < highlandIO.FlatTree.TrueVertex.P0D     = 0 >
+ < highlandIO.FlatTree.TrueVertex.DsECal  = 0 >
+ < highlandIO.FlatTree.TrueVertex.TrECal  = 0 >
+ < highlandIO.FlatTree.TrueVertex.P0DECal = 0 >
+ < highlandIO.FlatTree.TrueVertex.SMRD    = 0 >
+
+
+
+FLAT TREE READING
+
+Use corrected values or raw values. The FlatTree contains corrected values for the TPC dxdx parameters.
+We can used the corrected values from the FlatTree and not apply the corrections or use the corrected
+values and apply the corrections when running the analysis. We can use the DrawingTools::DumpCorrections() method over the flattree file
+to see what corrections were applied when creating the FlatTree
+
+ < highlandIO.ReadFlatTree.UseCorrectedValues = 0 >
+
+The line below is needed for doxygen documentation
+//! [highlandIO.parameters.dat_flattree]

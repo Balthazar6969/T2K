@@ -1,0 +1,60 @@
+Readme for the following tools:
+NumuEffTools and NumuDataMcCompTools
+M.Ravonel (February 2011)
+
+-----------------------------------------------------
+
+NumuEffTools:
+class that allow you to compute efficiency plots, and purity plots
+with the output of NumuFlatTree as a function of the cut number or
+different varibles.
+There is in addition different option of drawing that are optionnal:
+
+The list of function are:
+
+DrawEffPur        // draw eff and pur together : INPUT: sel_cut,sel_true_cut , true_cut
+DrawEff           // draw efficiency : INPUT: sel_cut, sel_true_cut , true_cut
+DrawPur           // draw purity : INPUT: sel_cut, sel_true_cut , true_cut
+DrawCont          // draw contamination : INPUT: sel_cut, sel_true_cut, true_cut
+DrawEv            // draw event number for different cut: INPUT: sel_cut
+DrawEvRatio       // draw ratio of event number for different mc filesand data : INPUT: sel_cut
+DrawFrac          // draw fraction for different cut: INPUT: denom_cut and num_cut
+DrawEffvsVar      // plot efficiency vs different variables: INPUT:sel_cut, sel_true_cut , true_cut, variale to plot
+DrawPurvsVar      // plot purity vs different variables: INPUT: sel_cut,sel_true_cut , true_cut, variale to plot
+
+
+DrawEffvsVar2d    // plot efficiency as a function of 2dim variables
+                    (X,Y): INPUT: sel_cut, sel_true_cut , true_cut,variable X and variable
+                    Y to plot 
+
+DrawPurvsVar2d   // plot purity as a function of 2dim
+                    variables (X,Y): INPUT: sel_cut, sel_true_cut , true_cut,variable X
+                    and variable Y to plot
+
+
+//========================================
+
+NumuDataMcCompTools:
+
+Draw Data together with MC file (Neut or Genie or both) for the
+variable and the cut you give as input. You will always need to give
+the inputs of the histogram you want to plot :
+name,title,nbins,xmin,xmax (let's call it hist_about in the
+folllowing)
+
+draw_var:        // plot variables for data and mc:
+                    INPUT: NumuCut#, variable, additional_cut, hist_about
+
+draw_var_ratio:  // plot ratio for 2 different numu cut number: INPUT:
+                    NumuCut#1, NumuCut#2, variable, additional_cut, hist_about
+
+draw_var_DataMc_ratio : //plot ratio between Data and Mc for variable x
+
++ same function for 2d plots
+
+few additionnal function:
+getDataPOT        // get the POT # for a given input file
+
+getMcPOT          // get the MC POT nb from a list of MC files used
+
+makeNorm          // make normalisation

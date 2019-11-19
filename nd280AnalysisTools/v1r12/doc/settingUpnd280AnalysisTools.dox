@@ -1,0 +1,57 @@
+/*! \page settingUpnd280AnalysisTools How to setup the nd280AnalysisTools module 
+
+\brief A more detailed explanation of how to setup the nd280AnalysisTools module
+
+@section introduction Introduction
+
+Three types of code compilation exist in relation to the reading out of oaAnalysis files and subsequent analysis work.
+
+The first is the compilation of a class definition library for the contents of the oaAnalysis output files themselves.
+
+The second is the compilation of the \ref analysisTools, which are collected in the <tt>AnalysisTools/</tt> directory, and are 
+written in standard ROOT C++.
+
+The third is the compilation of user executables, which are in the <tt>app/</tt> directory and depend only upon ROOT and the analysis tools.
+
+@section compilation Compilation from within the ND280 software
+
+To setup the nd280AnalysisTools, the absolute path to an oaAnalysis input file must be copied to the first line of <tt>nd280AnalysisTools/vXrY/AnalysisTools/input-file.list</tt>, replacing whatever else is in the file.
+
+Once this is done, move to the <tt>cmt/</tt> directory then source the setup script.  The three compilations above are then all performed by the CMT <tt>make analysisTools</tt> command when run from the <tt>cmt/</tt> directory.
+
+Note that just running <tt>make</tt> will not compile anything!
+
+When the <tt>make analysisTools</tt> command is running there will be a few warnings about unused variables, which should be ignored.
+
+The analysis format file class definitions have now been compiled and the compiled output is put in the new directory <tt>libReadoaAnalysis/</tt>, created in the <tt>AnalysisTools/</tt> directory.
+
+@section compilingUsingRunAnalyses Compiling using runAnalyses.py 
+
+Compilation of the class definition library and the analysis tools can also be triggered by issuing a command of the form
+
+@code
+./runAnalysis.py -c /path/to/oa_*_anal_*.root
+@endcode
+
+where <tt>oa_*_anal_*.root</tt> is an oaAnalysis output file that is going to be analysed.
+
+Executing <tt>runAnalysis.py</tt> with the <tt>-c</tt> option in this way will create a local copy of the analysis tools or re-make the /AnalysisTools directory, depending upon where it's run.
+
+Unnecessary ROOT output is suppressed during this, unless the <tt>--noisyROOT</tt> option is given to <tt>runAnalyses.py</tt> alongside <tt>-c</tt>.
+
+If there have been no changes to the analysis tools since the last time they were compiled then they will not be re-compiled.  To force re-compilation, run:
+
+@code
+./runAnalysis.py -f /path/to/oa_*_anal_*.root
+@endcode
+
+@section performingAnalyses Performing Analyses
+
+Once the package has been compiled libraries exist that allow physics analysis code to correctly interpret the data stored in the oaAnalysis files.  Instructions on performing a physics analysis are detailed at \ref writingAndPerformingAnalyses.
+
+@section compilingOutsideND280Software Compiling the nd280AnalysisTools without the rest of the ND280 software
+
+It is possible to use this package without the rest of the software, all you need is a version of <tt>root</tt> and the oaAnalysis files.  Details on doing this are at \ref outsideND280AnalysisTools.
+
+If there are problems with setting up the package, look at \ref troubleshootingND280AnalysisTools.
+*/

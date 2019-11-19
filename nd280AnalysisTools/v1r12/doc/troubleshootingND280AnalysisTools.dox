@@ -1,0 +1,28 @@
+/*! \page troubleshootingND280AnalysisTools Troubleshooting
+
+\brief Troubleshooting when using the nd280AnalysisTools package.
+
+@section introduction Introduction
+
+This is a new and slightly different package, so there will be some issues with it initially.  If you are having any difficulties that are not covered here please email the package manager so that they can be fixed and documented.
+
+@section setupTrouble Errors occurring when setting up the nd280AnalysisTools package
+
+Whenever you are looking at a different oaAnalysis file or trying to remake the tools after an error perform a <tt>make clean</tt> to ensure that the package correctly picks up any changes you have made.
+
+If the tools won't compile properly, first, check that there is only one file listed in <tt>input-file.list</tt> and that the complete path to that file is included.
+
+Check that you can open the oaAnalysis file correctly with your version of ROOT, and that you are using the same version of ROOT that was used to create the oaAnalysis file.
+
+It was found that some operating systems do not recognise one of the scripts used to compile the AnalysisTools.  If you nothing is being compiled, or you see an error like <tt> Cannot import ROOT<\tt>, then try changing the <tt>makeAnalysisTools.sh</tt> file to run the command <tt>root -l compileAnalysisTools.C</tt> instead of the python script.
+
+If the <tt>make analysisTools<\tt> command does nothing, try sourcing the <tt>makeAnalysisTools.sh</tt> script directly.  If this builds with no errors then the applications can be compiled using the command <<make applications<\tt> from the <tt>cmt<\tt> directory.
+
+Is the version of nd280AnalysisTools the correct one for the oaAnalysis files you are analysing?  A list showing the correspondence can be found at \ref nd280AnalysisTools.
+
+@section analysisTrouble Errors occurring in users analyses
+
+Is the <tt>libReadoaAnalysis/libReadoaAnalysisProjectHeaders</tt> header included at some point?
+
+If you are working outside the ND280 software have you set the LD_LIBRARY_PATH variable correctly?
+*/

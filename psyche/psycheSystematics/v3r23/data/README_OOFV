@@ -1,0 +1,25 @@
+OOFV_rate_hornmode_particle:
+First NU BEAM (bin 0 -1)
+2nd   Nu contamination in ANTI NU BEAM (bin: 1 -2) 
+3rd   ANTINu signal in ANTI NU BEAM    bin: 2-3
+
+	nubeam_min  nubeam_max 	  bin_min	bin_max		mean	sigma
+in tracker
+P0D
+ECal
+SMRD
+other
+x3
+
+OOFV_rate_FGD : 
+
+	      	      	bin1	bin2	mean	sigma
+1/in FGD OOFV
+2/upstream in tracker
+3/downstream in tracker
+4/neutral events
+5/backward events
+6/high angle
+7/double skipped layers
+8/last module failure
+9/else

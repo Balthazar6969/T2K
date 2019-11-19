@@ -1,0 +1,58 @@
+________________
+
+For a detailed description of oaAnalysis please see:
+
+http://www.hep.lancs.ac.uk/nd280Doc/stable/invariant/oaAnalysis/
+
+For more information on analysing events please see following tutorial (kindly
+provided by Alex Finch):
+
+http://workbook.nd280.org/AnalyseEvents.html
+
+Access details to the workbook are at
+http://www.nd280.org/software
+
+There is also a talk on oaAnalysis given at January 2010 nd280 meeting:
+
+http://www.nd280.org/software/software_meetings/20100106premeeting/jdobson_050110.pdf
+
+Once you  have done this, take  a look at the following examples (documentation will
+soon be moved to the workbook and doxygen), or for a more
+involved example see the analysis scripts in the deprecatedMacros and officialMacros
+folders.
+
+________________
+
+For now here are some instructions for running the example macros.
+
+To run the example macros you first need to generate the liReadoaAnalysis
+libraries and compile the AnalysisTools utils. This is done using the
+runAnalysis.py script and an input analysis file. You can either generate this
+analysis file yourself or get hold of one from a source such as MDC1. For more
+details on how to generate analysis output files and how to use them to
+generate the libReadOAAnalysis libraries see the talk at the link above.
+
+First generate the libraries and compile the utils. Go to the macros directory
+[oaAnalysis/VERSION/macros] and run the command:
+[macros]>./runAnalysis.py -c path/to/oa_??_????_?????_anal.root
+
+You can also run this from another directory in which case the a copy of the
+AnalysisTools directory will be made and the liReadOAAnalysis folder will be
+made in this directory.
+
+You can check that the libraries were successfully created by opening up a
+root session and loading the oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C file.
+[root] .x ${ND280ANALYSISTOOLSROOT}/AnalysisTools/oaAnalysisReadInitFile-${ND280ANALYSISTOOLSCONFIG}.C
+If the are no warnings or errors then you have generated the libraries
+successfully.
+
+Now you are ready to run the python (exampleAnalysisScript.py) or root
+(exampleAnalysisScript.C) example macros. They both do pretty much the same
+thing and are just a demonstration of how to access the information stored in
+an MC analysis output tree using either python, ROOT CINT or ROOT ACLiC code. See
+the comments at the top of the files for instructions on how to run.
+
+Jim Dobson - 13th March 2010
+
+_____
+

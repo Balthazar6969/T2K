@@ -1,0 +1,20 @@
+ --- Corrections ------------
+
+Disables all corrections regardless of the ones enabled below
+
+ < baseTrackerAnalysis.Corrections.DisableAllCorrections  = 0 >
+
+Enable/Disable individual corrections
+
+
+--- Systematics ------------
+
+Enable/disable configurations with a single systematic (when EnableSingleSystConfigurations = 0 in baseAnalysis.parameters.dat)
+and enable systematics in the "all_syst" configuration (when EnableSingleSystConfigurations = 1 in baseAnalysis.parameters.dat)
+
+
+--- Example --------------
+
+ < baseP0DAnalysis.Example.MinAccumLevelToSave  = 1 >
+ < baseP0DAnalysis.Example.DebugSelection       = 0 >
+ < baseP0DAnalysis.Example.DebugAnalysis        = 0 >

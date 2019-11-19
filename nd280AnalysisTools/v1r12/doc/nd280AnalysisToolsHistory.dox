@@ -1,0 +1,191 @@
+/*! \page nd280AnalysisToolsHistory History for the nd280AnalysisTools Package
+
+\section nd280AnalysisTools_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Fri Aug 19 11:22:13 2011
+   - Freeze User: ms2609
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+
+
+This is an initial freeze of the nd280AnalysisTools package to produce a frozen version that compiles against the analysis files created in productions 4A, 4B, 4C and 4D.
+
+This will allow people to use the package to develop their own analysis tools and take advantage of the NumuFlatTree application that has been developed by the NuMu analysis group to produce a flat tree from oaAnalysis files.
+
+There will be a further freeze of this package in the near future incorporating the changes to the oaAnalysis file format that will be introduced in production 4E and production 5.
+
+\section nd280AnalysisTools_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Wed Sep  7 17:51:13 2011
+   - Freeze User: ms2609
+   - Freeze Host: lx05.hep.ph.ic.ac.uk
+
+
+
+This is a freeze of the nd280AnalysisTools package ready for production 4E.
+The main change has been to re-write all the AnalysisTools to be compatible
+with oaAnalysis v5r1 and remove the majority of the warning messages that
+used to appear on compilation.
+
+Also, the oaAnalysisEventDisplay has been enabled, allowing events to be
+plotted using the global recon module from oaAnalysis.
+
+\section nd280AnalysisTools_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Wed Feb  8 16:51:22 2012
+   - Freeze User: ms2609
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+
+
+A freeze of nd280AnalysisTools for analysis files from production 4/5.
+
+There are a lot of bugfixes committed for the runAnalyses script, giving greater flexibility and reliability when running analyses.
+
+There has also been:
+
+   The addition of a pass-through information checking macro
+
+   Implementation of a binary search in the TruthUtils tool
+
+
+\section nd280AnalysisTools_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Thu Mar 22 16:28:52 2012
+   - Freeze User: ms2609
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+
+
+Freeze of nd280AnalysisTools for the production 5 software release
+
+This version includes an Eve based event display in the same format as the official event display
+There are also new validation macros present
+Some bug fixes to the truthUtils
+Methods in TGenie(Neut)AnalysisUtils to return the correct Genie(Neut) vertex when given a truth vertex ID
+
+\section nd280AnalysisTools_v0r9_history Version v0r9
+
+Freeze information:
+   - Freeze Date: Tue Feb  5 14:31:18 2013
+   - Freeze User: db211
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+Preliminary freeze for production 6.
+ECal EM Energy corrections included for people who still want to use them.
+Multiple event display updates.
+It is now possible to use 'cmt make' to build nd280AnalysisTools.
+'make analysisTools' is kept in for backwards compatibility.
+'make clean' is no longer an action, but is defined in the make file.
+TTruthUtils now has a verbosity member to function (set to non-verbose by default).
+This allows the omission the 'can not find truthTrajectory in oaAnalysis file' error messages.
+
+
+\section nd280AnalysisTools_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Wed Oct 30 15:47:30 2013
+   - Freeze User: db211
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+
+Change to compilation method.  nd280AnalysisTools now uses $CMTCONFIG information when compiling its libraries.
+The AnalysisTools libraries (built from the sources) are compiled in $CMTCONFIG/AnalysisTools (keeping them separated from the app libraries).  The libReadoaAnalysis headers etc are now located in $CMTCONFIG/AnalysisTools/libReadoaAnalysis.
+oaAnalysisReadInitFile.C is now named with ${ND280ANALYSISTOOLSCONFIG} information attached (e.g. oaAnalysisReadInit-Linux-x86_x64.C).  The oaAnalysisReadInit-${ND280ANALYSISTOOLSCONFIG}.C file is also now updated with the new library locations, so the user scripts contained in the macro directory should not need altering.  It is up to the user to choose the correct oaAnalysisReadInit-${ND280ANALYSISTOOLSCONFIG}.C file.
+The main result of this is allowing one nd280AnalysisTools source tree to be compiled on multiple architectures.  This change fixes bugs 901/908.
+
+
+Software version information for the input oaAnalysis file used to compile nd280AnalysisTools is now extracted.  This is done using a header file which defines preprocessor directives.  This is needed so that downstream packages can conditionally compile their code depending on the version.
+The file AnalysisTools/nd280AnalysisTools_file_version.h is auto-populated with the following directives when compiling nd280AnalysisTools:
+ANATOOLS_FILE_VERSION (string, e.g. v10r11p21)
+ANATOOLS_FILE_MAJOR_VERSION (integer, e.g. 10)
+ANATOOLS_FILE_MINOR_VERSION (integer, e.g. 11)
+ANATOOLS_FILE_PATCH_VERSION (integer, e.g. 21)
+BEFORE_ANATOOLS_FILE(v,r,p) (bool)
+EQUALS_ANATOOLS_FILE(v,r,p) (bool)
+ANATOOLS_FILE_PROD5 (bool - whether this is before v11)
+ANATOOLS_FILE_AFTERPROD5 (bool - whether this is after v11)
+
+
+Additions to the event display:
+Added a control to allow selection by Run/Subrun/Event.
+
+Various updates to macros.
+
+
+
+\section nd280AnalysisTools_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Mon Nov  4 14:16:10 2013
+   - Freeze User: db211
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+Commented out the remaining references to the deprecated TGlobalReconModule::TFgdCluster class which has been removed from the oaAnalysis output.  The TGlobalReconModule::TFgdTimeBin class should now be used instead.
+
+Added TPC information and removed the FGD Cluster information from the GlobalReconModuleAnalysisScript example script.
+
+\section nd280AnalysisTools_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Thu Nov  7 21:09:26 2013
+   - Freeze User: db211
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+Fix a typo in exportVersion.C
+Fix the software_version error message in exportVersion.C
+
+\section nd280AnalysisTools_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Thu Nov 14 11:07:19 2013
+   - Freeze User: db211
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+Fix an edge case in the dynamic method of compilation.  If pyROOT is not installed, then the C compilation script has to be used.  This script has been updated to compile the libraries in the $CMTCONFIG/AnalysisTools subdirectory.
+Fix for bug 947.  Check that the parent trajectory exists before trying to access it.
+
+\section nd280AnalysisTools_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Fri Feb  7 11:45:27 2014
+   - Freeze User: db211
+   - Freeze Host: lx06.hep.ph.ic.ac.uk
+
+Fixed legends not being drawn on the efficiency and purity canvases in userAnalysisBase.py
+
+Include new directory for p0dNumuInputs (located in AnalysisTools).
+Added utilities for p0d muon energy loss correction.
+
+In validate_passthrough.C, increase the size of some arrays to cope with increased knockout nucleons from GENIE 2.8.0.  Alter the "Itensity" branch to "POTPerSpill".
+
+\section nd280AnalysisTools_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Fri Jan 20 14:52:47 2017
+   - Freeze User: luke
+   - Freeze Host: localhost.localdomain
+
+
+
+Major changes:
+  - Tidys up AnalysisTools. Removes a lot of old, unused tools.
+  - Augments python build script, now handles dependencies
+    and invokes the compiler manually rather than getting ROOT to.
+    - Currently probably only works with gcc...
+  - The event display works again and now lives in src/EventDisplay
+
+Minor changes:
+  - Adds tools to handle ECal-iso vertexing objects and ECal hits.
+  - Adds a hand copied oaAnalysisEnums header so that enum definitions
+    are available here.
+
+N.B
+  - Has a currently unfunctional CMake build. It used to work and
+    simplified things but needs bringing slightly up to date. This has
+    been deemed not worth the time, as this package is all but deprecated.
+*/

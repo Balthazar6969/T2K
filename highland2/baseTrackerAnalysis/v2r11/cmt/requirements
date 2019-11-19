@@ -1,0 +1,35 @@
+package highland2/baseTrackerAnalysis
+version v2r11
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app
+
+use baseAnalysis                      v2r19 highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro baseTrackerAnalysis_cppflags " -DBASETRACKERANALYSIS_USED"
+macro baseTrackerAnalysis_linkopts " -L$(BASETRACKERANALYSISROOT)/$(baseTrackerAnalysis_tag) -lbaseTrackerAnalysis "
+macro baseTrackerAnalysis_stamps " $(BASETRACKERANALYSISROOT)/$(baseTrackerAnalysis_tag)/baseTrackerAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(BASETRACKERANALYSISROOT)"
+path_prepend PATH "$(BASETRACKERANALYSISROOT)/$(baseTrackerAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(BASETRACKERANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(BASETRACKERANALYSISROOT)/$(baseTrackerAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(BASETRACKERANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(BASETRACKERANALYSISROOT)/$(baseTrackerAnalysis_tag)"
+
+
+# The library to build
+library baseTrackerAnalysis *.cxx ../dict/*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+

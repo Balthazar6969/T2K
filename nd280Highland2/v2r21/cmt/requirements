@@ -1,0 +1,74 @@
+package nd280Highland2
+version v2r21
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt doc
+
+# Master package to specify highland2 package versions and the psyche released version
+
+# psyche packages
+use nd280Psyche                       v3r25 
+
+# base highland2 packages
+use highlandCore                      v2r21   highland2
+use oaAnalysisReader                  v2r9    highland2
+use highlandEventModel                v2r19   highland2
+use highlandTools                     v2r17p1 highland2
+use highlandUtils                     v2r19   highland2
+use highlandIO                        v2r21   highland2
+use highlandCorrections               v2r7    highland2 
+use highlandSystematics               v2r3    highland2
+use baseAnalysis                      v2r19   highland2 
+
+# tracker analyses
+use baseTrackerAnalysis               v2r11   highland2 
+use numuCCAnalysis                    v2r13   highland2
+use numuCCMultiPiAnalysis             v2r7    highland2
+use antiNumuCCAnalysis                v2r3    highland2
+use numuCCMultiTargetAnalysis         v2r11   highland2
+use numuBkgInAntiNuModeAnalysis       v2r5    highland2
+use nueCCAnalysis                     v2r17   highland2
+use antiNueCCAnalysis                 v2r9    highland2
+use gammaAnalysis                     v2r11   highland2 
+
+# P0D-tracker analyses
+use p0dNumuCCAnalysis                 v2r13   highland2
+use p0dNumuCCQEAnalysis               v2r11p1 highland2
+
+# P0D-only analyses
+use baseP0DAnalysis                   v2r5    highland2
+
+# the tutorial analysis package
+use tutorialAnalysis                  v2r15   highland2
+
+# the validation package (version used to validate this nd280Highland2 version)
+use highlandValidation                v2r15   highland2
+
+# highland documentation
+use highlandDoc                       v2r1    highland2
+use highlandND280Doc                  v2r1    highland2
+
+
+# These packages are in the repository but need validation. No frozen version exists yet for some of them
+# For a complete list of highland2 packages, have a look at https://repo.nd280.org/viewvc/ND280/highland2
+#use numuCCOuterDetAnalysis   v2r1  highland2
+#use antiNumuCCPiZeroAnalysis v0r0  highland2
+#use numuCCZeroPiAnalysis     v1r3  highland2
+#use numuDISkaonAnalysis      v0r1  highland2
+#use numuCCPi0Analysis        v0r11 highland2
+
+
+# The packages below need additional stuff to compile. This is why they are commented out
+# - grtfAnalysis needs nd280AnalysisTools compiled against an oaAnalysis file containing the TReconPerformance module. This package is not yet migrated from highland
+# - highlandRecPack needs RECPACK, this is why it is commented out by default
+#use grtfAnalysis           v0r0  highland2
+#use highlandRecPack        v2r1  highland2
+
+
+
+# Build methods to include.
+#document version version *.cxx ../dict/*.cxx
+#document register register
+document doxygen doxygen -group=documentation *.cxx *.hxx ../doc/*.dox *py

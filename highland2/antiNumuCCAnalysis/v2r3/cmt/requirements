@@ -1,0 +1,37 @@
+package highland2/antiNumuCCAnalysis
+version v2r3
+
+manager Lorenzo Magaletti <lorenzo.magaletti@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app 
+
+use numuCCAnalysis                    v2r13 highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro antiNumuCCAnalysis_cppflags " -DANTINUMUCCANALYSIS_USED"
+macro antiNumuCCAnalysis_linkopts " -L$(ANTINUMUCCANALYSISROOT)/$(antiNumuCCAnalysis_tag) -lantiNumuCCAnalysis "
+macro antiNumuCCAnalysis_stamps " $(ANTINUMUCCANALYSISROOT)/$(antiNumuCCAnalysis_tag)/antiNumuCCAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(ANTINUMUCCANALYSISROOT)"
+path_prepend PATH "$(ANTINUMUCCANALYSISROOT)/$(antiNumuCCAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(ANTINUMUCCANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(ANTINUMUCCANALYSISROOT)/$(antiNumuCCAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(ANTINUMUCCANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(ANTINUMUCCANALYSISROOT)/$(antiNumuCCAnalysis_tag)"
+
+
+# The library to build
+library antiNumuCCAnalysis *.cxx  ../dict/*.cxx
+
+application RunAntiNumuCCAnalysis ../app/RunAntiNumuCCAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+

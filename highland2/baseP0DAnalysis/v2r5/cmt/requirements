@@ -1,0 +1,37 @@
+package highland2/baseP0DAnalysis
+version v2r5
+
+manager Damon Hansen <dgh9@pitt.edu>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app
+
+use baseAnalysis                      v2r19   highland2 
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx ../doc/*.dox
+
+# Build information used by packages that use this one.
+macro baseP0DAnalysis_cppflags " -DBASEP0DANALYSIS_USED"
+macro baseP0DAnalysis_linkopts " -L$(BASEP0DANALYSISROOT)/$(baseP0DAnalysis_tag) -lbaseP0DAnalysis "
+macro baseP0DAnalysis_stamps " $(BASEP0DANALYSISROOT)/$(baseP0DAnalysis_tag)/baseP0DAnalysis.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(BASEP0DANALYSISROOT)"
+path_prepend PATH "$(BASEP0DANALYSISROOT)/$(baseP0DAnalysis_tag)"
+path_remove LD_LIBRARY_PATH "$(BASEP0DANALYSISROOT)"
+path_prepend LD_LIBRARY_PATH "$(BASEP0DANALYSISROOT)/$(baseP0DAnalysis_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(BASEP0DANALYSISROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(BASEP0DANALYSISROOT)/$(baseP0DAnalysis_tag)"
+
+
+# The library to build
+library baseP0DAnalysis *.cxx ../dict/*.cxx
+
+application RunP0DExampleAnalysis ../app/RunP0DExampleAnalysis*.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+

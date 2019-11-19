@@ -1,0 +1,17 @@
+--- Analysis sample (1 for FGD1, 2 for FGD2, 3 for both) --------
+ < nueCCAnalysis.Analysis.Sample.whichFGD = 1 >
+  
+--- Save all the secondary FGD-TPC tracks in the event ------------
+ < nueCCAnalysis.Analysis.SaveSecondaries = 0 >
+
+--- Cut levels: Use 18 to apply all CC-inc cuts --------
+ < nueCCAnalysis.MinAccumLevelToSave = 18 >
+
+--- Save additional toy vars at microtree --------
+ < nueCCAnalysis.MicroTrees.AdditionalToyVars = 0 >
+
+--- Save the gamma initiator - slow  --------
+ < nueCCAnalysis.Analysis.SaveGammaInitiator = 0 >
+
+--- Corrections ------------
+ < nueCCAnalysis.Corrections.UseGlobalEleMom.Enable = 1 >

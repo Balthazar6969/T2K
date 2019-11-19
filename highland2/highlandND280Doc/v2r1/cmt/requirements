@@ -1,0 +1,14 @@
+package highland2/highlandND280Doc
+version v2r1
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt doc
+
+use highlandDoc                       v2r1    highland2
+
+# Build methods to include.
+document doxygen doxygen -group=documentation ../doc/*.dox
+
+

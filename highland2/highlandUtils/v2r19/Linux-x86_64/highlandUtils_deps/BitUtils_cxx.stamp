@@ -1,0 +1,1 @@
+BitUtils_cxx_dependencies =  ../src/EventDisplay/BitUtils.cxx   ../src/EventDisplay/BitUtils.hxx  $(bin)highlandUtils_deps/BitUtils_cxx.stamp

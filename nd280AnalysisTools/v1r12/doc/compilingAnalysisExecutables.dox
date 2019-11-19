@@ -1,0 +1,35 @@
+/*! \page compilingAnalysisExecutables Creating and compiling analysis code as an executable
+
+\brief A guide to creating and compiling an analysis as an executable
+
+@section introduction Introduction
+
+It is possible to create executables to perform analyses, which can significantly improve the runtime of the analysis when looking at large datasets.  The ProcessNumuFlatTree.cxx executable is a bad example of this (quickly written as a proof of principle), but it's currently the only one.
+
+@section writingAnExecutable Writing an Analysis Executable
+
+An analysis executable is written in the same way as in the rest of the software, with the <tt>main(int argc, char **argv)</tt> method calling methods either defined locally or from an analysis tool.  The code
+@code
+#if !defined(__CINT__) || defined(__MAKECINT__)
+#include <AnalysisTools/NuMuFlatTree_GeneralUtils.hxx>
+#endif 
+@endcode
+includes the header file for the analysis tools that the executable will use.  Any analysis tools can be added here then used as follows:
+@code
+NuMuFlatTree_GeneralUtils flat;
+
+TTree* outputTree = new TTree();
+
+flat.SetOutputTree(outputTree);
+flat.Initialize();
+flat.runEvents();
+@endcode
+
+To gain access to the data stored in the oaAnalysis files the executable must include the <tt>libReadoaAnalysis/libReadoaAnalysisProjectHeaders.h</tt> headers, either directly or through the analysis tools.
+
+@section compilingAnExecutable Compiling an Analysis Executable
+
+If you are using the nd280AnalysisTools within the ND280 software compiling executables is simple.  Simply add it to the cmt/requirements file of nd280AnalysisTools in the same way as you would for any other nd280 package.  Then perform a <tt>make clean</tt> before remaking the package, which will give the executable.
+
+If you are working outside of the ND280 software, follow the instructions in \ref outsideND280AnalysisTools.
+*/

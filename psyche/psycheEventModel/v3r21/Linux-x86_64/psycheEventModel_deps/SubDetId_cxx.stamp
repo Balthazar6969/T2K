@@ -1,0 +1,1 @@
+SubDetId_cxx_dependencies =  ../src/SubDetId.cxx   /mnt/data/backup/home/cfrancois/T2K2/psyche/psycheCore/v3r21/src/BasicTypes.hxx   ../src/SubDetId.hxx  $(bin)psycheEventModel_deps/SubDetId_cxx.stamp

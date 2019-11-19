@@ -1,0 +1,11 @@
+
+--- Selection ---------
+ < numuCCMultiTargetAnalysis.DoMultiPi = 0 > // set to 1 for multi-pi branches and variables
+ < numuCCMultiTargetAnalysis.DoAntiNu = 0 >  // set to 1 for antineutrino analysis
+
+--- Reduced Fiducial Volume (make FGD1 and FGD2 FV identical) --------
+ < numuCCMultiTargetAnalysis.UseReducedFV = 0 >
+
+--- Cut levels --------
+ < numuCCMultiTargetAnalysis.MinAccumLevelToSave = 6 >  // minimum accum level to save the event
+

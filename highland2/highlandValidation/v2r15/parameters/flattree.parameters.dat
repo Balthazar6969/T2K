@@ -1,0 +1,11 @@
+Override FlatTree parameters defined in highlandIO.parameters.dat
+
+Enable/disable local recon
+ < highlandIO.FlatTree.UseReconDirP0D = 1 >
+ < highlandIO.FlatTree.UseReconDirTrackerECal = 1 >
+
+Save only the RooTracker vertices with link in the MiniTree/FlatTree
+Swithch of to avoid mistmatching in NVtx between MiniTree/FlatTree and oaAnalysis
+ < highlandIO.FlatTree.FilterRooTracker = 0 > 
+
+

@@ -1,0 +1,32 @@
+ApplyBANFFTuning.exe 
+
+Apply the BANFF tuning to MC (BANFF 2014/15).
+
+use :
+
+./ApplyBANFFTuning.exe
+-m BOOL : 0 = data / 1 = MC
+-p BOOL : 0 = w/o BANFF postfit weight / 1 = with
+-f CHAR : post BANFF fit parameters
+-o CHAR : output file name
+-t BOOL : 0 = don't apply NIWG tuning / 1 = do *
+[-n INT : nb of events to process]
+CHAR : input_file.txt with one MC file and one data file (to scale MC POT)
+
+* mandatory -t 1 if apply BANFF tuning (-f 1)
+
+____________________________________________________________________________
+example for MC :
+
+./ApplyBANFFTuning.exe -m 1 -p 1 -f /ams/data4/neutrino/iRODS_files/QMULZone1/home/asg/asg2015oa/BANFF/postfit/postfit_banff_2015_data_20150417_allparams.root -o mc_banff_tuned.root -t 1 inputfiles/Run4_WaterIn_BeamC_NEUT_Final.txt
+
+
+example for data :
+
+./ApplyBANFFTuning.exe -m 0 -p 0 -f /ams/data4/neutrino/iRODS_files/QMULZone1/home/asg/asg2015oa/BANFF/postfit/postfit_banff_2015_data_20150417_allparams.root -o data_banff_tuned.root -t 0 inputfiles/Run4_WaterIn_BeamC_NEUT_Final.txt
+
+____________________________________________________________________________
+example of input_file.txt :
+
+/ams/data4/neutrino/iRODS_files/QMULZone1/home/asg/asg2015oa/BANFF/prefit/prod6/MC/Run4_WaterIn_BeamC_NEUT_Final.root
+/ams/data4/neutrino/iRODS_files/QMULZone1/home/asg/asg2015oa/BANFF/prefit/prod6/Data/Run4_WaterIn_Data_RDP_FlatTree_Selected.root

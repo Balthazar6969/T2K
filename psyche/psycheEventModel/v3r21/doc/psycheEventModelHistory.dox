@@ -1,0 +1,191 @@
+/*! \page psyche/psycheEventModelHistory History for the psyche/psycheEventModel Package 
+
+\section psycheEventModel_v3r1_history Version v3r1
+
+Freeze information:
+   - Freeze Date: Sun Mar  6 17:07:55 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+major reorganization with new packages and  changes in event model class names
+
+- NMAXTRUETRACKS --> NMAXTRUEPARTICLES,  NMAXTRACKS --> NMAXPARTICLES
+- Move EventBoxTracker class definition as a separe file to psycheUtils. Therefore 
+  many files have to include EventBoxTracker.hxx
+- big reorganization of utilities:
+- AnaParticleB::CompareMomentum takes now const objects as argument
+- Move CompareNHits to AnaParticleB from AnalysisUtils
+- move Index, flip and range variables to AnaTrackB, since they are not used in a particle. 
+  In this way subdetector objects will be lighter
+- Very simple CoreDataClasses (with suffix C, ie. AnaEventC), needed by the machinery are introduced. 
+  Also substitute enums used for Ids (SystId, EventBoxId, SampleId, SubDetId) by a typedef (to an integer for the moment), 
+  with similar name (SystId_h, EventBocId_h, where h stands for highland) such that they can be easily extended.
+- add AnaParticleMomB base class inheriting from AnaParticleB and AnaParticleMomE
+
+
+
+\section psycheEventModel_v3r3_history Version v3r3
+
+Freeze information:
+   - Freeze Date: Mon Apr 11 16:28:08 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Freeze for BANFF development
+
+- Add antinue and gamma sample ID.
+- Update systematic Id to include the nue specific systematics.
+- BaseDataClasses: added Length variable for the AnaECALParticleB. added NECAL/SMRDSUBDETS (will be used in converters)
+
+
+
+\section psycheEventModel_v3r5_history Version v3r5
+
+Freeze information:
+   - Freeze Date: Wed May  4 18:29:20 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+use dynamic_cast instead of static_cast in conversions from AnaParticleB to AnaTrackB since P0D objects are not AnaTracks. 
+This affects only MiniTree reading
+
+
+
+\section psycheEventModel_v3r7_history Version v3r7
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:10:48 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- BaseDataClasses: DirectionStartFlip var moved to highland2, implement GetEventInfoString
+- SampleId: added samples for multi-pi selection for anti-nu CC  and  numu CC bkg  in anti-nu mode
+            differentiate between antinumu/numuCCBkgInAntiNu multi-track and multi-pi samples
+
+
+
+\section psycheEventModel_v3r9_history Version v3r9
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 12:03:43 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!
+
+- BaseDataClasses: Added the DSECAL-FGD2 ToF
+- SystId: Pileup -> PileUp for the nue
+
+
+
+\section psycheEventModel_v3r11_history Version v3r11
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:07:21 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- BaseDataClasses: Added P0D segment length & energy loss to AnaP0DParticleB.
+- SampleId, SistId: Added flags P0D Numu CC selection and several P0D systematics.
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+
+
+\section psycheEventModel_v3r13_history Version v3r13
+
+Freeze information:
+   - Freeze Date: Tue Oct 18 17:35:36 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+SystId: 
+- new systematic: MomBiasFromVertexMigration 
+- the order was changed (indices), hence affects random seeds used for validation (can
+  trivially change), but guess it is better to keep everything in some logical order
+
+BasicUtils: 
+- adopted to changes in psycheCore/CoreUtils.(h)cxx
+  template all the Copy/Resreve/Resize/CreateArray methods,  
+  keep only those that are type specific (e.g. provide some default as a
+  parameter)
+
+- CopyArray() ! an important change: modify all the methods,   so that the
+  structure is (source,  target,  size): previousely there were differences
+  depending on the types used
+
+- ResizeArray() methods now take the original size as an additional parameter and
+  use proper C++ style of creating a new array so that the memory usage is not
+  corrupted due to a mixture of C (reallocate) and C++ (delete) methods
+  it can be a bit slower but is used generally only on event level)))))
+
+
+
+\section psycheEventModel_v3r15_history Version v3r15
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:19:28 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+
+remove methods that were deprecated for a while
+
+
+\section psycheEventModel_v3r17_history Version v3r17
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 20:43:24 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+added the sample id for nue selections with wrong side component:
+ - kFGD?AntiNuEBkgInNuModeCC*
+ - kFGD?NuEBkgInAntiNuModeCC*
+ - kFGD?GammaInAntiNuMode
+
+
+\section psycheEventModel_v3r19_history Version v3r19
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 15:50:33 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- BaseDataClasses: minor, added a method to dump a vector. added a macro to dump an array should put similar ones into CoreUtils?
+- SampleId: Added the numuCC4Pi MultiPi SampleIds for FGD1/2
+- SubDetId: TrackUsesOnlyDet should return false if a detector does not use anything
+
+
+
+\section psycheEventModel_v3r21_history Version v3r21
+
+Freeze information:
+   - Freeze Date: Fri Apr 21 20:41:07 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An intermediate freeze of psyche in order to test systematics tuning for NuMu.
+SystId.hxx 
+use single kFluxWeight
+ 
+BaseDataClasses.cxx BaseDataClasses.hxx 
+added a function to compare AnaTrackB muon momenta from range
+added DSECal_FGD* 
+ToF vars
+
+For AnaTrueParticleB 
+added variables needed for systematics fine-tuning for selections
+
+GParentID (new)
+
+>From AnaTrueParticle
+Int_t PrimaryID
+bool IsTruePrimaryPi0DecayPhoton;
+bool IsTruePrimaryPi0DecayPhotonChild;
+
+
+
+
+*/

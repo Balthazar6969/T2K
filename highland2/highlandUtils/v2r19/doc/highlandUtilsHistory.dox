@@ -1,0 +1,375 @@
+/*! \page highland2/highlandUtilsHistory History for the highland2/highlandUtils Package 
+
+\section highlandUtils_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Sun Nov 30 13:38:31 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+Release for the highland to highland2 migration tutorial on Dec 1st 2014.
+Selections give the same results for oaAnalysis and FlatTrees
+Systematics give slighly different results (Under investigation). Not crucial for tutorial
+
+This is the first freeze of this new package in which utilities from several phighland packages have been put. 
+Changes with respect to previous utils
+
+- anti-nu categories added
+- ported GetFgdModuleType and GetFgdModuleTypeNoFV from old highland (committed in April),
+  adding AnaEvent as argument to check whether using DATA or MC geometry
+
+
+
+\section highlandUtils_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Wed Dec 10 18:27:56 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+add ability to plot 2p-2h reactions
+
+
+\section highlandUtils_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Tue Jan 27 17:48:15 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+add prefix also to FillTruthTreeCategories, as it is for FillCategories
+
+
+
+\section highlandUtils_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Wed Feb 18 11:10:33 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+- add highland PID utils extending the one in psyche. For the moment just one method to 
+  compute the pulls including the kaon hypothesis
+- filling the categories for tracker cc pi-zero analysis and for numuBkg analysis
+- patch for NuWro 2p2h reaction code that is 70 instead of 2 (ported from old highland)
+- Add default mainpage.dox so that package  can be referenced from another one in doxygen using \ref
+- add GetAllTracksUsingFGDOrTPC
+- remove reaction2 and reaction2_antinu (I guess nobody was using it, at least for prod6, since it was giving CC without 2P2H)
+- add reactionCC and reactionCC_antinu, and GetReacionCC and GetReacionCC_antinu that fill them, giving:
+  1 for CC inclusive: (reaction>0 && reaction<-4) || reaction = CAT2P2H)
+  same value of reaction for anything else
+- add categories reactionCC and reactionCC_antinu also in the TruthTree
+
+
+\section highlandUtils_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 18:57:55 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes in psyche 
+to allow selection depending systematics, and performance optimization
+
+Most changes related with CategoriesUtils
+
+
+\section highlandUtils_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 16:00:24 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- fix default values for categories
+- add application to check the link between micro-trees and the RooTrackerVtx tree
+
+
+\section highlandUtils_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Tue Jun 23 09:56:24 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+
+\section highlandUtils_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Sat Aug  1 11:33:08 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+ In CheckRooTrackerVtxLink.cxx add missing header for CLANG
+
+
+\section highlandUtils_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 17:15:21 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- Add 2 functions to get the True tracks in BrECal and DsECal. They are used in highland2Systematics/EcalPi0Systematics.
+- a function to Flip/Reverse a track
+- ToFSenseCorrector.cxx:  a new class that can deal with different ToF business,  check whether a track needs bwd flipping,  flip it
+  etc. guess eventually it should be migrated to psyche(Utils),  keep it here for the moment till is approved by highland/psyche gods
+- parameters file for highlandUtils,  for the moment some ToF stuff
+- CheckRooTrackerVtxLink.cxx: don't count as failures events that have no true vertex associated because the vertex is not yet associatet either 
+  (the accum level is to low). In those cases TruthVertexID=-999. 
+  Reduce the fraction of allowed failures to 1 per mil
+
+
+\section highlandUtils_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 13:12:20 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+HighlandAnalysisUtils: 
+- Added functions that compute PID likelihoods including the kaon hypothesis.
+  This is necessary because the kaon dE/dx variables are not in psyche.
+
+CategoriesUtils:
+- add FillCategories method taking a AnaTrueVertexB as argument instead of AnaTrackB. In that way selections with no MainTrack defined (i.e. NC in P0D) can still fill the categories
+- add "nuparent" and get rid of obsolete GetAntiNuParent
+- add CATSAND code to all categories when is sand MC (addressing bug 1237)
+- remove GetReactionSand* methods
+- reflect the fact that the AnaTrueVertexB::Detector member is now properly filled with psyche bits:
+  for drawing/colors use oaAnalysis definitions
+- Use the GetCategories method with a true vertex and event as input from FillTruthTreeCategories, which was essentially the same. 
+  Mark the last as deprecated. 
+
+P0DAnalysisUtils:
+- add some utilities for P0D. They will be probably moved somewhere else once this is stable
+
+ToFSenseCorrector
+ - moved into psycheUtils
+
+
+\section highlandUtils_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:24:33 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+TransverseUtils:
+- Add utils for calculating transverse kinematics.
+  Ported from p0dAnaUtils (see bug 1247)
+  Beampipe and neutrino parent decay point added to DetDef namespace (for now?)
+  Tested implementation in numuCCPi0Analysis, should probably be incorporated into tutorialAnalysis at some point.
+
+CategoriesUtils:
+- add optional argument useCATSAND in FillCategories to allow sand muons dedicated studies
+  (setting it to false sand muons will be categorized)
+
+P0DAnalysisUtils:
+ - The P0DHit has no Position anymore. get the time from the new data member Time.
+ - Add utilities to fill new EventBoxP0D2
+
+Move to version v2
+
+
+\section highlandUtils_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Sun Mar  6 17:37:40 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+major reorganization with new packages and  changes in event model class names
+
+- ND280GeomId and P0DGeometryManager moved from highlandIO to highlandUtils
+- HighlandAnalysisUtils: put here the method GetProductionIdFromND280AnalysisTools() and the productions enum such that 
+  highlandCore can be decoupled from nd280AnalysisTools
+
+
+\section highlandUtils_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Wed May  4 19:21:12 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- CategToolsNueCC: Add nue categories utils.
+
+- P0DAnalysisUtils: Use dynamic_cast to distinguish between p0d objects inheriting from AnaTrack and from AnaParticleB. 
+  To be better understood !!!
+
+- TranseversUtils removed. 
+  Utilities to calculate the reconstructed neutrino direction and the transeverse kinematics moved to psycheUtils.
+  The neutrino direction is calculated in NuDirUtils, which uses neutrino bea line parameters from the parameters file. 
+  The transeverse kinematic utils are noy in KinematicUtils
+
+
+\section highlandUtils_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:19:44 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- P0DAnalysisUtils: Added class to fill P0D michel clusters from AnaP0DVertex
+- CategToolsNueCC: Minor. Make sure that signal electron is not coming from a pi0.
+- HighlandTreeConverterUtils: move FillTrueVertexRooInfo from the tree converters to HighlandTreeConverterUtils, since the method was common for FlatTree and oaAnalysis
+
+
+
+\section highlandUtils_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Aug 10 11:50:57 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!
+
+- CategToolsNueCC: correct bug detected by warning:  abs(reac < 30)  ---> abs(reac) < 30
+- RooTrackerVtxManager: move RooTrackerVtx stuff from OutputManager (which is supposed to be general) to a RooTrackerVtxManager in highlandUtils
+
+
+
+\section highlandUtils_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:25:55 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- CategToolsNueCC: Fix compilation warnings.
+- HighlandTreeConverterUtils: add info about bug 1368 in error output
+
+
+\section highlandUtils_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 09:40:23 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+CategToolsNueCC:
+- Check that there is gamma only in the selected fgd. Small correction in the way signal is defined.
+
+P0DAnalysisUtils: 
+- use templates from CoreUtils for Resize/Create/CopyArray() methods
+  for CopyArray() account to the new "consistent" (throughout the classes) changes
+   of arguments` order: (src, target, size)
+
+IntersectionUtils:
+- various useful classes functions that allow to check/get the enrtrance&exit
+  points of the intersection of a ray with a 3D box (axis oriented)  
+  useful for pthoton systematics estimations and possibly some neutrino checks as
+  well, 
+
+  the deeper functionality can be retrieved with highlandRecPack (via RECPACK) but 
+  usage of the RECPACK is considered to be something not generalized and for only
+  specific case,  hence introduced something simplier
+
+  may be useful for checks/systematics by Pierre Lasorak for photons 
+
+
+
+\section highlandUtils_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 16:25:47 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+P0DAnalysisUtils: 
+ - Adding Geomtery Utilities to convert GeomID to SP0Dule, P0Dule, Layer and Bar Number. 
+   This is the same calculation as done in SetupP0DTree.H in p0dRecon. 
+   Also, correction for minTime/maxTime which was swtiched for Michel Electron clusters.
+
+HighlandAnalysisUtils: 
+ - add PROD5D
+ - rename 6BC --> 6BD
+ - handle TREx production
+
+requirements 
+ - add root libraries needed by TECALPid stuff, imported from nd280AnalysisTools
+
+TECALPidDefs, TTruthUtils
+- import TECALPid... files  and TTruthUtils from nd280AnalysisTools
+
+ecalRecon_likelihood_pdfs ...
+- add ecal likelihood pdfs temporarily under src and set the proper folder in the manager
+
+CategToolsNueCC
+- IsGammaSignalOOFGD is separated between FGD1 and FGD2. Update NuESimpleCat.
+
+
+
+\section highlandUtils_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:29:35 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+CategToolsNueCC:
+- Update categories to include genie channels not simulated in neut. Correctly name anti-nue categories.
+
+Working file: highland2/highlandUtils/v2r14/src/CategoriesUtils.cxx
+- add particle_detector category as suggested in bug 1413
+- correct bug 1413 by assigning code 999 (CATOTHER) to the detector cathegory when the detector is not found in TreeConverterUtils
+- remove methods that were deprecated for a while
+
+HighlandAnalysisUtils:
+- Production version stuff noved into a different utility files: ProductionUtils.cxx/.hxx
+
+P0DAnalysisUtils: 
+- remove methods that were deprecated for a while
+
+ProductionUtils
+- Production version stuff noved from HighlandAnalysisUtils into a different utility files: ProductionUtils.cxx/.hxx
+  Add more productions. Use directly version and revision numbers instead of preprocessor variables
+
+
+
+\section highlandUtils_v2r17_history Version v2r17
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 21:23:56 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+CategToolsNueCC: 
+- No need to define again the NOTRUTH topology. This will solve a harmless(?) error printed when running nue analysis.
+
+
+\section highlandUtils_v2r19_history Version v2r19
+
+Freeze information:
+   - Freeze Date: Thu Mar  2 11:08:04 2017
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+app/BuildReWeightedMicroTree: 
+- As requested in bug 1270 this is an application that adds weights to the microtrees provide an external file
+  with weights. The new weights are stored into the vector of floats ext_weight, with size NEXTWEIGHTS. If you run the application
+  over a file that already contains external weights, the new weight will be added to the vector
+- include cstdlib needed for std::exit in jenkins server  
+
+HighlandTreeConverterUtils: 
+- when filling the proton information it is more consistent (between the
+  generators as well) to use the most
+  energeitc one,  not the first one ecountered
+
+new src/EventDisplay folder
+- added some general (well,  depends on BaseDataClasses,  but on very general
+  stuff there) code for a simple EventDisplay,
+  very basic things for the moment,  more to come: e.g. Helix propagator
+  engine
+
+
+*/

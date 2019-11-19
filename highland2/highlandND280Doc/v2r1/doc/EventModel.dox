@@ -1,0 +1,55 @@
+The top-level object is an AnaSpillB, which contains the information from one beam spill (in general formed formed of several bunches). 
+The full structure of the AnaSpillB object can be found in the class documentation, but
+a summary is:
+
+
+<ul>
+  <li>AnaSpillB - top-level object. It represents a beam spill
+  <ul>
+   <li>AnaEventInfoB - event information (run, subrun, evt number, etc)</li>
+   <li>AnaBeamB - beam summary information</li>
+   <li>AnaDataQualityB - detector data quality information</li>
+   <li>vector&lt; AnaBunchB &gt; - A vector of bunches in the Spill
+    <ul>
+     <li>vector&lt; AnaVertexB &gt; - Vector of reconstructed vertices in this Bunch</li>
+       <ul>
+         <li>vector&lt; AnaParticleB &gt; - Vector of particles associated to this vertex </li>
+         <li>AnaTrueObjectC - True object (a AnaTrueVertexB) associated to this reconstructed vertex</li>
+       </ul>
+     <li>vector&lt; AnaParticleB &gt; - Vector of reconstructed particles in this Bunch
+      <ul>
+       <li>AnaParticleB - \c Original Particle from which this particle comes from (explained below)</li>
+       <li>AnaTrueObjectC - true object (AnaTrueParticleB) associated with the particle</li>
+       <li>AnaVertexB - reconstructed vertex to which this particle is associated</li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li>vector&lt; AnaTrueParticleB &gt; -  vector of true particles in the Spill
+     <ul>
+       <li>vector&lt; AnaDetCrossingB &gt; - Vector of detector crossings. These are in the order in which the detectors were crossed.</li>
+       <li>AnaTrueVertexB - True vertex associated to this true particle</li>
+    </ul>
+   <li>vector&lt; AnaTrueVertexB &gt; - vector of true vertices in the Spill</li>
+    <ul>
+     <li>vector&lt; AnaTrueParticleB &gt; - vector of true particles associated to a true vertex</li>
+    </ul>
+  </ul>
+ </li>
+</ul>
+</ul>
+
+
+A special case oa AnaParticleB is AnaTrackB, which represents a global track in ND280. It has the following structure:
+
+<ul>
+  <li>AnaTrackB - Inherits from AnaParticleB and represents a global track </li>
+    <ul>
+      <li>AnaTrueObjectB - True object (a AnaTrueVertexB) associated to this reconstructed vertex</li>
+      <li>vector&lt; AnaTPCParticleB &gt; - TPC segments of particle
+      <li>vector&lt; AnaFGDParticleB &gt;  - FGD segments of particle</li>
+      <li>vector&lt; AnaECALParticleB &gt; - ECal segments of particle</li>
+      <li>vector&lt; AnaP0DParticleB &gt;  - P0D segments of particle</li>
+      <li>vector&lt; AnaSMRDParticleB &gt; - SMRD segments of particle</li>
+    </ul>
+</ul>

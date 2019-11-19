@@ -1,0 +1,42 @@
+/*! \page creatingAnalysisTools Creating new Analysis Tools
+
+\brief A guide to creating and using the analysis tools
+
+@section introduction Introduction
+
+nd280AnalysisTools will become a repository of useful analysis tools that can be used by anyone performing an analysis, or that could be used to reproduce a published analysis for example.
+
+These tools are equivalent classes in that they contain a set of methods that can be called from user analysis code.  The tools are also able to use oaAnalysis classes, such as <tt>TGlobalRecon::TGlobalHit</tt>s and extract information from them.  Using or writing an analysis tool is therefore the best way to use oaAnalysis classes in your analysis code.
+
+@section writingAnalysisTools How to write an analysis tool
+
+How to include and use analysis tools in your analysis code is described by \ref writingAndPerformingAnalyses.  To create an analysis tool, it easiest to start with a simple example, such as <tt>TGENIEAnalysisUtils</tt>.
+
+Firstly, in the *.cxx file, there are the lines:
+@code
+#include "TGENIEAnalysisUtils.hxx"
+
+#if !defined(__CINT__)
+ClassImp(TGENIEAnalysisUtils);
+#endif
+@endcode
+These include the <tt>TGENIEAnalysisUtils</tt> header file and provide a class implementation for ROOT if required.
+
+The rest of the *.cxx file contains they methods of the tool.
+
+Next, look at the header file.
+@code
+#include <TObject.h>
+#include "libReadoaAnalysis/libReadoaAnalysisProjectHeaders.h"
+#include "TVNeutrinoGeneratorAnalysisUtils.hxx"
+@endcode
+This code includes the <tt>TObject</tt> header, allowing the analysis tool to handle ROOT objects.  It also includes the <tt>libReadoaAnalysis/libReadoaAnalysisProjectHeaders</tt> header.  This allows the tool to access the oaAnalysis classes and data stored in the oaAnalysis file, and must be included in all analysis tools.  Finally, the <tt>TVNeutrinoGeneratorAnalysisUtils</tt> analysis tool header is included, allowing this tool access to the methods from the <tt>TVNeutrinoGeneratorAnalysisUtils</tt> tool.
+
+The final file is <tt>TGENIEAnalysisUtils_LinkDef.h</tt>.  This is similar for all analysis tools and contains:
+@code
+#ifdef __CINT__
+#pragma link C++ class TGENIEAnalysisUtils+;
+#endif
+@endcode
+In your analysis tool simply replace <tt>TGENIEAnalysisUtils</tt> with the name of your analysis tool.
+*/

@@ -1,0 +1,107 @@
+/*!
+\page tutorial Implementing your own analysis package - a tutorial
+
+      WORK IN PROGRESS !!!
+      For the moment have a look at the tutorial package highland2/tutorialAnalysis
+
+
+Here we explain step by step the tutorialAnalysis package, which can be used to understand most elements of the framework.
+
+
+This example contains two analyses algorithms, one, called tutorialAnalysis.
+
+Each analysis algorithm inherits ultimately from the class AnalysisAlgorithm, which has many methods, somo of them mandatory. 
+
+\section tut_create Creating the analysis package
+
+To create your own analysis the first thing you should do is to create a cmt package. After going into the folder where highland2 and psyche leave just type
+
+\code
+cmt create highland2/tutorialAnalysis v0r0
+\endcode
+
+This will create a folder tutorialAnalysis inside highland2 with a subfolder v0r0. Inside two folders will appear cmt and src.
+The file with instructions on how to compile and link your code is the requirements file, under the cmt folder. This file is basically empty.
+We should fill it with the appropriate instructions. You can have a look at the requirements file under tutorialAnalysis
+
+\include tutorialAnalysis/v2r10/cmt/requirements
+
+Once we have the proper requirements file to compile we go inside the cmt directory and do:
+
+\code
+cmt config
+make
+\endcode
+
+Notice that cmt config has to be used only the first time, to create the Makefile file.
+At this point nothing will be compiled because there are no source code files under the src folder.
+
+\section tut_algo Start filling the algorithm
+
+The first files we should put there are tutorialAnalysis.hxx and tutorialAnalysis.cxx, which should contain the declaration and definition of the class tutorialAnalysis and its methods.
+This class should inherit from AnalysisAlgorithm or from another analysis algorithm (inheriting ultimately from AnalysisAlgorithm 
+
+AnalysisAlgorithm has some pure virtual methods (=0) that must be implemented in the derived analysis.
+
+\snippet AnalysisAlgorithm.hxx AnalysisAlgorithm_mandatory
+
+But don't worry, as we will see below, most of them are already implemented in the baseAnalysis class.
+
+Other methods are optional and allow fintunning of the analysis or complicated cases
+
+\snippet AnalysisAlgorithm.hxx AnalysisAlgorithm_optional
+
+
+From the list of 
+
+\section tut_sel Including an event selection
+
+baseAnalysis does not define any selection. Selections should be added to the selection manager in the method DefineSelections:
+
+\snippet tutorialAnalysis.cxx tutorialAnalysis_DefineSelections
+
+
+We can now compile and run the executable, provided input and output files:
+
+\code
+../$TUTORIALANALYSISCONFIG/RunTutorialAnalysis.exe -o output.root input.root
+\endcode
+
+The output file contains few root trees:
+
+|  tree        |     description        |
+--------------:|:-----------------------|
+|  default     |  nominal selection     |  
+|  truth       |  all true signal events|
+|  header      |  POT information       |
+|  config      |  configuration of the analysis|
+
+
+The default tree will not contain much information. Only the variables added automatically:
+ - categories for color code drawing
+ - cut information: accum_level, cut0, cut1, ...
+
+\section tut_microtree Add variables to the micro-tree
+
+The next step is to add variables to the micro-tree such that we can understand the selection. This is done in the DefineMicroTrees method. 
+
+\snippet tutorialAnalysis.cxx tutorialAnalysis_DefineMicroTrees
+
+\section tut_syst Adding systematics
+
+\snippet tutorialAnalysis.cxx tutorialAnalysis_DefineSystematics
+
+
+\section tut_conf Adding configurations
+
+\snippet tutorialAnalysis.cxx tutorialAnalysis_DefineConfigurations
+
+
+\section tut_truthtree Computing efficiencies: the truth tree
+
+\snippetdoc tutorialAnalysis.cxx tutorialAnalysis_DefineTruthTree_info
+
+\snippet tutorialAnalysis.cxx tutorialAnalysis_DefineTruthTree
+
+
+*/

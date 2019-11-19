@@ -1,0 +1,125 @@
+-----------------------------------
+How to use the NumuFlatTree tools
+
+(F.Dufour, Feb 2011)
+
+Contents:
+This directory: Tools needed to make flat tree
+Analysis_FlatTree: Tools to analyse the flat tree
+	Tools: Tools that could be useful to anyone
+	GlbAna10: Tools to produce results from Global Analysis 10 a
+
+//////////////////////////////////////////////////////////////////
+Note: The obsolete directory contains the RunMiniTree code which does
+exactly the same as this version, and is kept there for reference.
+
+
+WARNING: This is a very early version. 
+It can run on either v7r21p1 (best) or v8r5p13 (see below).
+It is currently meant to use on MCP1 and RPD1.
+
+Extensive use with MCP2 and RPD3 has not been done yet, but if you
+want to try make sure to changed the the timing of the bunch in
+ProcessNumuFlatTree.h (p_time_mc and p_time_data)
+
+Please email me or Gustav with comments
+and questions: fanny.dufour@unige.ch or Gustav.Wikstrom@unige.ch 
+_____________________________________________________________________
+_____________________________________________________________________
+About this directory:
+
+
+** General purpose:
+
+Create a flat tree used for numu analyses out of the output of
+oaAnalaysis
+
+** General logic of the code:
+
+The goal is that everyone who run this macro, always run the standard
+module (this is the class defined in NumFlatTree_Standard.C). The
+variables of the standard module are defined in NumFlatTree_Standard.h
+and all start with "std". (see top of NumFlatTree_Standard.h for more
+details on the syntax)
+
+To run only the standard module you need to use: mode = 0.
+
+Then you can write your own module following the logic of the Global
+Analysis 10a module:
+
+     1) Look at NumuFlatTree_GlbAna10a.C and NumuFlatTree_GlbAna10a.h
+        and follow th syntax especially about name variables.
+
+     2) Associate a mode number to it (+, see below), and 3 or 4
+        letters to start your variables 
+
+     3) Add call to your class with an if statement on the mode
+        See examples already in place by searching for "mode" in ProcessNumuFlatTree.C
+
+
+(+) How to know which mode to use for running a given set of modules:
+
+We use a binary scheme so that there is an easy way to run any
+combination of modules.
+
+If you want to run modules 1, 3 and 4, it looks like you want to run
+modules: 1101  which is 13 in binary so you need to set the mode to 13.
+         43 1
+
+The modules are defined in GetModeDefinition of  NumuFlatTree_GeneralUtils.C 
+Please add your own module there.
+_____________________________________________________________
+______________________________________________________________
+
+** How to create the flat tree:
+
+WARNING : Check which shared library you should be using in
+ProcessNumuFlatTree.C. It is different if you are using the oaAnalysis
+of v7r21p1 or the one of v8r5p13. Just comment/uncomment the section
+that you need.  
+
+Extensive use with MCP2 and RPD3 has not been done yet, but if you
+want to try make sure to changed the the timing of the bunch in
+ProcessNumuFlatTree.h (p_time_mc and p_time_data)
+
+----------------------------------------------------
+1)
+Run the macro ProcessNumuFlatTree.C with root 
+
+Standard running:
+> root -l 'ProcessNumuFlatTree.C("oa_gn_beam_91000000-0000_ryo7pno5fwxo_anal_000_mcp1geniemagnet.root","tmpout.root")'
+Note: don't change the name of the input files, currently it gets the subrun number out of the name..... (bad I know)
+
+For a selected range of events, and a verbose output:
+> root -l 'ProcessNumuFlatTree.C("oa_gn_beam_91000000-0000_ryo7pno5fwxo_anal_000_mcp1geniemagnet.root","tmpout.root",0,500,0,1,0)'
+
+More info is available in the beginning of ProcessNumuFlatTree.C
+
+----------------------------------------------------------------------
+2) Once you have your outputs (just chain them together if you have a
+large number of files, in order to have only one file containing the
+flat tree). You can create your own macros to study them.
+
+You can look at process_chainNumuFlatTree_mc.sh and chainTree.C
+as an example about how to do that.
+
+------------------------------------------------------------------ 
+
+3) If you go to Analysis_FlatTree/GlbAna10a% there is an example of
+analysis macro: McEffPur.C
+
+(This is just meant to be an example, it does not give proper results
+right now.  But it gives an example of how you can define the CC cuts
+(Geneva+Valencia version) and use them see NumuCutsDefinition.h)
+
+Run it with
+> root -l 'McEffPur.C(0)'
+
+Note: I currently provide the files test_**.root to test this
+macro. The data file is based on one file and the MC files were run on
+only 500 events. This is really just meant as an example of output
+files from ProcessNumuFlatTree.C
+
+
+
+

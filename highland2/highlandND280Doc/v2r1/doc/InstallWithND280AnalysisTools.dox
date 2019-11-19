@@ -1,0 +1,369 @@
+/*!
+\page install_nd280AnalysisTools Install highland2/psyche (with nd280AnalysisTools)
+
+- \ref intro
+  - \ref nd280AnalysisTools
+  - \ref coFrozen
+  - \ref coHEAD
+  - \ref compileH2
+  - \ref bothProd
+  - \ref cmtpathIssue
+- \ref tipstricks
+- \ref installnd280
+- To import and freeze see \ref committing
+
+
+\section intro Install highland2/psyche in a dedicated workspace folder
+
+It is not recommended to install highland2 in the same folder of other nd280 packages,
+otherwise every time you compile with the broadcast option (cmt br make)
+<A HREF="http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/CMT.CVS.html"> CMT </A>
+will recompile also nd280AnalysisTools, ROOT, etc.
+\n
+To avoid this, you can easily install highland2/psyche in a different workspace folder
+and properly set the CMTPATH environment variable to point to nd280AnalysisTools.
+\n
+Also in the case you want to have both a frozen version and the HEAD of highland2/psyche,
+it's recommended to install them in different workspace folders
+(otherwise you have to use nd280Highland2/v&lowast;/cmt/fix_requirement, a script which fixes packages dependencies).
+
+
+\subsection nd280AnalysisTools nd280AnalysisTools (prerequisite)
+highland2/psyche needs nd280AnalysisTools:
+  - if you are working on a cluster, you probably have it already installed
+(documentation to install nd280 software on Scientific Linux can be found in the
+<A HREF="http://workbook.nd280.org/Workbook.html"> ND280 workbook </A> )
+  - to install nd280AnalysisTools on Ubuntu see section \ref installnd280
+  - to use highland2 with oaAnalyis files of a certain production, you need an nd280AnalysisTools compiled using a file of the same production (otherwise highland2 will warn you)
+
+
+\subsection coFrozen Install a frozen version
+When we refer to a version of highland2, we actually refer to the version of the <B>nd280Highland2</B> package:
+it's a <EM>hat</EM> package which properly links all the needed versions of each highland2 and psyche package
+(for psyche it actually only links a version of nd280Psyche, which in turn links the needed psyche pakcages).
+\n
+To know which is the last frozen version of highland2 you can have a look at the
+<A HREF=
+"http://hep.lancs.ac.uk/nd280Doc/devel/Highland2/nd280Highland2/latest/dox/nd280Highland2History.html"
+>freezing history</A>,
+but actually the patched versions are not shown there, thus you'd better check on top of this page:
+<A HREF=
+"https://repo.nd280.org/viewvc/ND280/nd280Highland2/doc/nd280Highland2History.dox?sortby=date&sortdir=down&view=log"
+>
+https://repo.nd280.org/viewvc/ND280/nd280Highland2/doc/nd280Highland2History.dox?sortby=date&sortdir=down&view=log
+</A>
+
+To check out (i.e. download) for example nd280Highland2 v1r11, do:
+\verbatim
+  export CVSROOT=:ext:anoncvs@repo.nd280.org:/home/trt2kmgr/ND280Repository
+  mkdir h2_v1r11
+  cd h2_v1r11
+  source <your_nd280_folder>/CMT/v*/mgr/setup.sh # alternatively you can source an nd280 setup script
+  cmt co -r v1r11 -R nd280Highland2 # (co=check out, -r=release ID, -R=recursively check out all packages listed in cmt/requirements)
+\endverbatim
+
+
+\subsection coHEAD Install the HEAD version
+If you want the HEAD, you likely want commit some code: you need to have a "cvs developer account"
+(<A HREF="http://www.t2k.org/nd280/software/cvs_access_account_signup"> how to get it </A>)
+: make sure to have it before proceeding!
+WARNING: never attempt to commit code that was originally checked out as "anoncvs" or as a different user.
+\n
+Without specifying a release, cmt will check out the HEAD of a package, but in this case -R cannot work, so we have to use a script.
+
+\verbatim
+  export CVSROOT=:ext:<your_cvs_developer_username>@repo.nd280.org:/home/trt2kmgr/ND280Repository
+  mkdir h2_HEAD
+  cd h2_HEAD
+  source <your_nd280_folder>/CMT/v*/mgr/setup.sh # alternatively you can source an nd280 setup script
+  cmt co nd280Highland2
+  cd nd280Highland2/v*/cmt/
+  ./checkout_HEAD #(follow the instructions on the screen, it will create the following script to be run)
+  ./checkout_HEAD_v*
+\endverbatim
+Note that this script will modify nd280Highland2/v&lowast;/cmt/requirements replacing the version of each package with a wildcards
+\n
+<B>--> do not commit this file!!!</B>
+
+
+\subsection compileH2 Compiling highland2/psyche
+
+Before compiling you have to properly setup the CMTPATH environment variable:
+\verbatim
+  source <your_nd280_folder>/CMT/v*/mgr/setup.sh # alternatively you can source an nd280 setup script
+  export CMTPATH="<path_to_the_folder_containing_nd280Highland2>:<path_to_the_folder_containing_nd280AnalysisTools" # (paths separeted by columns)
+  source nd280Higland2/v*/cmt/setup.sh
+\endverbatim
+
+These commands above are needed also to run highland2: to avoid typing every time you could put these lines into a setup script and source it in every new shell.
+\n
+If the same package is contained in both paths specified in CMTPATH, cmt will use the one contained in the first path.
+\n
+If ROOT is not in the same folder of nd280AnalysisTools (they are if you have the full nd280 software installed)
+you need to add its path to CMTPATH:
+\verbatim
+  export CMTPATH="<path_to_the_folder_containing_nd280Highland2>:<path_to_the_folder_containing_nd280AnalysisTools:<path_to_the_folder_containing_ROOT>"
+\endverbatim
+Now you can compile:
+\verbatim
+  cd nd280Higland2/v*/cmt/
+  # (if you moved/renamed folders, you need to run here 'cmt br make config' to re-set the paths in setup.sh of all package, and source setup.sh again)
+  cmt br make # (br = broadcast = recursively compile all the needed packages which are in the same workspace folder)
+\endverbatim
+\n
+If the compilation fails complaining libGLEW.so.1.8 was not found, just create a softlink to another libGLEW (on Xubuntu 14.04 I had the 1.10):
+\verbatim
+  sudo ln -s /usr/lib/x86_64-linux-gnu/libGLEW.so.1.10 /usr/lib/x86_64-linux-gnu/libGLEW.so.1.8
+\endverbatim
+
+
+
+\subsection bothProd Working with two different production
+As said in section \ref nd280AnalysisTools, nd280AnalysisTools needs to be compiled with the same production used in highland2.
+\n
+Since compiling nd280AnalysisTools takes quite a lot a time, if you want to work with two production you'd better install two nd280AnalysisTools: each time you run you can set the CMTPATH to point to one or to the other, as explained in the previous section (\ref compileH2), and you don't need two full installations of nd280.
+\n
+Note that the two nd280AnalysisTools cannot stay in folders at the same level of the absolute path: see next section \ref cmtpathIssue.
+\n
+Also highland2 needs to be recompiled every time you switch between production 5 and 6:
+make sure you properly clean everything before re-compiling (or alternatively you can install highland2 in two different workspace folders)
+\verbatim
+  cmt br make clean
+  cmt br make
+\endverbatim
+
+
+\subsection cmtpathIssue Known issues with CMTPATH
+1) If you set CMTPATH=pathA:pathB, the same package can exist in both pathA and pathB
+but only if pathA and pathB are NOT at the same level of the absolute path
+(e.g. when there is one nd280AnalysisTools in the nd280 software and one stand-alone):
+\verbatim
+    export CMTPATH="<main_path>/folderA/:<main_path>/<another_folder>/folderB/" # this works and cmt will use the pacakge found in the first path (folderA)
+    export CMTPATH="<main_path>/folderA/:<main_path>/folderB/" # this will complains for conflicting releases
+\endverbatim
+
+2) On Scientific Linux 5, nd280AnalysisTools and nd280 compile only if their paths are the first ones in CMTPATH.
+3) xsTool needs to stay in the same workspace folder of highland (not sure why but even properly setting the CMTPATH it doesn't work)
+
+\subsection test Test your installation
+If everything worked so far, you should be fine. If you want to make sure, try this out:
+\n
+(if you are in a new shell, you have to source again your setup script, or manually export the CMTPATH and source nd280HighlandTools, as explained in \ref compileH2)
+\verbatim
+  RunNumuCCAnalysis.exe -o test.root <path-to-oaAnalysis-file>
+\endverbatim
+Now you can check some of the histograms inside the tree:
+\verbatim
+  root test.root
+  TBrowser b
+\endverbatim
+
+
+\n
+\section tipstricks Tips & Tricks with CMT and CVS
+
+- cmt is used to check out and compile (it handles versioning and dependencies among pacakges), e.g.
+  \n
+  cmt br make = cmt broadcast make
+  \n
+  cmt co = cmt checkout (actually this command internally uses cvs)
+  \n
+  DO NOT check out with 'cvs co': you will get something broken (without versioning and dependencies)
+
+- 'cmt make' can be run also from src/ (all cmt and cvs commands can be run from any folder parallel to cmt)
+
+- 'cmt br make' compiles all the packages listed in cmt/requirements of the current package
+   \n
+   --> from a specific package it will compile all and only the needed packages
+
+- If you rename/move folders, use 'cmt br cmt config' to re-set the correct paths in setup.sh of all packages
+
+- 'cmt show use' to check the configuration of the package and versions dependencies
+
+- cvs is used to commit and update in the HEAD version, e.g.
+  \n
+  cvs ci = cvs commit (to send changes to the online repository)
+  \n
+  cvs di = cvs diff (to see your changes not yet committed, --brief for just the list of the modified files)
+  \n
+  cvs up = cvs update (to retrieve changes from the online repository)
+  \n
+  cvs remove <filename> (need also 'cvs ci' afterwards. No way to remove a folder, need to be done manually in the repository by experts)
+  \n
+  cvs add <filename> (need also 'cvs ci' afterwards)
+  \n
+  cvs add <foldername> (needed before adding the file in the fodler)
+  \n
+  DO NOT check out with 'cvs co': you will get something broken (without versioning and dependencies)
+
+- to update a whole HEAD version (-d is for dowloading files and folder added to the repository after your checkout)
+  \n
+  \verbatim
+  cvs update -d highland2/*/*/
+  cvs update -d psyche/*/*/
+  \endverbatim
+  \n
+  Note that even if you update an old HEAD version anyway you will get the very HEAD,
+  and you can keep working and commit to the very HEAD from there
+
+- alternatively to the checkout_HEAD script you can get the HEAD with one of these tricks:
+
+   - if you already have an old HEAD, just update it: no matter the folder number, you will work with and commit to the very HEAD
+     \n
+     \verbatim
+     cvs update -d highland2/*/*/
+     cvs update -d psyche/*/*/
+     \endverbatim
+
+   - with the following you will have in each package both a frozen and a HEAD version
+     (but the frozen one will not work unless you run nd280Highland2/v&lowast;/cmt/fix_requirements)
+     \n
+     \verbatim
+     cmt co -R nd280Highland2 -r vXrY (check out recursively the frozen version vXrY)
+     find psyche/* -maxdepth 0 -exec cmt checkout {} \;
+     find highland2/* -maxdepth 0 -exec cmt checkout {} \;
+     \endverbatim
+
+   - with the following you will have in each package a folder with a frozen number, but usable as a HEAD
+     \n
+     \verbatim
+     cmt checkout -R nd280Highland2 -r vXrY   (check out recursively the frozen version vXrY)
+     cvs update -A -d highland2/*/*/
+     cvs update -A -d psyche/*/*/
+     \endverbatim
+     (with option -A you get the HEAD not matter the version you are)
+
+
+
+\n
+\section installnd280 Install nd280 or nd280AnalysisTools on Ubuntu
+
+This is an update to the previous versions written by Martti and Enrico in 2013.
+\n
+This was tested on Ubuntu 12.04.4 LTS (Martti) and 13.10/14.04 (Enrico) using the last frozen software version of nd280.
+
+
+\subsection setup 1. Prepare a setup.sh script and install CMT
+Follow the ND280 workbook instructions for non-standard OS, make a setup script and install CMT:
+\n
+http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/SoftwareUser.html
+
+
+\subsection prerequisites 2. Prerequisites
+For this step, simple install all the needed packages that are not automatically included in Ubuntu:
+\n
+http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/NonStandardOS.html
+\n
+To save time, you can also run the script provided on the above page:
+\n
+http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/aptCommands.sh
+
+
+\subsection Download 3. Download nd280 software
+You have two options:
+  - (a) you can install the full nd280 software suite (5.4 GB)
+  - (b) you can get a “light” version if you only need highland to work (1.9GB - 2.5 GB)
+
+Note that you should always check the version IDs (e.g. v11r31) and change them if needed!
+\n
+Martti wrote two scripts for the two options, they can be found here:
+\n
+http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/install_full.sh
+\n
+http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/install_minimal.sh
+\n
+Note: You must edit the first 3-5 lines of the script to match your desired installation, and your
+input-file.list (see step 4) must exist in $INSTALLPATH for the scripts to work! No guarantees!
+\n
+Nevertheless it is probably better to learn the right commands (here below), instead of using my scripts.
+\n
+Therefore, run your setup script (the one prepared in step 1) and then the following commands:
+\n
+(as for highland (see first section), if you have other nd280 version installed, it's recommended to install this one in a new workspace folder)
+\n
+  - (a) “nd280 full” installation
+\verbatim
+  source setup.sh # (the one prepared in step 1)
+  cmt co -r v11r31 -R nd280
+\endverbatim
+  - (b) “nd280 light” installation
+\verbatim
+  source setup.sh # (the one prepared in step 1)
+  cmt co -r v1r55 -R nd280Tools
+  cmt co -r v1r9p3 nd280AnalysisTools
+\endverbatim
+  Optional to b): edit nd280Tools/v&lowast;/cmt/requirements and comment the following lines:
+  \n
+  #use CLHEP v2r1p1n00
+  \n
+  #use GEANT v9r4p04n00
+  \n
+  This will save approx 600 MB of disk space and some compiling time, since this packages are not needed by highland.
+  \n
+  You may then also delete the folders CHLEP and GEANT.
+
+
+\subsection configure 4. Configure nd280AnalysisTools
+Make sure nd280AnalysisTools has an oaAnalysis file to compile with.
+Edit the file nd280AnalysisTools/v&lowast;/AnalysisTools/input-file.list to point to a valid file location.
+It is important to choose the proper file for the compilation of nd280AnalysisTools (prod5, or prod6)
+in order to have highland working properly with the production you want to use!
+\n
+Note: surely you have data files stored on your local server, otherwise check this page to download them
+\n
+http://www.t2k.org/nd280/datacomp/howtoaccessdata/accessdatawithgrid
+\n
+Note2: if any problems occur (doesn't compile etc.) see subsection \ref nd280issues
+
+
+\subsection compilend280 5. Compile nd280AnalysisTools
+This is the part that will take the longest. Make sure you've done all the above steps before continuing!
+- (a) “nd280 full” installation
+\verbatim
+  cd nd280/v*/cmt/
+  # (if you moved/renamed folders, you need to run here 'cmt br make config' to re-set the paths in setup.sh of all packages)
+  source setup.sh
+  cmt br make
+\endverbatim
+- (b) “nd280 light” installation
+\verbatim
+  cd nd280Tools/v*/cmt
+  # (if you moved/renamed folders, you need to run here 'cmt br make config' to re-set the paths in setup.sh of all packages)
+  source setup.sh
+  cmt br make
+\endverbatim
+
+
+\subsubsection nd280issues 6. Help, nd280AnalysisTools is not compiling
+Occasionally, some annoying and difficult-to-fix problems occur with nd280AnalysisTools.
+\n
+In case you have such problems, you may want to try one of these fixes (that have worked for us):
+\n
+- (a) I had a horrible time getting EventDisplay to work on my notebook because it has a very old
+graphics card (ATI Mobility Radeon HD 4225). In the end, I had to downgrade xorg as the newer
+versions do not support this card any more. After a lot of browsing in Ubuntu forums, this worked:
+http://ubuntuxtreme.com/howto/how-to-fix-your-amd-graphics-in-ubuntu-12-10/ - However, this is
+very hardware-specific and you may need to search for a different solution. If you encounter problems
+with EventDisplay, the quick-fix is option (b) below... (Martti)
+
+- (b) Often it is a not needed sub-package that doesn't compile. In this case one can avoid it's compilation
+by commenting out the corresponding line near the end of nd280AnalysisTools/v&lowast;/cmt/requirements:
+\verbatim
+  #application EventDisplay -group=applications ...
+\endverbatim
+Having done this, the package should compile, but the EventDisplay won't be available. (Martti)
+
+- (c) Similar to option (b): Edit the file nd280AnalysisTools/v&lowast;/AnalysisTools/analysisToolsOrder.list
+and remove everything except the following lines:
+\verbatim
+  TTruthUtils.cxx
+  TECALPidDefs.cxx
+  TECALPidLikelihoodHypothesisTest.cxx
+  TECALPidLikelihood.cxx
+  TECALEMEnergyCorrection.cxx
+\endverbatim
+This allows for a “minimal installation” of nd280AnalysisTools. Highland just need a few libraries of
+nd280AnalysisTools, if it doesn’t finish compiling but the libraries are created, it’s enough. (Enrico)
+
+- d) On Scientific Linux 5 nd280AnalysisTools and nd280 properly compile only if their path is the first one in CMTPATH.
+*/

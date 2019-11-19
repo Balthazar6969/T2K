@@ -1,0 +1,245 @@
+/*! \page highland2/numuCCMultiPiAnalysisHistory History for the highland2/numuCCMultiPiAnalysis Package 
+
+\section numuCCMultiPiAnalysis_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Tue Oct  7 23:57:35 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+
+First version of this package in highland2. It compiles, runs, and gives the same results as in highland 
+when running with no corrections
+
+
+
+\section numuCCMultiPiAnalysis_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Mon Nov 17 17:38:35 2014
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Fully validated	version of FlatTree creation, Selection and Systematics.
+It will be used to create first	official FlatTrees.
+
+- save version for this package
+
+
+\section numuCCMultiPiAnalysis_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Sun Nov 30 14:02:39 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Release for the highland to highland2 migration tutorial on Dec 1st 2014.
+Selections give the same results for oaAnalysis and FlatTrees
+Systematics give slighly different results (Under investigation). Not crucial for tutorial
+
+- make the definition of an analysis more user fiendly. Corrections, Systematics and Configurations are now defined in different methods, 
+  such that the user knows what should be done in each method:
+  * DefineCorrections(): adds the corrections to the CorrectionManager
+  * DefineSystematics(): adds the systematics to the SystematicManager
+  * DefineConfigurations(): add the configurations to the ConfigurationManager, with the appropriate systematics in each configuration
+- Also change DefineSelection() by DefineSelections(), since several selections can be added for a single analysis
+- Also change the name of some methods: AnalysisVar is substituded by ToyVar to make it clearer. 
+  * InitializeAnalysis --> InitializeToy
+  * FinalyseAnalysis --> FinalizeToy
+  * AddAnalysisVar --> AddToyVar
+  * FillAnalysisVar --> FillToyVar
+  * FillAnalysisVarsInMicroTrees --> FillToyVarsInMicroTrees
+
+
+
+\section numuCCMultiPiAnalysis_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Wed Dec 10 18:44:50 2014
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+add macros directory with macros that calculate analysis sample efficiencies and relative errors 
+
+
+\section numuCCMultiPiAnalysis_v0r9_history Version v0r9
+
+Freeze information:
+   - Freeze Date: Wed Jan  7 17:12:30 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+
+- add macro for covariance matrix calculation
+- macro making T2K-TN-212 plots and latex table
+
+
+\section numuCCMultiPiAnalysis_v0r11_history Version v0r11
+
+Freeze information:
+   - Freeze Date: Tue Jan 27 17:58:03 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- use UseAnalysis method such that InitializeToy is not needed anymore. 
+- Remove FillCategories method and use the one in numuCCAnalysis
+- update macros
+
+
+\section numuCCMultiPiAnalysis_v0r13_history Version v0r13
+
+Freeze information:
+   - Freeze Date: Wed Feb 18 11:04:51 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+
+- Add default mainpage.dox so that package  can be referenced from another one in doxygen using \ref
+- Add ability to run fgd2 selection. Controlled via paremeters file. Default is FGD1
+
+
+\section numuCCMultiPiAnalysis_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 19:03:48 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes in psyche 
+to allow selection depending systematics, and performance optimization
+
+add FGD2 selection
+
+
+\section numuCCMultiPiAnalysis_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 16:36:01 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- add in truth tree non-CC vertices categorized as CCother: in principle this might happen
+  because our topology definition doesn't consider the reaction code and a muon (pair)
+  can be created during FSI, but actually I didn't find any.
+- indentation, save FGD tracks in the selected FGD(s)
+- use the EventBox to get tracks with FGD and no TPC in the appropriate FGD
+
+
+
+\section numuCCMultiPiAnalysis_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 19:45:15 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- remove deprecated RooTrackerVtx accum level stuff. 
+- Put the default accum level to 6
+- update macros for new eff-like systematics method
+
+
+\section numuCCMultiPiAnalysis_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 10:52:18 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Release motivated by baseAnalysis splitting
+ - inherit and use methods from baseTrackerAnalysis
+
+
+\section numuCCMultiPiAnalysis_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Sat Aug  1 12:01:32 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+FindTPCTracks in the selection is only used to fill micro-tree variables. Move it here from the selection
+
+
+\section numuCCMultiPiAnalysis_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 17:21:31 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+attept to solve bugs 1183, 1149 and 1169 by moving most code in the analyses constructors to their Initialize methods. 
+At the moment only the package version and the UseAnalysis functionality is kept in the constructors
+
+
+
+\section numuCCMultiPiAnalysis_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 13:23:18 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- Added pi+ variables to truth tree: truepi_mom, truepi_dir, truepi_costheta,
+
+
+\section numuCCMultiPiAnalysis_v1r15_history Version v1r15
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:34:31 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+
+- use new pion SI manager
+- increase version number (v2) for development version
+
+
+
+\section numuCCMultiPiAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 10:49:48 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+
+major reorganization with new packages and  changes in event model class names
+- udapt to changes in base packages
+- Define pion momentum and angle as Toy variables: PosPionMom and PosPionTheta.
+  That should fix bug 1272: https://bugzilla.nd280.org/show_bug.cgi?id=1272
+
+
+
+\section numuCCMultiPiAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:14:15 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- fill true_signal
+- minor: in FillToyVarsForMicroTree() added a protection that the MainTrack exists
+- Get MichelElectrons from EventBox and not from ToyBox, since they are toy independent
+
+
+\section numuCCMultiPiAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 13:50:37 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!!
+
+true_signal is a toy var
+
+
+\section numuCCMultiPiAnalysis_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 18:11:05 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+use new MultiPiBox to fill pion selection related vars
+
+*/

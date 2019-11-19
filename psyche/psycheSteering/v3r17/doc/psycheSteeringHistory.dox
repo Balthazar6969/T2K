@@ -1,0 +1,548 @@
+/*! \page psyche/psycheSteeringHistory History for the psyche/psycheSteering Package 
+
+\section psycheSteering_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Fri May 30 18:46:36 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+Initial freeze. It includes most of the required functionality but it must be 
+optimized for speed. This is the main reason for this freeze. 
+Missing functionality:
+- Beam Flux weighting
+- Proper treatment of POT info. Although the infraestructure is there
+  the POT info from the input tree is not yet propagated 
+
+
+
+\section psycheSteering_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Wed Jul  2 16:02:34 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+An interim freeze of the psyche framework after significant changes to boost
+performance, add necessary functionality and fix bugs.  The following list of
+changes in non-exhaustive and may have missed some changes:
+
+Increased functionality:
+
+    - Initial NuE CC selection added (not yet running or validated)
+    - Ability to apply flux weight systematics
+    - Ability to apply a single weight systematic
+    - 'Efficiency-like' weight systematics now use the new method from
+      highland
+    - A new SystematicSourceParams class to store the systematic source
+      parameters for a given event
+
+Performance enhancement:
+
+    - Each event now stores a systematics class, SystBoxB, to hold pointers to
+      objects used to calculate systematics.  The InitiliseEventSystematics()
+      method is now called automatically when reading the input file, so the
+      analyser does not need to do this anymore.  This allows the analyser to
+      loop over all the events then all the systematics, or over the
+      systematics then all the events with no impact on the code speed
+    - Psyche now uses arrays to store objects wherever possible, rather than
+      vectors, since arrays have less memory and processing overhead
+    - Unification of detector enumeration: All objects now use the same
+      detector enumeration
+    - DetectorUsed variable now stored as a bitfield, allowing us to use
+      bit-level operations to determine which detectors an object does or does
+      not use
+    - Rationalisation of the utility methods: 
+        - All methods require a detector enumeration as an argument rather than a string
+        - Logic of loops in methods improved to increase efficiency
+        - Use of switch/case statements instead of multiple if/else if 
+        - New, fast methods written for commonly required functions
+
+
+\section psycheSteering_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Mon Jul  7 15:26:58 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+This freeze adds variables to the psyche AnaEventB class that are necessary for the BANFF and MaCH3 analyses, and also fixes a bug in one of the selection cuts.  It also turns on the correct branches of the input tree to ensure that the necessary variables are read out correctly.  Finally, the true <-> reco vertex association is made more robust, since a bug in the code before allowed the reco vertices and their associated truth vertices to get out of step with one another.
+
+
+
+\section psycheSteering_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Thu Aug 28 02:42:28 2014
+   - Freeze User: markscott
+   - Freeze Host: markscott-Lenovo-IdeaPad-Y510P
+
+
+Fix application of selections - remove memory leaks and increase speed
+
+Correct calculation of POT - calculate MC-Data POT ratio for all files in each sample
+
+Load all input files at start, rather than sequentially
+
+
+
+\section psycheSteering_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Thu Aug 28 02:32:49 2014
+   - Freeze User: markscott
+   - Freeze Host: markscott-Lenovo-IdeaPad-Y510P
+
+
+
+\section psycheSteering_v0r9_history Version v0r9
+
+Freeze information:
+   - Freeze Date: Wed Sep  3 18:27:13 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche to address the bugs in the systematics code
+
+All systematics are now running and appear to produce reasonable weights
+
+These still need to be optimised for speed, but all appear to be thread safe
+
+This freeze should allow the fitters to use psyche successfully
+
+\section psycheSteering_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Wed Sep 17 10:50:06 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+First stable, validated freeze of psyche - the interface between near detector event samples and the fitters.
+
+Changes since last freeze:
+
+	Validation of systematics - systematics for the NuMu selections now return the approximately the same weights and variations as seen in highland, and all weights and variations are realistic.
+	Multithreaded event processing - the code now supports multithreaded event loops, see the RunPreloadExample application for an example.  You must uncomment the necessary compiler flags in the requirements file of psycheCore and psycheSteering.
+	Multiple selections - the event summary now contains information for each event selection applied, allowing multiple selections to be applied and the events reweighted.
+	Bug fixes and code cleanup.
+
+\section psycheSteering_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Fri Sep 26 15:20:38 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche containing important bugfixes to allow data events to be processed and to allow multiple selections to be successfully applied
+
+Further speed improvements and minor bugfixes
+
+Time taken to load events reduced by 2/3rds, since we use arrays to calculate the secondary pion interaction probabilities rather than TGraph interpolation
+
+Addition of new anti-neutrino CCQE/CCnQE selection
+
+Ability to only preload MC events when using the Experiment class and then load data events at processing time.  By default, both data and MC will be preloaded.  Only preloading MC is not validated fully - the RunExpPreloadExample executable produces the same results with or without preloading the data sample (it takes roughly 4 times longer without preloading to process the data once), but if you do things in a different order you may have issues.  We really need to re-write the event looping methods to have a single method that checks internally whether events are preloaded, whether we're using the Experiment class etc., and then determines how to access the correct event. Something to discuss in Toyama.
+
+\section psycheSteering_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Sat Oct  4 16:41:19 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche to incorporate the recent bug fixes and improvements
+
+A few speed improvements - adding flags for things that don't need to be calculated multiple times, and more efficient algorithm for checking the TPC multiplicity
+Fixed bugs in event selection and systematics code
+Highland2 and psyche now use the same flat tree converter code
+
+\section psycheSteering_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Oct 10 23:50:01 2014
+   - Freeze User: acervera
+   - Freeze Host: Anselmo-Cerveras-MacBook-Pro.local
+
+
+Fix requirements not to include gperftools profiler by default, it must now be commented in 
+
+
+\section psycheSteering_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Fri Nov  7 00:56:14 2014
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+- Modify the AnalysisManager, and add protection for POT
+  
+- Update application with respect:
+Remove _input().FinalizeEvent() method.  
+This was a poorly named method that just deleted an event object created when reading in the file.
+Instead, when loading the event, the flag used to specify whether to delete the event or not actually deletes the entire event, rather than just part of it.
+
+- Remove multi-threading pre-processor commands from Experiment example application.  
+  This has been changed to show how to run psyche without preloading the events, and in this case you cannot multi-thread (when reading each event from the ROOT file you fill the same local variables, so you cannot read two events at once).
+
+
+\section psycheSteering_v1r11_history Version v1r11
+
+Freeze information:
+   - Freeze Date: Mon Nov 17 12:13:29 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Near final freeze of the psyche interface.  This freeze	captures the psyche systematics and selections,	whose results have been validated.
+
+Many bug corrections for event systematics - highland, highland2 and psyche are now giving the same results for all systematics when applying the numu multi-pion selection.
+
+There is still an issue with the anti-neutrino systematics, but that will be fixed in the next freeze along with the move to variable sized arrays.
+
+
+\section psycheSteering_v1r13_history Version v1r13
+
+Freeze information:
+   - Freeze Date: Fri Nov 28 18:10:23 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche in order to produce first-pass production 6 inputs for the BANFF fitters
+
+Selections currently validated, including systematics, in Psyche: 
+
+       Forward horn current FGD1 NuMu CC MultiPi
+
+       Reverse horn current FGD1 Anti-NuMu CC QE/nQE
+
+       Forward horn current FGD1 NuMu (wrong-sign) CC QE/nQE
+
+
+
+
+
+\section psycheSteering_v1r15_history Version v1r15
+
+Freeze information:
+   - Freeze Date: Tue Dec  9 19:57:43 2014
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Final freeze of the psyche framework for the winter oscillation analysis.  Psyche now contains validated selections, variation systematics and weight systematics for the production 6 FGD1 neutrino mode (forward horn current) and anti-neutrino mode (reverse horn current) selections.
+
+Big changes since the last freeze:
+
+    - Many, many bug fixes
+    - Run by run flux weighting, for the 11b and 13a flux tuning
+    - Addition of selection validity ranges, so we don't apply anti-neutrino
+      selections to neutrino data and MC.  Controlled by a comma separated
+      string in the psycheSteering parameter file
+    - OSX/Darwin headers
+    - Nominal bunch timing for run 5
+    - Memory leak fixes
+    - Information for pion SI systematic not computed if systematic is
+      disabled - events preload 30 times faster without pion SI
+    - Updated systematics tables
+    - Ability to run production 5 style selection and systematics as well as
+      production 6 - flags in the parameter files
+
+
+
+\section psycheSteering_v1r17_history Version v1r17
+
+Freeze information:
+   - Freeze Date: Mon Dec 22 23:13:52 2014
+   - Freeze User: mravonel
+   - Freeze Host: atlas013.unige.ch
+
+-fix POT weighting in getsuperevent
+-update macros
+-minor improvements
+
+
+\section psycheSteering_v1r19_history Version v1r19
+
+Freeze information:
+   - Freeze Date: Wed Jan  7 14:41:26 2015
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+A freeze of psycheSteering to pick up the fix to the RunSyst executable from Melody
+
+\section psycheSteering_v1r21_history Version v1r21
+
+Freeze information:
+   - Freeze Date: Mon Jan 26 09:20:18 2015
+   - Freeze User: mscott
+   - Freeze Host: neut21.triumf.ca
+
+
+
+Freeze of psyche in order to be compatible with highland2 changes. Needed for the collaboration meeting to allow highland2 to work with more analyses than just FGD NuMu, but not fully tested with respect to the oscillation input samples.  Everything appears OK, but this freeze should not used for near detector fitting. 
+
+\section psycheSteering_v1r23_history Version v1r23
+
+Freeze information:
+   - Freeze Date: Tue Feb 17 18:46:46 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Minor changes
+- Add default mainpage.dox so that package  can be referenced from another one in doxygen using \ref
+
+
+
+\section psycheSteering_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Tue Mar 31 19:22:48 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Major freeze with many changes 
+to allow selection depending systematics, and performance optimization
+
+
+
+\section psycheSteering_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 15:49:55 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- take now antinu in FGD2 as well 
+- update RunSyst with all the selections
+
+
+\section psycheSteering_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 20:38:01 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- Adapt to partially to new MiniTree reading. Not yet working with multithreading (i.e. RunPreloadExample)
+- protection against OMP_NUM_THREADS not being defined in RunPreloadExample
+- Use SystID instead of harcoded numbers. 
+- Add SiProton systematic. 
+
+
+
+\section psycheSteering_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 11:14:58 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Make it work with event preloading. It runs but results not checked.
+
+- differenciate between entries and events in input tree. This is needed to deal with FlatTrees (entry=event) and MiniTrees (entry=spill)
+- Option -n to run over a given number of events in RunExample and RunPreloadExample. In this case the behavior is the same for FlatTree and MiniTree. 
+- Option -N introduced in RunExample to run over a given number of entries. Equivalent to -n for FlatTree but different for MiniTree  
+- Make run and compile RunExpPreloadExample.cxx 
+
+
+\section psycheSteering_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Jul 31 12:44:45 2015
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+AnalysisManager: 
+ - remove ProcessEvent method assuming a ToyMaker in SystematicManager. Not used
+ - set versionUtils::prod6_POT using a parameter
+
+Applications: 
+ - Create the ToyMaker in the application and not in the SystematicManager
+
+
+\section psycheSteering_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 18:47:02 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- use in all applications  ND::params().SetReadParamOverrideFilePointPassed() such that it does not complain when reading parameters
+- a little README on how to use ApplyBANFFTuning 
+
+
+\section psycheSteering_v2r13_history Version v2r13
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 12:25:03 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- RunExample: The PreviousToyBox must be reset after processing the event (sel().FinalizeEvent(...)) must be called. 
+- change name of method in SelectionManager: Initialize --> CreateToyBoxArray
+- Read the parameters files following the package hierarchy
+
+
+\section psycheSteering_v2r15_history Version v2r15
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 14:23:21 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- increase version number (v3) for development version
+- explicitely call SystTunning::Initialize() from the AnalysisManager constructor to address bug 1263
+
+
+\section psycheSteering_v3r1_history Version v3r1
+
+Freeze information:
+   - Freeze Date: Tue Mar  8 11:00:53 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+
+
+\section psycheSteering_v3r3_history Version v3r3
+
+Freeze information:
+   - Freeze Date: Mon Apr 11 16:37:46 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Freeze for BANFF development
+
+- no need to initialize systematic tuning since this is done in each selection
+- make it compile and run with changes in all psyche packages
+- for the moment we still need to add weights and systematics to the SystematicManager. Mainly for the creation of ToyExperiments. 
+
+
+
+\section psycheSteering_v3r5_history Version v3r5
+
+Freeze information:
+   - Freeze Date: Thu May  5 11:44:28 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+remove obsolete CCQE stuff, which was removed from psycheSelections
+
+
+\section psycheSteering_v3r7_history Version v3r7
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:13:25 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- Added the 4pi Multipions selection
+- antiNumuCC and numuCCBkg:
+  old 1/N-track selection are now named MiltiTrack
+  the proper MultiPi ones will be added later (dummy for the moment)))
+
+
+
+\section psycheSteering_v3r9_history Version v3r9
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 12:36:57 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+Summer release !!!
+
+AnalysisManager: 
+ - added new selections available: numu bkg in anti-nu mode, nue, anti-nue and gamma  
+    restore some prvious ones for consistency
+ - Print info about entries being run, not anymore in converters
+ - Added ToF, EcalEMEnergyScale, EcalEMEnergyResol, ECalPID, TPCECalMatching
+   Changed Pileup -> PileUp for the nue 
+
+
+RunPreloadExample: Move the omp lines to the start of the event loop and add the
+  reduction so the npassed counter is correct.
+
+RunExample: Print info about entries being run, not anymore in converters
+
+
+
+\section psycheSteering_v3r11_history Version v3r11
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:24:14 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- RunPreloadExample: Don't use nmax_events/nCores (nmax_events may be -1) to calculate how manycontiguous iterations.
+- RunExpPreloadExample: Count how many events pass the selection.
+- RunSyst: Update the parameter names. Add counters to show the numbers of events passing the cuts.
+- requirements: remove make_fragment stuff since there are no fragments for this package
+
+
+\section psycheSteering_v3r13_history Version v3r13
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 20:48:42 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+centralise the  Flux file parameters in psycheND280Utils
+
+
+\section psycheSteering_v3r15_history Version v3r15
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 15:46:48 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+AnalysisManager: 
+- Now listen to the parameter file for systematics (bug 1437)
+- centralise the  Flux file parameters in psycheND280Utils
+
+psycheSteering.parameters.dat:
+- centralise the  Flux file parameters in psycheND280Utils
+
+
+
+
+\section psycheSteering_v3r17_history Version v3r17
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 15:03:51 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An intermediate freeze of psyche dedicated to tests of NuMu systematics tuning
+Also include other changes collected
+
+psycheSteering.parameters.dat
+Update the parameter file so that it works for run6 (valid run periods)
+Turn on the proper selections
+Make the nue selections work in nu and antinu mode
+
+remove the wrong sign nues switch which actually don't exist
+
+single param EnableFlux
+
+AnalysisManager.cxx 
+use single kFluxWeight 
+
+
+*/

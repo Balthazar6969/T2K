@@ -1,0 +1,23 @@
+/*!
+\page nd280_selections Specific selections in ND280 (WORK IN PROGRESS!!) 
+
+
+In this section the different selections used in ND280 are explained
+  
+ - \ref nd280sel_numuCC
+ - \ref nd280sel_numuCCMultiPi
+ - \ref nd280sel_nueCC
+
+
+\section nd280sel_numuCC Inclusive numuCC selection in the tracker
+\snippetdoc numuCCSelection.cxx        numuCCSelection_info
+
+
+\section nd280sel_numuCCMultiPi numuCC selection with multiple pions in the tracker
+\snippetdoc numuCCMultiPiSelection.cxx        numuCCMultiPiSelection_info
+
+
+\section nd280sel_nueCC Inclusive nueCC selection in the tracker
+\snippetdoc nueCCSelection.cxx        neCCSelection_info
+
+*/

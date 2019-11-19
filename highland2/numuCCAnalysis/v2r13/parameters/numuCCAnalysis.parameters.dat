@@ -1,0 +1,17 @@
+--- Cut levels --------
+ < numuCCAnalysis.MinAccumLevelToSave = 6 >   // minimum accum level to save the event
+
+--- Selections --------------------------
+
+Analysis sample (1 for FGD1, 2 for FGD2, 3 for both
+
+ < numuCCAnalysis.Selections.whichFGD = 1 >
+ < numuCCAnalysis.Selections.UseAlternativeFV = 0 >
+
+--- Corrections ------------
+ < numuCCAnalysis.Corrections.EnableUseMuonAltMom    = 1 >
+
+--- Micro-trees --------
+ < numuCCAnalysis.MicroTrees.AdditionalToyVars = 0 >    
+ < numuCCAnalysis.MicroTrees.SaveMassWeights   = 0 >    
+

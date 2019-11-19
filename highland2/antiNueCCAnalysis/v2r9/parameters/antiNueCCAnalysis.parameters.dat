@@ -1,0 +1,15 @@
+--- Analysis sample (1 for FGD1, 2 for FGD2, 3 for both) --------
+ < antiNueCCAnalysis.Analysis.Sample.whichFGD = 1 >
+
+--- Save all the secondary FGD-TPC tracks in the event ------------
+ < antiNueCCAnalysis.Analysis.SaveSecondaries = 0 >
+
+--- Cut levels: Use 23 to apply all CC-inc cuts for FGD1 and 21 for FGD2--------
+ < antiNueCCAnalysis.MinAccumLevelToSave.FGD1 = 23 >
+ < antiNueCCAnalysis.MinAccumLevelToSave.FGD2 = 21 >
+
+--- Save additional toy vars at microtree --------
+ < antiNueCCAnalysis.MicroTrees.AdditionalToyVars = 0 >
+
+--- Save the gamma initiator - slow  --------
+ < antiNueCCAnalysis.Analysis.SaveGammaInitiator = 0 >

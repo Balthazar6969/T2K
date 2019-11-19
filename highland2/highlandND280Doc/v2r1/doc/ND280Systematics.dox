@@ -1,0 +1,17 @@
+/*!
+\page nd280_systematics Specific systematics in ND280 (WORK IN PROGRESS!!) 
+
+
+In this section the different systematics used in ND280 are explained
+
+ - \ref nd280syst_pileup
+ - \ref nd280syst_momresol
+
+
+\section nd280syst_pileup Pileup
+\snippetdoc PileUpSystematics.cxx        PileUpSystematics_info
+
+\section nd280syst_momresol Momentum Resolution systematics
+\snippetdoc MomentumResolSystematics.cxx MomentumResolSystematics_info
+
+*/

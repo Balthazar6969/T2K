@@ -1,0 +1,90 @@
+/*!
+\page processing Tips for processing all the ND280 data in highland
+
+This page gives a quick-start guide for people who only need to process ND280
+data through highland (rather than developing an analysis) and contains tips
+for ensuring the process runs smoothly.
+
+The page is split into the following sections:
+ - \ref process_quickstart
+ - \ref process_filelists
+ - \ref process_flux
+ - \ref process_submit
+
+<b>Instructions are printed in bold text</b>; supporting information is in normal text.
+
+\section process_quickstart Quick-start guide
+
+<b>You should also <a href="http://www.t2k.org/beam/NuFlux/FluxRelease/11brelease">download 
+the relevant flux tuning files</a> from the internet.</b> At the time of writing,
+the <a href="http://www.t2k.org/beam/NuFlux/FluxRelease/11brelease/11btuned-v3.2/tuned11bv3.2.tar.gz/view">11bTuned-v3.2</a>
+and <a href="http://www.t2k.org/beam/NuFlux/FluxRelease/11brelease/11btuned-v3.2-for-run4-full-data/tuned11bv3.2_run4_full.tar.gz/view">11bTuned-v3.2 (for Run4 full data)</a>
+files were needed. <b>Extract the tar files that are downloaded.</b>
+
+\section process_filelists Creating lists of files
+
+Processing oaAnalysis files takes a long time, so you will probably want to run several 
+processing jobs in parallel on batch nodes. As an example, to process MC of 10 times the 
+run 1-4 data POT will take 30 jobs approximately 8 hours each.
+
+<b>You should create a text file for each job you will submit, where each text file
+lists the oaAnalysis files to be processed, with one file path per line.</b>
+
+It is recommended that you keep separate T2K runs apart. That is, you may want a
+couple of lists of run 1 files, a couple of lists of run 2 air files, but no lists
+that contain a mixture of the two. This is because of the separate flux tunings that
+must be applied for each run (see below).
+
+To help you decide how many MC files to process, you should note that each file
+contains 5e17 POT. The good data POT for each run is listed in the table below,
+along with the amount and type of MC needed to get 10x POT.
+
+<table>
+<tr><th>T2K run</th><th>ND280 runs</th><th>Good data POT (x10^19)</th><th>MC type</th><th>MC files for 10x POT</th></tr>
+<tr><td>Run 1         </td><td> 4165&mdash;5115 </td><td>1.67  </td><td>2010-02-water/magnet/beama</td><td>334 </td></tr>
+<tr><td>Run 2 (water) </td><td> 6462&mdash;7663 </td><td>4.28  </td><td>2010-11-water/magnet/beamb</td><td>856 </td></tr>
+<tr><td>Run 2 (air)   </td><td> 7664&mdash;7754 </td><td>3.55  </td><td>2010-11-air/magnet/beamb</td><td>710 </td></tr>
+<tr><td>Run 3 b       </td><td> 8309&mdash;8453 </td><td>2.14  </td><td>2010-11-air/magnet/beamc</td><td>428 </td></tr>
+<tr><td>Run 3 c       </td><td> 8550&mdash;8753 </td><td>13.48 </td><td>2010-11-air/magnet/beamc</td><td>2696 </td></tr>
+<tr><td>Run 4 (water) </td><td> 8995&mdash;9422 </td><td>16.25 </td><td>2010-11-water/magnet/beamc</td><td>3250 </td></tr>
+<tr><td>Run 4 (air)   </td><td> 9423&mdash;9798 </td><td>17.62 </td><td>2010-11-air/magnet/beamc</td><td>3524 </td></tr>
+<tr><td>Run 5 (water)        </td><td> 10252&mdash;10333 / 10519&mdash;10521 </td><td> - </td><td> - </td><td> - </td></tr>
+<tr><td>Run 5 (water antinu) </td><td> 10334&mdash;10518 </td><td> - </td><td> - </td><td> - </td></tr>
+<tr><td>Run 6 (air antinu)   </td><td> 10954&mdash;11563 </td><td> - </td><td> - </td><td> - </td></tr>
+</table>
+
+<b><i>NOTE THAT THERE ARE NOT ENOUGH PRODUCTION 5 2010-11-air/magnet/beamc FILES TO HAVE 10x DATA POT!</i></b> There
+are only 6028 files available, while the above table demands 6648.
+Depending on your analysis, it may be easiest to use some more water MC instead.
+
+\section process_flux Specifying the flux tuning for each run
+
+The beam group provides a separate flux tuning for each run. Due to the relatively large
+amount of bad ND280, the 'average' flux tunings (run1-4) should NOT be used. Instead, you
+should tell highland to use the right flux tuning for each job you submit.
+
+<b>You should create 'parameter override files' to specify which tuning to apply.</b> 
+These files only need to contain one parameter, as shown below. \c yourAnalysis should 
+be replaced by the name of the analysis you are running (\c nueCCAnalysis, 
+\c numuCCAnalysis, \c numuCCBANFFAnalysis etc). Create separate files for run1, run2, 
+run3b, run3c and run4.
+
+\code
+$ cat flux_run1.params.dat
+ < yourAnalysis.FluxWeighting.File = /path/to/flux/tuned11bv3.2/run1/nd5_tuned11bv3.2_11anom_run1.root  >
+\endcode
+
+\section process_submit Submitting jobs
+
+<b>In each job, execute a command like one of the following:</b>
+
+\code
+RunNueCCAnalysis.exe -p $PARAMS_FILE -o $OUTPUT_FILE $INPUT_FILE
+RunNumuCCAnalysis.exe -p $PARAMS_FILE -o $OUTPUT_FILE $INPUT_FILE
+RunNumuCCBANFFAnalysis.exe -p $PARAMS_FILE -o $OUTPUT_FILE $INPUT_FILE
+\endcode
+
+ - \c $PARAMS_FILE is the relevant 'parameter override file' for this job.
+ - \c $OUTPUT_FILE is the output file you want to create. This should NOT already exist.
+ - \c $INPUT_FILE is the text file you created.
+*/

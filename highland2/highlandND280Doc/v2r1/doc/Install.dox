@@ -1,0 +1,245 @@
+/*!
+\page install Install highland2/psyche
+
+- \ref intro
+  - \ref coFrozen
+  - \ref coHEAD
+  - \ref compileH2
+  - \ref bothProd
+  - \ref cmtpathIssue
+- \ref tipstricks
+- To import and freeze see \ref committing
+
+
+\section intro Install highland2/psyche in a dedicated workspace folder
+
+It is not recommended to install highland2 in the same folder of other nd280 packages,
+otherwise every time you compile with the broadcast option (cmt br make)
+<A HREF="http://www.hep.lancs.ac.uk/nd280Doc/devel/invariant/nd280Doc/workbook/CMT.CVS.html"> CMT </A>
+will recompile also ROOT, etc.
+\n
+To avoid this, you can easily install highland2/psyche in a different workspace folder
+and properly set the CMTPATH environment variable to point to ROOT
+\n
+Also in the case you want to have both a frozen version and the HEAD of highland2/psyche,
+it's recommended to install them in different workspace folders
+(otherwise you have to use nd280Highland2/v&lowast;/cmt/fix_requirement, a script which fixes packages dependencies).
+
+\subsection coFrozen Install a frozen version
+When we refer to a version of highland2, we actually refer to the version of the <B>nd280Highland2</B> package:
+it's a <EM>hat</EM> package which properly links all the needed versions of each highland2 and psyche package
+(for psyche it actually only links a version of nd280Psyche, which in turn links the needed psyche pakcages).
+\n
+To know which is the last frozen version of highland2 you can have a look at the
+<A HREF=
+"http://hep.lancs.ac.uk/nd280Doc/devel/Highland2/nd280Highland2/latest/dox/nd280Highland2History.html"
+>freezing history</A>,
+but actually the patched versions are not shown there, thus you'd better check on top of this page:
+<A HREF=
+"https://repo.nd280.org/viewvc/ND280/nd280Highland2/doc/nd280Highland2History.dox?sortby=date&sortdir=down&view=log"
+>
+https://repo.nd280.org/viewvc/ND280/nd280Highland2/doc/nd280Highland2History.dox?sortby=date&sortdir=down&view=log
+</A>
+
+To check out (i.e. download) for example nd280Highland2 v1r11, do:
+\verbatim
+  export CVSROOT=:ext:anoncvs@repo.nd280.org:/home/trt2kmgr/ND280Repository
+  mkdir h2_v1r11
+  cd h2_v1r11
+  source <your_nd280_folder>/CMT/v*/mgr/setup.sh # alternatively you can source an nd280 setup script
+  cmt co -r v1r11 -R nd280Highland2 # (co=check out, -r=release ID, -R=recursively check out all packages listed in cmt/requirements)
+\endverbatim
+
+
+\subsection coHEAD Install the HEAD version
+If you want the HEAD, you likely want commit some code: you need to have a "cvs developer account"
+(<A HREF="http://www.t2k.org/nd280/software/cvs_access_account_signup"> how to get it </A>)
+: make sure to have it before proceeding!
+WARNING: never attempt to commit code that was originally checked out as "anoncvs" or as a different user.
+\n
+Without specifying a release, cmt will check out the HEAD of a package, but in this case -R cannot work, so we have to use a script.
+
+\verbatim
+  export CVSROOT=:ext:<your_cvs_developer_username>@repo.nd280.org:/home/trt2kmgr/ND280Repository
+  mkdir h2_HEAD
+  cd h2_HEAD
+  source <your_nd280_folder>/CMT/v*/mgr/setup.sh # alternatively you can source an nd280 setup script
+  cmt co nd280Highland2
+  cd nd280Highland2/v*/cmt/
+  ./checkout_HEAD #(follow the instructions on the screen, it will create the following script to be run)
+  ./checkout_HEAD_v*
+\endverbatim
+Note that this script will modify nd280Highland2/v&lowast;/cmt/requirements replacing the version of each package with a wildcards
+\n
+<B>--> do not commit this file!!!</B>
+
+
+\subsection compileH2 Compiling highland2/psyche
+
+Before compiling you have to properly setup the CMTPATH environment variable:
+\verbatim
+  source <your_nd280_folder>/CMT/v*/mgr/setup.sh # alternatively you can source an nd280 setup script
+  export CMTPATH="<path_to_the_folder_containing_nd280Highland2>:<path_to_the_folder_containing_ROOT" # (paths separeted by columns)
+  source nd280Higland2/v*/cmt/setup.sh
+\endverbatim
+
+These commands above are needed also to run highland2: to avoid typing every time you could put these lines into a setup script and source it in every new shell.
+\n
+If the same package is contained in both paths specified in CMTPATH, cmt will use the one contained in the first path.
+\n
+Now you can compile:
+\verbatim
+  cd nd280Higland2/v*/cmt/
+  # (if you moved/renamed folders, you need to run here 'cmt br make config' to re-set the paths in setup.sh of all package, and source setup.sh again)
+  cmt br make # (br = broadcast = recursively compile all the needed packages which are in the same workspace folder)
+\endverbatim
+\n
+If the compilation fails complaining libGLEW.so.1.8 was not found, just create a softlink to another libGLEW (on Xubuntu 14.04 I had the 1.10):
+\verbatim
+  sudo ln -s /usr/lib/x86_64-linux-gnu/libGLEW.so.1.10 /usr/lib/x86_64-linux-gnu/libGLEW.so.1.8
+\endverbatim
+
+
+
+\subsection bothProd Working with two different productions
+
+In general each production has a different format for their oaAnalysis files. Thus a different oaAnalysisReader is needed. To change the reader you should
+set the proper oaAnalysisReader folder in the requirements file of that package:
+
+\verbatim
+# the production to be used
+macro PRODUCTIONDIR "prod6B"
+\endverbatim
+
+By default prod6B is used. The list of available readers can be found in the same requirements file:
+
+\verbatim
+# The list below shows the correspondence between a given production, the oaAnalysis version used for that production
+# and the oaAnalysisReader subfolder to be used (to be set below in the PRODUCTIONDIR variable)
+#
+# productions  oaAnalysis           oaAnalysisReader
+#--------------------------------------------
+# 5D           v5r11                prod5D   
+# 5E           v5r15p1               
+# 5F, 5G       v5r15p3              prod5F
+# 
+# 6B-6D_6J     v5r29p19             prod6B 
+# 6E-6K        v5r29p21             prod6E
+# 6F-6G-6L     v5r29p25             prod6G
+# 6H-6I        v5r31p9  (TREX)      prod6TREx 
+\endverbatim
+
+
+
+highland2 needs to be recompiled every time you switch between two different productions. 
+Make sure you properly clean everything before re-compiling (or alternatively you can install highland2 in two different workspace folders)
+\verbatim
+  cmt br make clean
+  cmt br make binclean   
+  cmt br make
+\endverbatim
+
+IMPORTANT: It is also recommended to remove manually the dict folder of all highland2 packages.  
+
+
+\subsection cmtpathIssue Known issues with CMTPATH
+1) If you set CMTPATH=pathA:pathB, the same package can exist in both pathA and pathB
+but only if pathA and pathB are NOT at the same level of the absolute path
+\verbatim
+    export CMTPATH="<main_path>/folderA/:<main_path>/<another_folder>/folderB/" # this works and cmt will use the pacakge found in the first path (folderA)
+    export CMTPATH="<main_path>/folderA/:<main_path>/folderB/" # this will complains for conflicting releases
+\endverbatim
+
+2) xsTool needs to stay in the same workspace folder of highland2 (not sure why but even properly setting the CMTPATH it doesn't work)
+
+\subsection test Test your installation
+If everything worked so far, you should be fine. If you want to make sure, try this out:
+\n
+(if you are in a new shell, you have to source again your setup script, or manually export the CMTPATH and source nd280HighlandTools, as explained in \ref compileH2)
+\verbatim
+  RunNumuCCAnalysis.exe -o test.root <path-to-oaAnalysis-file>
+\endverbatim
+Now you can check some of the histograms inside the tree:
+\verbatim
+  root test.root
+  TBrowser b
+\endverbatim
+
+
+\n
+\section tipstricks Tips & Tricks with CMT and CVS
+
+- cmt is used to check out and compile (it handles versioning and dependencies among pacakges), e.g.
+  \n
+  cmt br make = cmt broadcast make
+  \n
+  cmt co = cmt checkout (actually this command internally uses cvs)
+  \n
+  DO NOT check out with 'cvs co': you will get something broken (without versioning and dependencies)
+
+- 'cmt make' can be run also from src/ (all cmt and cvs commands can be run from any folder parallel to cmt)
+
+- 'cmt br make' compiles all the packages listed in cmt/requirements of the current package
+   \n
+   --> from a specific package it will compile all and only the needed packages
+
+- If you rename/move folders, use 'cmt br cmt config' to re-set the correct paths in setup.sh of all packages
+
+- 'cmt show use' to check the configuration of the package and versions dependencies
+
+- cvs is used to commit and update in the HEAD version, e.g.
+  \n
+  cvs ci = cvs commit (to send changes to the online repository)
+  \n
+  cvs di = cvs diff (to see your changes not yet committed, --brief for just the list of the modified files)
+  \n
+  cvs up = cvs update (to retrieve changes from the online repository)
+  \n
+  cvs remove <filename> (need also 'cvs ci' afterwards. No way to remove a folder, need to be done manually in the repository by experts)
+  \n
+  cvs add <filename> (need also 'cvs ci' afterwards)
+  \n
+  cvs add <foldername> (needed before adding the file in the fodler)
+  \n
+  DO NOT check out with 'cvs co': you will get something broken (without versioning and dependencies)
+
+- to update a whole HEAD version (-d is for dowloading files and folder added to the repository after your checkout)
+  \n
+  \verbatim
+  cvs update -d highland2/*/*/
+  cvs update -d psyche/*/*/
+  \endverbatim
+  \n
+  Note that even if you update an old HEAD version anyway you will get the very HEAD,
+  and you can keep working and commit to the very HEAD from there
+
+- alternatively to the checkout_HEAD script you can get the HEAD with one of these tricks:
+
+   - if you already have an old HEAD, just update it: no matter the folder number, you will work with and commit to the very HEAD
+     \n
+     \verbatim
+     cvs update -d highland2/*/*/
+     cvs update -d psyche/*/*/
+     \endverbatim
+
+   - with the following you will have in each package both a frozen and a HEAD version
+     (but the frozen one will not work unless you run nd280Highland2/v&lowast;/cmt/fix_requirements)
+     \n
+     \verbatim
+     cmt co -R nd280Highland2 -r vXrY (check out recursively the frozen version vXrY)
+     find psyche/* -maxdepth 0 -exec cmt checkout {} \;
+     find highland2/* -maxdepth 0 -exec cmt checkout {} \;
+     \endverbatim
+
+   - with the following you will have in each package a folder with a frozen number, but usable as a HEAD
+     \n
+     \verbatim
+     cmt checkout -R nd280Highland2 -r vXrY   (check out recursively the frozen version vXrY)
+     cvs update -A -d highland2/*/*/
+     cvs update -A -d psyche/*/*/
+     \endverbatim
+     (with option -A you get the HEAD not matter the version you are)
+
+
+
+*/

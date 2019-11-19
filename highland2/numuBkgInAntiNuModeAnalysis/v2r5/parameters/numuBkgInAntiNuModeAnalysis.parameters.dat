@@ -1,0 +1,23 @@
+----- Cut levels --------
+
+ < numuBkgInAntiNuModeAnalysis.MinAccumLevelToSave = 2 >   // minimum accum level to save the event
+
+-------------- Selections --------
+
+Analysis sample (1 for FGD1, 2 for FGD2, 3 for both) 
+
+ < numuBkgInAntiNuModeAnalysis.Selections.whichFGD = 1 >
+
+Specify the selection criteria for the anti-nu beam mode analysis. If the flag is set to 1 you will have only the CCInc sample, while if the flag is set to 0 you will have both the CC1Track/CCNTracks samples
+
+ < numuBkgInAntiNuModeAnalysis.Selections.OnlyCCInc = 0 >
+
+ < numuBkgInAntiNuModeAnalysis.Selections.doMultiTrack = 1 >
+
+ < numuBkgInAntiNuModeAnalysis.Selections.doMultiPi = 0 >
+
+
+--------------- Corrections ------------
+
+ < numuBkgInAntiNuModeAnalysis.Corrections.EnableUseMuonAltMom    = 1 >
+

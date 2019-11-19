@@ -1,0 +1,384 @@
+/*! \page psyche/psycheND280UtilsHistory History for the psyche/psycheND280Utils Package 
+
+\section psycheND280Utils_v3r1_history Version v3r1
+
+Freeze information:
+   - Freeze Date: Sun Mar  6 17:09:46 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+major reorganization with new packages and  changes in event model class names
+
+- ND280BeamBunching: add specific files for ND280 specifiying the file to read
+- move bunch positions data files to this new package
+- VersioningUtils moved to psycheND280Utils. Convert it into a namespace since there is no need for a class
+- AnaEventB::kEventBoxTracker --> EventBoxId::kEventBoxTracker, SystematicSource --> BinnedData, SubDetId::SubDetEnum --> SubDetId_h
+- MomentumResolVariation: a class that handles the smearing of the global/TPC momentum, MomentumResolutionSystematic and Correction will inherit from it 
+- a new class to apply TPCPIDVariation, the corresponding systematic and correction will use it
+- ND280AnalysisUtils: add utility IncrementPOTBySpill, previously in Header
+
+
+\section psycheND280Utils_v3r3_history Version v3r3
+
+Freeze information:
+   - Freeze Date: Mon Apr 11 16:32:04 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Freeze for BANFF development
+
+- TPCPIDVariation: Current frozen version assigns muon mean/sigma for every particle, which is an obvious bug. Fixing it. added ToyExperiment as an input param, some re-organization
+- FiducialVolumeDefinition: Definition of ECAL and SMRD fiducial volumes. Used by the stopping cut in 4pi (needed to compute the momentum by range)
+- CutUtils: Addition of ECAL PID and Stopping ECAL/SMRD cuts. They are used in the numu 4pi selection for high angle tracks.
+- ToFSenseCorrector: New organization of the flip method. Now we apply the flip sense to those tracks that fulfil muon like requirements. 
+  Distinction between Fwd, Bwd and HA topologies is made. Currently, only optimised for muons in starting or ending in FGD1.
+  Changing name of isECAL class. Including ForceForward method in HasValidToF to classify consistently. Removing PID conditions from HasValidToF.
+- ND280AnalysisUtils: Update (temporary) the run id for the data to include the full run6 anti-nu. However, this doesn't separate between fhc and rhc for run6. 
+  Need to have access to each run (where can we get this info?) and also introduce the subrun id.
+- Add nue utils and cututils classes.
+- BinnedData --> BinnesParams to avoid confusion (data vs MC)
+
+
+\section psycheND280Utils_v3r5_history Version v3r5
+
+Freeze information:
+   - Freeze Date: Wed May  4 18:33:30 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- ND280AnalysisUtils: Update GetRunPeriod which now takes an optional subrun argument. 
+  Run periods taken from here http://www.t2k.org/nd280/physics/nu-mu/2014analysis/run-5-info . 
+  This solves https://bugzilla.nd280.org/show_bug.cgi?id=1282
+
+- nueCCUtils: Use Box utilities instead of GetAllTracks calls as explained in https://bugzilla.nd280.org/show_bug.cgi?id=1224
+
+
+
+\section psycheND280Utils_v3r7_history Version v3r7
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:08:38 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- PionCrossSections.cxx Implement fix for https://bugzilla.nd280.org/show_bug.cgi?id=1301 as suggested there. 
+- nueCCUtils: Remove a forgotten GetTracker* method. Add some protection when looking for tracks with Ecal segment. 
+              Add temporary functions to save some extra variables to further check the veto cuts.
+              Update FGD2 shower cut.
+- SecondaryInteractionSystematic: global re-view:
+  - properly implemented the step propagation (bug fixed that missed the steps)
+  - added a possibility to use the reference cross-section (i.e. re-weighting)
+  - material enums
+  - detector bit has to be provided for the manager and is later set to the propagator
+
+  the code is in principle a migration (with additional modifications) from the numuDisKaonAnalysis
+- ProtonInteractionSystematic:  adopted to the changes in base class
+- psycheND280Utils.parameters.dat: store nd280-related params here
+- BunchPosition.dat:  New temporary Bunch timing to include the first Run 7 data. This file is temporary since the timing for run 7 data is computed using Run 7 fpp data which are not calibrated yet
+- ND280AnalysisUtils, TruthUtils: added an ability to retrieve pt from the AnaDetCrossing
+- MomentumResolVariation: started adding an ability to do pure tpc based mom variation
+    various new methods to smear TPC local momentum and then propagate to global
+    propagate the smearing to the flip momentum as well!
+- ContituentsUtils methods methods related ith the mass component and the Fgd module type take now "bool IsMC" as argument, and not event, since event is not avaiable 
+  in FillTruthTree 
+
+
+
+
+\section psycheND280Utils_v3r9_history Version v3r9
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 12:59:58 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+Summer release !!!!
+
+ProtonInteractionSystematic: add #include <cmath> (trying to solve compilation issue in some platform)
+ConstituentsUtils.: GetAllTracking(Not)UsingDet() functions moved to SubDetUtils, GetConstituentInDet functionality was lacking P0D
+
+
+ND280AnalysisUtils: Minor. Be constistent when returning run period for fhc or rhc in runs 5+6.
+
+nueCCUtils, nueCutUtils:
+ - Update nue utils for the tof and oofv cuts.
+ - Added FindLeadingTrackInDet to get the leading track in the gamma pairs in FGD1 when the box fv is FGD2,
+ - Add a warning if the highlandIO.FlatTree.UseReconDirTrackerECal is not turned on - bug 1344.
+ - Do not use the extended EMEnergy cut for anti-nue. Add some protection for sand muons against the veto cuts.
+
+psycheND280Tools: add class with utilities that can be instantiated from a interactive rood session. In this way we don't need the DrawingTools 
+                    to do that. 
+
+
+
+\section psycheND280Utils_v3r11_history Version v3r11
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:13:12 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- EventBoxTracker, EventBoxUtils, ConstituentsUtils: 
+   + Added four rec. object groups and three true object groups: for P0D tracks:
+   + Also added functions to fill these in ConstituentsUtils (trajectories) and EventBoxUtils (rec objects) and
+     modified boxUtils::FillTracksWithTPC to fill groups if the P0D is the subdetector being used. 
+   + Fixed bug causing errors when filling P0D true trajectories.
+- CutUtils: Added some functions for a P0D veto cut. The cut creates a box around the standard fiducial volume (limits currently hard coded)
+  and vetoes bunches where a track starts outside the box and ends inside.
+- ToFSenseCorrector: started to review the logic and the names. review the satic-ness and const-ness of functions
+- nueCCUtils: Add a protection against tracks going in the Ecal but no ecal information is available. Remove unused variables. Small change in the way the FGD2Shower cut is applied.
+- FluxWeighting:
+  + FluxTuning now optionally takes a 'planeident' parameter.
+  + Can specifiy nd6/nd13 (magnet/sand) neutrino plane
+  + Constructor arguments are now const references... saving the world
+    one std::string copy at a time.
+  + Also recieved a clang-format.
+
+
+\section psycheND280Utils_v3r13_history Version v3r13
+
+Freeze information:
+   - Freeze Date: Tue Oct 18 18:56:53 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+add rootmap stuff such that psycheND280Tools is visible from a root session
+
+ND280AnalysisUtils:
+- fix GetNTargets for fgd2xylike when using a FV different from default, and make fgd2watermodules being the exact sum of fgdwaterlike and virtual xy
+
+EventBoxUtils:
+- adopted to changes in psycheCore/CoreUtils.(h)cxx and
+  psycheEventModel/BasicUtils.(h)cxx related to the arrays
+
+nueCCUtils:
+- Minor. Update warning when the ecal variables are not found.
+- Minor. Update ToF.
+
+
+
+\section psycheND280Utils_v3r15_history Version v3r15
+
+Freeze information:
+   - Freeze Date: Thu Nov 10 16:14:01 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+FREEZE FOR BANFF DEVELOPMENT with no nd280AnalysisTools
+
+- fix number of targets for water modules
+
+
+
+\section psycheND280Utils_v3r17_history Version v3r17
+
+Freeze information:
+   - Freeze Date: Wed Dec 28 13:22:16 2016
+   - Freeze User: acervera
+   - Freeze Host: portcervera.ific.uv.es
+
+- TruthUtils: Added initial version of an alternative true Michel counter that does not require pion grandparents and uses a time cut between
+  the Michel start time and the parent end time. Might also want a Michel counter that looks at pileup events (true Michels from different vertices)
+- ND280AnalysisUtils: Update runid for Run7 data. MC is not yet updated as there is no Run7 MC available.
+- TreeConverterUtils: correct bug in ConvertBitFieldToTrackerDetField
+
+
+\section psycheND280Utils_v3r19_history Version v3r19
+
+Freeze information:
+   - Freeze Date: Tue Feb  7 21:47:16 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- EventBoxUtils: fixed typos, 
+  in FillTrajsInECal() and FillTrajsChargedInP0D()
+  the check whether the trajs were already filled should use
+  TrueObjectsInGroup and not RecObjectsInGroup
+- ND280AnalysisUtils: Added IsRHC(run) in ND280AnalysisUtils which needs to be updated every times a RHC run is added in GetRunPeriod()
+- nueCutUtils:  Added a check in nuecututils for the TPC segment. got rid of the usage of anaUtils::GetTPCBackSegment()
+  which simply gets the last element of the array of TPC constituents (actually
+  sorted by the decreasing number of nodes!)
+  instead use the good quality segment ("standard" cut to trust the momentum) in the TPC closest to the ECal segment of
+  interest
+
+  probably the effect is small since the tracks of interest usually I guess cross
+  only one TPC,  but is it important to be consistent
+
+- ConstituentsUtils: added a flag to control whether to apply a quality cut
+  GetSegmentWithMostNodesInClosestTpc(const AnaTrackB& track,  const Float_t* pos, bool quality_cut = false);
+  Removed confusing GetTPCBackSegment utility
+- nueCCUtils, nueCutUtils: Add ME finder in Utils and FGD2 pull cut in CutUtils
+- EventBoxTracker, EventBoxUtils: Add new groups kTracksWithFGD1InFGD1FV and kTracksWithFGD2InFGD2FV, kTracksWithFGD1AndTECALInFGD1FV and kTracksWithFGD2AndTECALInFGD2FV
+- FluxWeighting: Simplify enormously by replacing individual histos and files by vectors. Add run7
+- psycheND280Utils.parameters.dat: centralise the selection of Flux parameters
+- add latest flux files from july 2016, including run7, at tuned13av1.1_july2016
+
+
+\section psycheND280Utils_v3r21_history Version v3r21
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 15:43:53 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+MANY CHANGES. SUMMARY:
+
+- add latest flux files from july 2016, including run7
+- centralise the selection of Flux parameters here
+- unify multi-pi selections by putting the cuts in CutUtils
+
+
+
+ConstituentsUtils:
+- a function to get all iso tracks in ECal (dsecal and barrel sub-modules)
+
+CutUtils:
+- added general ECal pi0 veto cut,
+  re-named the previous one (it does the loop on ECal tracks) as general
+  and the new one uses MultiPiBox already filled
+- re-named pion related cuts to *Base ones
+  added a simple utility class used to retrieve the MultiPiBox from the ToyBox,
+  the user will have to implement it for his analysis
+- added dummy classes for multi-pion,
+  no/one/other pion cuts
+  can be used for further generalisation of methods
+- fixed a typo in getting ECal most energetic object
+- FillPionInfo properly check a paramter to control whether to use ECal pi-zero info
+- make Detector a  member of the MultiPiBox
+- added various methods related to filling the pion information:
+  methdos fill various variables in multipi::MultiPiBox,
+  also included various cuts on track PID: TPC,  FGD,  ECal
+  relevant for pion selection
+  these were basically re-arranged/simplified ones from
+  numuCCMultiPiSelection so that make them available for general usage
+  and avoid copying the code
+- minor, use proper virtual destructor for MultiPiBoxGetter
+
+EventBoxTracker: 
+- add kIsoTrackInECal
+
+EventBoxUtils: 
+- add filling ECal iso tracks when calling FillAllTracksUsingECAL
+  added filling of Michel electrons on event basis
+
+FluxWeighting: 
+
+- add new constructor with no arguments, in which the flux file coordinates are directly read from the parameters file.
+  Add option to use the histograms with fine binning, off by default
+- Simplify enormously by replacing individual histos and files by vectors.
+- Add run7
+
+MultiPiBox: 
+- make Detector a  member of the MultiPiBox
+- added an utility object that stores information
+  relevant for the selection of various pion info,
+  this is to be able to do a unification over various selections
+
+ND280AnalysisUtils: 
+- Data run 7754 added to run2 air list. See bug 1418.
+- Added a check when the Bunch time is not filled in GetFGDMichelElectrons
+
+
+TreeConverterUtils: 
+- convUtils::ConvertTrueParticleDetEnumToBitField()
+- added fine-grained numbers for Barrel and P0D ECals
+  these appear in prod-7 oaAnalysis iteration
+  although the functionality should be bwd compatible
+
+TruthUtils: 
+- GetDetectorUsed()
+  for compatibility with prod-7 oaAnalysis versions
+  which uses individual sub-modules for Barrel and P0D ECals,
+  added  and explicit check on the detector usage as well
+- addressing bug 1435:
+  introduced a function anaUtils::GetDetectorUsed(const AnaDetCrossingB& cross,
+  SubDetId::SubDetEnum det, bool check_active);
+  that uses geometry info to check the sub-modules crossed for SMRD,  Barrel
+  and P0D ECals.
+
+  Although one has to be careful anyway since  a true track may cross several
+  sub-modules of SMRD/Barrel/P0DECal but this will be treated as one crossing
+  (in case they are subsequent)
+
+  GetAnaDetCrossing()
+  fixed a typo when getting the GetSubdetectorEnum
+
+  also proceed with the first crossing of interest found
+
+nueCCUtils: 
+- Minor. Missed else.
+- Provide detector as argument, rather than looking for the detector each time. Rverse back to the old way the TPC veto cut is applied.
+- Remove michel finder as this now handle in boxUtils. Add option to look for pair track with the same charge as the main track. Off by default.
+
+nueCutUtils:
+- Provide detector as argument, rather than looking for the detector each time. Rverse back to the old way the TPC veto cut is applied.
+
+psycheND280Utils.parameters.dat: 
+- add parameter to select fine binning flux tunning. Off by default (by now)
+- use $(PSYCHEND280UTILSROOT)/data/tuned13av1.1_july2016 flux folder
+- centralise the selection of Flux parameters
+
+data
+- add latest flux files from july 2016, including run7
+
+
+\section psycheND280Utils_v3r23_history Version v3r23
+
+Freeze information:
+   - Freeze Date: Sat Apr 22 09:09:23 2017
+   - Freeze User: alexander
+   - Freeze Host: alexandrs-mbp.home
+
+An intermediate freeze of psyche in order to test systematics tuning for NuMu.
+ 
+PionInteractionSystematic.cxx PionInteractionSystematic.hxx 
+Added a virtual method:
+CheckLookForInteraction() to check whether a particular trajectory should be a
+subject to a search for its interactions
+
+This method can be overwritten hence makes the code available for general usage
+for other FV,  e.g. TPC analysis
+
+EventBoxTracker.hxx 
+added new groups *WithStartOrEndInFGD*FV
+needed for 4pi selections
+
+EventBoxUtils.cxx 
+fill new categories in EventBoxTracker
+"WithStartOrEndInFGD*FV*
+
+ProtonInteractionSystematic.hxx 
+simplify things:
+no need to use separate ProtonSIManager
+will just set the proper propagator where needed
+
+TruthUtils.cxx TruthUtils.hxx 
+Check that a give true particle "leads" to the existence of a given reco object
+In case of "Simple" only certain "generations" are considered:
+direct, parent, grandparent and primary
+
+In case of "Full" a looping takes place over parents (from the true particle
+associated with the reco up to the primary) 
+
+bool CheckTrueCausesRecoSimple(const AnaTrueParticleB& trueTrack,  const
+AnaParticleB& track);
+
+
+Also returns the generation is the association is found (0 --> direct
+contributor)
+bool CheckTrueCausesRecoFull(const AnaEventB& event,  const AnaTrueParticleB&
+trueTrack,
+const AnaParticleB& track,  int& gen);
+
+
+CutUtils.cxx 
+following the discussion at the NuMu meeting (April 18th,  2017)
+do not use the upper limit for the AntiMuon TPC PID cut (previousely 0.7), 
+added an explanation and the link to the corresponding material
+
+
+*/

@@ -1,0 +1,43 @@
+package highland2/highlandUtils
+version v2r19
+
+manager Anselmo Cervera <anselmo.cervera@cern.ch>
+author nd280-software@mailman.t2k.org
+
+branches cmt src doc app
+
+use highlandCore                      v2r21   highland2
+use highlandEventModel                v2r19   highland2
+use psycheND280Utils  v3r23   psyche
+
+# Build methods to include.
+document doxygen doxygen -group=documentation src/*.cpp src/*.h src/*.hxx src/*.cxx src/EventDisplay/*.cxx src/EventDisplay/*.hxx ../doc/*.dox
+document rootcint dictionary EventDisplay/*_LinkDef.h 
+
+# Build information used by packages that use this one.
+macro highlandUtils_cppflags " -DHIGHLANDUTILS_USED"
+macro highlandUtils_linkopts "-L$(HIGHLANDUTILSROOT)/$(highlandUtils_tag) -lhighlandUtils -lCore -lRooFit -lRooFitCore"
+macro highlandUtils_stamps " $(HIGHLANDUTILSROOT)/$(highlandUtils_tag)/highlandUtils.stamp"
+
+# The paths to find this library.
+path_remove PATH "$(HIGHLANDUTILSROOT)"
+path_prepend PATH "$(HIGHLANDUTILSROOT)/$(highlandUtils_tag)"
+path_remove LD_LIBRARY_PATH "$(HIGHLANDUTILSROOT)"
+path_prepend LD_LIBRARY_PATH "$(HIGHLANDUTILSROOT)/$(highlandUtils_tag)"
+path_remove DYLD_LIBRARY_PATH "" \
+	    Darwin	      "$(HIGHLANDUTILSROOT)"
+path_prepend DYLD_LIBRARY_PATH "" \
+	     Darwin	       "$(HIGHLANDUTILSROOT)/$(highlandUtils_tag)"
+
+
+# The library to build
+library highlandUtils *.cxx EventDisplay/*.cxx ../dict/*.cxx
+
+# Build the applications
+application CheckRooTrackerVtxLink ../app/CheckRooTrackerVtxLink.cxx
+application BuildReWeightedMicroTree ../app/BuildReWeightedMicroTree.cxx
+
+# tests
+document doxygen doxygen -group=documentation ../scripts/* ../doc/*.dox
+
+

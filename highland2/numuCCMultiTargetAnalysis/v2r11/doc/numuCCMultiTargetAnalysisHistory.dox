@@ -1,0 +1,230 @@
+/*! \page highland2/numuCCMultiTargetAnalysisHistory History for the highland2/numuCCMultiTargetAnalysis Package 
+
+\section numuCCMultiTargetAnalysis_v0r1_history Version v0r1
+
+Freeze information:
+   - Freeze Date: Fri Feb 27 02:18:31 2015
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+first freeze of numuCCMultiTargetAnalysis that works
+with the last frozen version of highland2, i.e. v0r21
+The selection by now is like this:
+- branch 0: numu CC inclusive in FGD1
+- branch 1,0: numu CC inclusive in FGD2 water (vertical bars)
+- branch 1.1: numu CC inclusive in FGD2 scintillator (horizontal bars)
+
+\section numuCCMultiTargetAnalysis_v0r3_history Version v0r3
+
+Freeze information:
+   - Freeze Date: Wed Mar 25 11:34:43 2015
+   - Freeze User: scantamb
+   - Freeze Host: atlas013.unige.ch
+
+
+
+freeze a version working with the
+current HEAD before transforming the package
+into a multi pi mutli target
+selection one, that will also keep
+the numuCC multi target selection via
+a parameter that will enable the mutli pi
+
+\section numuCCMultiTargetAnalysis_v0r5_history Version v0r5
+
+Freeze information:
+   - Freeze Date: Thu Apr 30 15:52:06 2015
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+highland tw0 is freezing, so I
+am freezing too, but summer is
+coming soon! Nevertheless there were no
+that many changes since the last
+spring freeze. Can we please call
+this procedure warming instead of freezing?
+
+\section numuCCMultiTargetAnalysis_v0r7_history Version v0r7
+
+Freeze information:
+   - Freeze Date: Mon Jun 22 19:39:51 2015
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+
+highland two is freezing, so I am freezing too,
+but we are actually in summer!
+Can we please call this procedure warming
+instead of freezing?
+
+Main changes:
+- extension to antinu selection (via a parameter)
+- branches reorganization (removed FGD1_scint and FGD1_water):
+  ID  selection
+  0   FGD1
+  1   FGD2
+  2   FGD2 water
+  3   FGD2 scint
+  4   FGD1 CC 0 pi
+  5   FGD1 CC 1 pi
+  6   FGD1 CC other
+  7   FGD2 water CC 0 pi
+  8   FGD2 water CC 1 pi
+  9   FGD2 water CC other
+  10  FGD2 scint CC 0 pi
+  11  FGD2 scint CC 1 pi
+  12  FGD2 scint CC other
+
+\section numuCCMultiTargetAnalysis_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 12:23:02 2015
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+\section numuCCMultiTargetAnalysis_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Fri Jul 31 19:05:04 2015
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+\section numuCCMultiTargetAnalysis_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Thu Sep 24 08:01:06 2015
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+Added line-line distance between muon start position and its first hit
+
+\section numuCCMultiTargetAnalysis_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 14:13:02 2016
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+fully implement antinu selection (to be set via a parameter)
+fix major issue in systematics propagation (bug 1235)
+fix fgd2moduletypeCC category
+fix sand muons type in own categories
+fix GetFgdLayer and GetFgdModuleTypeCC
+add reconstructed energy and selmu_chi2
+
+\section numuCCMultiTargetAnalysis_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Mon Feb  8 06:59:41 2016
+   - Freeze User: scantamb
+   - Freeze Host: Enrico-PORTEGE-Z930
+
+
+
+add parameter "UseReducedFV" to modify the FV defintion such that FGD1 and FGD2 FV are identical
+
+
+\section numuCCMultiTargetAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 13:59:24 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+major reorganization with new packages and  changes in event model class names
+- udapt to changes in base packages
+
+
+
+\section numuCCMultiTargetAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 16:47:01 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+- update for changes in psycheUtils
+- Change name of some methods containing: TrackCategory --> Category, TrackType --> CategoryType
+- rename truemu_ in truelepton_ in default tree as in numuCCAnalysis (bug 1144)
+- remove Erec vars for carbon since they are not in numuCCAnalysis
+- rename Erec for oxygen following numuCCAnalysis convention
+- make true Erec for oxygen using true vertex lepton instead of true particle of muon candidate
+- Add scoping of numuCCAnalysis::selmu_* and numuCCAnalysis::truemu_*
+ variables to satisfy OS X compiler errors
+  Apple LLVM version 7.3.0 (clang-703.0.29)
+  Target: x86_64-apple-darwin15.4.0
+
+
+
+\section numuCCMultiTargetAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sun Jun 12 17:47:42 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- rename truemu_ into truevtx_ following new conventions of bug 1144
+- ContituentsUtils methods and multitarget utils methods related with the mass component 
+  and the Fgd module type take now "bool IsMC" as argument, and not event, since event 
+  is not avaiable in FillTruthTree
+
+
+
+\section numuCCMultiTargetAnalysis_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Wed Aug 10 11:31:05 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+Summer release !!!
+
+- fix truelepton_nuErecQEoxygen (it was using the carbon Eb)
+- correct warnings
+
+
+\section numuCCMultiTargetAnalysis_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 10:04:40 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- Add variable "selmu_hit1_fgdmoduletype" in DefineMicroTree to make it run
+- This should solve bug 1403. must call baseTrackerAnalysis::Initialize() and the end of Initialize(). 
+  It was not called before. It has to be at the end such that usedAlgorithms are declared. It will be in baseAnalysis where the RooTrackerVtx stuff is handled 
+
+
+
+\section numuCCMultiTargetAnalysis_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Mar  1 18:10:53 2017
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+numuCCMultiTargetAnalysis:
+- use new MultiPiBox to fill pion selection related vars
+
+numuCCMultiTargetSelection:
+- adopt to the recent changes in numuCCMultiPi selection,
+  this for jenkins validation,  is this package ranked as official?
+
+
+*/

@@ -1,0 +1,161 @@
+/*! \page highland2/baseTrackerAnalysisHistory History for the highland2/baseTrackerAnalysis Package 
+
+\section baseTrackerAnalysis_v1r1_history Version v1r1
+
+Freeze information:
+   - Freeze Date: Wed Jul  1 11:01:44 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+Release motivated by baseAnalysis splitting
+ - split baseAnalysis package such that it only keeps what is common to all analyses (p0d and tracker). 
+   Many things moved to this new package baseTrackerAnalysis
+
+
+\section baseTrackerAnalysis_v1r3_history Version v1r3
+
+Freeze information:
+   - Freeze Date: Sat Aug  1 11:44:58 2015
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0.local
+
+- split EnableSingleSystConfigurations in two parameters, one for weight systematics and another for variation systematics
+- add ECal EM energy syst
+- each configuration has now a diferent toy maker, which is provided as argument in the constructor
+
+
+
+\section baseTrackerAnalysis_v1r5_history Version v1r5
+
+Freeze information:
+   - Freeze Date: Wed Sep 23 17:18:45 2015
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+- new systematics:
+  ToFResolSystematics
+  TPCECalMatchEffSystematics
+  TPCP0DMatchEffSystematics
+  FGDECalMatchEffSystematics
+  FGDECalSMRDMatchEffSystematics
+  ECalTrackEffSystematics
+- parameters: add the new systematics, reorganize (as of TN 212) and explain systematics switches
+- add initialize method calling the Initialize of its base class baseAnalysis
+
+
+
+\section baseTrackerAnalysis_v1r7_history Version v1r7
+
+Freeze information:
+   - Freeze Date: Fri Jan  8 13:19:57 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- reflect changes in syst package (removed copying of SystematicSource)
+- added ECal PID syst
+- some minor re-organization of the order
+- to define configurations use parameters from the base class, instead of 
+  reading them from param file (they are being read from the baseClass anyway)
+- use zero-var configuration
+
+
+
+\section baseTrackerAnalysis_v1r9_history Version v1r9
+
+Freeze information:
+   - Freeze Date: Fri Feb  5 12:28:10 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+Move to version v2
+
+- fixed a typo when adding the ECalEMSyst into the single syst configuration
+- FlipKinematics, ToF and MomRange correcitons,  OFF by default, need highlandRecPack
+  to fully work
+
+
+
+\section baseTrackerAnalysis_v2r1_history Version v2r1
+
+Freeze information:
+   - Freeze Date: Mon Mar  7 10:48:12 2016
+   - Freeze User: acervera
+   - Freeze Host: portanselmo.ific.uv.es
+
+major reorganization with new packages and  changes in event model class names
+- udapt to changes in base packages
+- add TPCPIDPullMCCorrection, off for the moment
+
+
+\section baseTrackerAnalysis_v2r3_history Version v2r3
+
+Freeze information:
+   - Freeze Date: Thu May  5 10:44:29 2016
+   - Freeze User: acervera
+   - Freeze Host: ip-192-168-19-79.private.net
+
+- Add the nue specific systematics.
+- enable TPC PID pull MC correction
+- move the method returning the ToyBoxTracker from baseAnalysis.hxx to here
+- Add methods to get the vertex and the true vertex from the ToyBoxTracker
+
+- weight corrections added to all configurations. 
+- add parameters to control weight corrections. Only pilup is enabled
+- The PileUp in the weight variable is kept for the moment but it will be removed soon (at least in trees other than the truth tree) because
+  the same information is available in the weight_corr variable (with appropriate index)
+
+
+
+\section baseTrackerAnalysis_v2r5_history Version v2r5
+
+Freeze information:
+   - Freeze Date: Sat Jun 11 17:31:16 2016
+   - Freeze User: acervera
+   - Freeze Host: Macintosh-64b9e8d35af0-2.local
+
+- got rid of -Alt systematics (they only add additional ProtonMomentum smearing, 
+  will be re-implemented (and properly,  no a simple full code copy) if needed)
+- enable MomentumResol MC correction (smearing to match data)
+
+
+\section baseTrackerAnalysis_v2r7_history Version v2r7
+
+Freeze information:
+   - Freeze Date: Tue Aug  9 13:12:11 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+
+Summer release !!!
+
+- make enums public such that they can be used by any analysis. This should salve bug 1333
+- nue*Pileup -> nue*PileUp change in SystId
+
+
+\section baseTrackerAnalysis_v2r9_history Version v2r9
+
+Freeze information:
+   - Freeze Date: Fri Sep 23 17:34:11 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+- Added P0D+TPC systematics that are now in psyche to the systematics and configurations.
+- for the moment keep independent flip kinematics and tof corrections, 
+  just add them in a proper order
+
+
+\section baseTrackerAnalysis_v2r11_history Version v2r11
+
+Freeze information:
+   - Freeze Date: Wed Oct 19 10:00:56 2016
+   - Freeze User: acervera
+   - Freeze Host: macintosh-64b9e8d35af0.local
+
+FREEZE FOR BANFF DEVELOPMENT
+
+- improvements in doxygen documentation
+- remove zero_var configuration since we now apply all weights also in the default tree
+- added MomBiasFromVertexMigration systematic
+- Fixed typo using systematics enum when enabling systematics
+
+*/

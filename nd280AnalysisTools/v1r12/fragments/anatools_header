@@ -1,0 +1,33 @@
+########################### Start External Header ######################### 
+# -*- makefile -*-
+# 
+# A fragment used by CMT to build the nd280AnalysisTools. This is based
+# on the external fragment used to compile packages like ROOT and CLHEP.
+#
+# This version is different though, as much more functionality happens
+# in the header script than the main script. This is because the main
+# script is only invoked if CMT thinks there have been changes to the 
+# code, and it seems to only look in the src directory. The header
+# functions are always invoked, so we call our compile script from
+# there and do the checking ourselves in runAnalyses.py.
+#
+# Usage in the requirements file is:
+#    "document anatools <package> <compile script>"
+
+${CONSTITUENT}_output = ../$(tag)
+
+ifndef ${CONSTITUENT}_stamps
+  ifdef $(package)_stamps
+     ${CONSTITUENT}_stamps=$($(package)_stamps)
+  else
+     ${CONSTITUENT}_stamps=$(${CONSTITUENT}_output)/${CONSTITUENT}.stamp
+  endif
+endif
+
+$(${CONSTITUENT}_stamps) ::
+	bash $(PACKAGE_ROOT)/src/compile_anatools compile $(PACKAGE_ROOT) $(tag)
+
+${CONSTITUENT} :: $(${CONSTITUENT}_stamps)
+	@echo "${CONSTITUENT} OK... " 
+
+########################### End External Header ########################

@@ -1,0 +1,3 @@
+Set the range of MAIN RING run numbers to apply the CT4POTCorrection to (inclusive).
+ < highlandCorrections.CT4POTCorrection.MRrunLower = 440194 >
+ < highlandCorrections.CT4POTCorrection.MRrunUpper = 440235 > 
